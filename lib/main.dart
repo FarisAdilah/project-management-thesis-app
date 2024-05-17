@@ -2,7 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/firebase_options.dart';
+import 'package:project_management_thesis_app/pages/authentication/mobile/mobile_authentication.dart';
+import 'package:project_management_thesis_app/pages/authentication/tablet/tablet_authentication.dart';
+import 'package:project_management_thesis_app/pages/authentication/web/desktop_authentication.dart';
 import 'package:project_management_thesis_app/pages/authentication/web/login.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +33,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       title: widget.title,
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: ResponsiveLayout(mobileScaffold: const MobileScaffold(), tabletScaffold: const TabletScaffold(), desktopScaffold: const DesktopScaffold()),
     );
   }
 }
