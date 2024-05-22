@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'admin_dm.dart';
+part of 'user_dm.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AdminDM _$AdminDMFromJson(Map<String, dynamic> json) => AdminDM()
+UserDM _$UserDMFromJson(Map<String, dynamic> json) => UserDM()
   ..id = json['id'] as String?
   ..name = json['name'] as String?
   ..email = json['email'] as String?
@@ -15,7 +15,7 @@ AdminDM _$AdminDMFromJson(Map<String, dynamic> json) => AdminDM()
   ..phoneNumber = json['phoneNumber'] as String?
   ..image = json['image'] as String?;
 
-Map<String, dynamic> _$AdminDMToJson(AdminDM instance) => <String, dynamic>{
+Map<String, dynamic> _$UserDMToJson(UserDM instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'email': instance.email,
