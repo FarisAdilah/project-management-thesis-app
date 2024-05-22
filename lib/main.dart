@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/firebase_options.dart';
-import 'package:project_management_thesis_app/pages/authentication/web/login.dart';
+import 'package:project_management_thesis_app/pages/wrapper/wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       title: widget.title,
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: Wrapper(),
     );
   }
 }
