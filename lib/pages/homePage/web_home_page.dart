@@ -37,19 +37,6 @@ class WebHomePage extends StatelessWidget {
                 height: 20,
               ),
               ElevatedButton(
-                onPressed: () => controller.goToProjectPage(),
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.red),
-                ),
-                child: const Text(
-                  "Project Page",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
                 onPressed: () => controller.logout(),
                 style: const ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(Colors.red),
