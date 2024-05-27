@@ -1,4 +1,4 @@
-abstract class UserDM {
+class UserDM {
   String? id;
   String? name;
   String? email;
