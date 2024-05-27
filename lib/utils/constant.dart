@@ -20,6 +20,13 @@ enum ExternalType {
   client,
 }
 
+enum MenuType {
+  home,
+  staff,
+  vendor,
+  client,
+}
+
 class Constant {
   static const bool showLog = true;
   static const String logIdentifier = "PenTools-log";

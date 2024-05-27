@@ -2,22 +2,30 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/createForm/create_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/main_home_page.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
 import 'package:project_management_thesis_app/repository/authentication/dataModel/login_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/user/user_repository.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
+import 'package:project_management_thesis_app/utils/menu_utility.dart';
+import 'package:project_management_thesis_app/utils/model/menus.dart';
 
 class HomePageController extends GetxController {
   final AuthenticationRepository _authenticationRepository =
       AuthenticationRepository();
   final UserRepository _userRepository = UserRepository();
+
   RxList<UserDM> users = <UserDM>[].obs;
   UserDM currentUser = UserDM();
+
+  RxList<Menus> menus = <Menus>[].obs;
+  RxInt selectedMenuId = 1.obs;
 
   @override
   void onInit() async {
     super.onInit();
+    menus.value = MenuUtility().getAllMenu();
     await getUsersData();
     await _getCurrentUser();
   }
@@ -73,5 +81,24 @@ class HomePageController extends GetxController {
     loginDM.password = signedUser.password;
 
     await _userRepository.createUser(user, loginDM);
+  }
+
+  setSelectedMenu(Menus menu) {
+    selectedMenuId.value = menu.id ?? 1;
+  }
+
+  Widget getSelectedMenuWidget() {
+    Helpers().writeLog("selectedMenuId: ${selectedMenuId.value}");
+    if (selectedMenuId.value == 1) {
+      return MainHomePage(users: users);
+    } else if (selectedMenuId.value == 2) {
+      return const Center(child: Text("Ini Halaman Untuk Staff"));
+    } else if (selectedMenuId.value == 3) {
+      return const Center(child: Text("Ini Halaman Untuk Vendor"));
+    } else if (selectedMenuId.value == 4) {
+      return const Center(child: Text("Ini Halaman Untuk Client"));
+    } else {
+      return const Center(child: Text("Ini Halaman Untuk Data Lainnya"));
+    }
   }
 }
