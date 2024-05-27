@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:project_management_thesis_app/pages/homePage/controller_home_page.dart';
+
+class MobileHomePage extends StatelessWidget {
+  const MobileHomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.put(HomePageController());
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'HomePage',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.grey[900],
+      ),
+      drawer: Drawer(
+        backgroundColor: Colors.grey[300],
+        child: const Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Text("Test")
+          ],
+        ),
+      ),
+    );
+  }
+}
