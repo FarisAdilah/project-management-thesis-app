@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/pages/authentication/controller_auth.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
@@ -27,9 +26,6 @@ class WebAuthentication extends StatelessWidget {
                       AssetColor.bluePrimaryAccent,
                       AssetColor.blueSecondaryAccent,
                       AssetColor.blueTertiaryAccent,
-                      // Color(0xFFB3E5FC),
-                      // Color(0xFFBA68C8),
-                      // Color(0xFF9576CD),
                     ],
                   ),
                 ),
@@ -79,7 +75,6 @@ class WebAuthentication extends StatelessWidget {
                             height: 20,
                           ),
                           TextField(
-                            cursorColor: AssetColor.bluePrimaryAccent,
                             controller: controller.emailController,
                             onChanged: (value) => controller.onTyping(),
                             decoration: const InputDecoration(
@@ -92,6 +87,7 @@ class WebAuthentication extends StatelessWidget {
                                 size: 17,
                               ),
                             ),
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           Obx(
                             () => TextField(
@@ -110,6 +106,7 @@ class WebAuthentication extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              keyboardType: TextInputType.visiblePassword,
                             ),
                           ),
                           const SizedBox(

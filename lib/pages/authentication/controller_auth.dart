@@ -23,6 +23,7 @@ class AuthController extends GetxController {
     if (user != null) {
       emailController.clear();
       passwordController.clear();
+      enableButton.value = false;
       Get.offAllNamed("/");
     }
   }
