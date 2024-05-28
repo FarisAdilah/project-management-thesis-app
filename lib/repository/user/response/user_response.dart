@@ -30,7 +30,7 @@ class UserDataResponse {
     return user;
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toFirebase() => {
         'id': id,
         'name': name,
         'email': email,

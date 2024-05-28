@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
 mixin RepoBase {
   static FirebaseFirestore get _db => FirebaseFirestore.instance;
   static FirebaseAuth get _auth => FirebaseAuth.instance;
+  static FirebaseStorage get _storage => FirebaseStorage.instance;
 
   // Base Repo for Repository Data Operation
   createData(
@@ -55,7 +60,7 @@ mixin RepoBase {
     return _db.collection(collection).doc(id).snapshots();
   }
 
-  //Authentication Operation
+  // Authentication Operation
   registerWithEmailAndPassword(String email, String password) async {
     try {
       await _auth.createUserWithEmailAndPassword(
@@ -64,6 +69,18 @@ mixin RepoBase {
       );
     } on FirebaseAuthException catch (e) {
       Helpers().showErrorSnackBar("Failed to register: $e");
+    }
+  }
+
+  // File Operation
+  uploadFile(String path, XFile image) async {
+    try {
+      final ref = _storage.ref(path).child(image.name);
+      await ref.putFile(File(image.path));
+      final url = await ref.getDownloadURL();
+      return url;
+    } on FirebaseException catch (e) {
+      Helpers().showErrorSnackBar("Failed to upload file: $e");
     }
   }
 }

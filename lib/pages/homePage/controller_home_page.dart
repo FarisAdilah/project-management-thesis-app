@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/createForm/create_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/main_home_page.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/staffPage/staff_list.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
 import 'package:project_management_thesis_app/repository/authentication/dataModel/login_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
@@ -26,7 +27,6 @@ class HomePageController extends GetxController {
   void onInit() async {
     super.onInit();
     menus.value = MenuUtility().getAllMenu();
-    await getUsersData();
     await _getCurrentUser();
   }
 
@@ -35,16 +35,6 @@ class HomePageController extends GetxController {
     UserDM? userDM = user;
     Helpers().writeLog("userDM: ${jsonEncode(userDM?.email)}");
     currentUser = userDM ?? UserDM();
-  }
-
-  getUsersData() async {
-    var response = await _userRepository.getAllUser();
-    if (response.isNotEmpty) {
-      users.value = response;
-      Helpers().writeLog("response: ${jsonEncode(users.first)}");
-    } else {
-      Helpers().showErrorSnackBar("Failed to get user data");
-    }
   }
 
   logout() async {
@@ -92,7 +82,7 @@ class HomePageController extends GetxController {
     if (selectedMenuId.value == 1) {
       return MainHomePage(users: users);
     } else if (selectedMenuId.value == 2) {
-      return const Center(child: Text("Ini Halaman Untuk Staff"));
+      return const StaffList();
     } else if (selectedMenuId.value == 3) {
       return const Center(child: Text("Ini Halaman Untuk Vendor"));
     } else if (selectedMenuId.value == 4) {
