@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/create_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/main_home_page.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/staffPage/staff_list.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffAdd/staff_add.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffList/staff_list.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorList/vendor_list.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
-import 'package:project_management_thesis_app/repository/authentication/dataModel/login_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/user/user_repository.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
@@ -28,13 +28,24 @@ class HomePageController extends GetxController {
     super.onInit();
     menus.value = MenuUtility().getAllMenu();
     await _getCurrentUser();
+    await _getUsersData();
   }
 
   _getCurrentUser() async {
     var user = await _authenticationRepository.user.first;
     UserDM? userDM = user;
-    Helpers().writeLog("userDM: ${jsonEncode(userDM?.email)}");
+    Helpers.writeLog("userDM: ${jsonEncode(userDM)}");
     currentUser = userDM ?? UserDM();
+  }
+
+  _getUsersData() async {
+    var response = await _userRepository.getAllUser();
+    if (response.isNotEmpty) {
+      users.value = response;
+      Helpers.writeLog("response: ${jsonEncode(users.first)}");
+    } else {
+      Helpers().showErrorSnackBar("Failed to get user data");
+    }
   }
 
   logout() async {
@@ -42,35 +53,8 @@ class HomePageController extends GetxController {
     Get.offAllNamed("/");
   }
 
-  showCreateForm() {
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(25),
-        width: Get.context!.width,
-        child: CreateForm(
-          onSubmit: (user) {
-            Helpers().writeLog("user: ${jsonEncode(user)}");
-            _createUser(user);
-
-            Get.back();
-          },
-        ),
-      ),
-      barrierColor: Colors.transparent,
-      backgroundColor: Colors.amber[50],
-    );
-  }
-
-  _createUser(UserDM user) async {
-    UserDM signedUser =
-        users.firstWhere((element) => element.email == currentUser.email);
-    Helpers().writeLog("currentUser: ${jsonEncode(currentUser)}");
-
-    LoginDM loginDM = LoginDM();
-    loginDM.email = signedUser.email;
-    loginDM.password = signedUser.password;
-
-    await _userRepository.createUser(user, loginDM);
+  showCreateForm(BuildContext context) {
+    Get.to(() => const StaffAdd())?.whenComplete(_getUsersData());
   }
 
   setSelectedMenu(Menus menu) {
@@ -78,13 +62,13 @@ class HomePageController extends GetxController {
   }
 
   Widget getSelectedMenuWidget() {
-    Helpers().writeLog("selectedMenuId: ${selectedMenuId.value}");
+    Helpers.writeLog("selectedMenuId: ${selectedMenuId.value}");
     if (selectedMenuId.value == 1) {
-      return MainHomePage(users: users);
+      return const MainHomePage();
     } else if (selectedMenuId.value == 2) {
-      return const StaffList();
+      return StaffList(users: users);
     } else if (selectedMenuId.value == 3) {
-      return const Center(child: Text("Ini Halaman Untuk Vendor"));
+      return const VendorList();
     } else if (selectedMenuId.value == 4) {
       return const Center(child: Text("Ini Halaman Untuk Client"));
     } else {

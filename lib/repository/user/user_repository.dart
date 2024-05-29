@@ -1,20 +1,56 @@
-import 'package:get/get.dart';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
 import 'package:project_management_thesis_app/repository/authentication/dataModel/login_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
-import 'package:project_management_thesis_app/repository/user/response/user_response.dart';
+import 'package:project_management_thesis_app/repository/user/firebaseModel/user_firebase.dart';
 import 'package:project_management_thesis_app/services/repo_base.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class UserRepository extends GetxController with RepoBase {
-  static UserRepository get instance => Get.find<UserRepository>();
+class UserRepository with RepoBase {
+  static UserRepository get instance => UserRepository();
 
-  createUser(UserDM user, LoginDM currentUser) async {
+  createUser(
+    UserDM user,
+    LoginDM currentUser, {
+    File? pickedImage,
+    Uint8List? pickedImageWeb,
+  }) async {
+    String url = "";
+
     if (user.email != null && user.password != null) {
+      // Upload the image to the storage
+      if (kIsWeb && pickedImageWeb != null) {
+        String username =
+            user.name?.trim().toLowerCase().replaceAll(" ", "-") ?? "";
+        url = await uploadImage(
+          "images/$username",
+          imageWeb: pickedImageWeb,
+        );
+      } else if (pickedImage != null) {
+        XFile image = XFile(pickedImage.path);
+        url = await uploadImage(
+          "images",
+          image: image,
+        );
+      }
+
+      // Get the image url from the storage
+      if (url.isNotEmpty) {
+        user.image = url;
+      } else {
+        Helpers().showErrorSnackBar("Failed to upload image");
+      }
+
+      // Register the user with email and password
       final result =
           await registerWithEmailAndPassword(user.email!, user.password!);
-      Helpers().writeLog("result: $result");
+      Helpers.writeLog("result: $result");
+
+      // Save the user data to the firestore
       await createData(CollectionType.users.name, user.toJson());
 
       AuthenticationRepository().login(currentUser);
@@ -26,11 +62,10 @@ class UserRepository extends GetxController with RepoBase {
   Future<List<UserDM>> getAllUser() async {
     List collection = await getDataCollection(CollectionType.users.name);
 
-    List<UserDataResponse> userDataresponseList = [];
+    List<UserFirebase> userDataresponseList = [];
 
     for (var element in collection) {
-      UserDataResponse userDataResponse =
-          UserDataResponse.fromFirestore(element);
+      UserFirebase userDataResponse = UserFirebase.fromFirestore(element);
       userDataresponseList.add(userDataResponse);
     }
 

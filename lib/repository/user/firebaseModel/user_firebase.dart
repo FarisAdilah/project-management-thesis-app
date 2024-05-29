@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class UserDataResponse {
+class UserFirebase {
   String? id;
   String? name;
   String? email;
@@ -11,14 +11,14 @@ class UserDataResponse {
   String? phoneNumber;
   String? image;
 
-  UserDataResponse();
+  UserFirebase();
 
-  factory UserDataResponse.fromFirestore(
+  factory UserFirebase.fromFirestore(
     QueryDocumentSnapshot<Map<String, dynamic>> snapshot, {
     SnapshotOptions? options,
   }) {
     final data = snapshot.data();
-    final user = UserDataResponse()
+    final user = UserFirebase()
       ..id = snapshot.id
       ..email = data['email']
       ..name = data['name']
@@ -30,7 +30,7 @@ class UserDataResponse {
     return user;
   }
 
-  Map<String, dynamic> toFirebase() => {
+  Map<String, dynamic> toFirestore() => {
         'id': id,
         'name': name,
         'email': email,

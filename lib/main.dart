@@ -1,12 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:project_management_thesis_app/firebase_options.dart';
 import 'package:project_management_thesis_app/pages/wrapper/wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initiate GetStorage as Shared Preference
+  await GetStorage.init();
+
+  // Initiate Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

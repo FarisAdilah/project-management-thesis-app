@@ -47,6 +47,31 @@ class WebHomePage extends StatelessWidget {
                           selectedMenuId: controller.selectedMenuId.value,
                         ),
                       ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () => controller.logout(),
+                        child: Container(
+                          margin: const EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(10),
+                          child: const Row(
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.arrowRightFromBracket,
+                                color: AssetColor.whitePrimary,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Logout',
+                                style: TextStyle(
+                                  color: AssetColor.whitePrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -62,11 +87,11 @@ class WebHomePage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // controller.showCreateForm();
-            controller.logout();
+            controller.showCreateForm(context);
+            // controller.logout();
           },
           child: const Icon(
-            FontAwesomeIcons.arrowRightFromBracket,
+            FontAwesomeIcons.plus,
           ),
         ));
   }

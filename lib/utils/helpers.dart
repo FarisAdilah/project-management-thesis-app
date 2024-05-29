@@ -35,9 +35,19 @@ class Helpers {
     );
   }
 
-  writeLog(String message) {
+  static writeLog(String message) {
     if (Constant.showLog) {
       log("${Constant.logIdentifier}: $message");
     }
+  }
+
+  String getInitialName(String name) {
+    List<String> nameLetter = name.split(" ");
+    String initialName = "";
+    for (var element in nameLetter) {
+      initialName += element[0].toUpperCase();
+    }
+
+    return initialName;
   }
 }
