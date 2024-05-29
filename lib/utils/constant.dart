@@ -27,6 +27,10 @@ enum MenuType {
   client,
 }
 
+enum StorageType {
+  user,
+}
+
 class Constant {
   static const bool showLog = true;
   static const String logIdentifier = "PenTools-log";
