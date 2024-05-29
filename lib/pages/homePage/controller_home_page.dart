@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientList/client_list.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/main_home_page.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffAdd/staff_add.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/staff_list.dart';
@@ -70,7 +71,7 @@ class HomePageController extends GetxController {
     } else if (selectedMenuId.value == 3) {
       return const VendorList();
     } else if (selectedMenuId.value == 4) {
-      return const Center(child: Text("Ini Halaman Untuk Client"));
+      return const ClientList();
     } else {
       return const Center(child: Text("Ini Halaman Untuk Data Lainnya"));
     }
