@@ -33,7 +33,7 @@ class MenuList extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (onTapMenu != null) {
-          Helpers().writeLog("menu: ${menu.name}");
+          Helpers.writeLog("menu: ${menu.name}");
           onTapMenu(menu);
         }
       },

@@ -20,7 +20,7 @@ class Wrapper extends StatelessWidget {
     return StreamBuilder(
       stream: controller.user,
       builder: (context, snapshot) {
-        Helpers().writeLog("snapshot: $snapshot");
+        Helpers.writeLog("snapshot: $snapshot");
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
