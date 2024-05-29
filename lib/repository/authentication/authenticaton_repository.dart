@@ -12,7 +12,7 @@ class AuthenticationRepository {
   // Authentication Operation
   Future<UserDM?> login(LoginDM creds) async {
     try {
-      Helpers().writeLog("credential request: ${jsonEncode(creds)}");
+      Helpers.writeLog("credential request: ${jsonEncode(creds)}");
       final UserCredential userCredential =
           await _auth.signInWithEmailAndPassword(
         email: creds.email ?? "",
@@ -22,6 +22,7 @@ class AuthenticationRepository {
       UserDM userDM = UserDM();
       userDM.email = user?.email;
       userDM.id = user?.uid;
+      userDM.password = creds.password;
 
       Helpers().showSuccessSnackBar(
         "Login Successful",
@@ -30,7 +31,7 @@ class AuthenticationRepository {
       return userDM;
     } on FirebaseAuthException catch (e) {
       String message = "";
-      Helpers().writeLog(e.code);
+      Helpers.writeLog(e.code);
       if (e.code == 'user-not-found') {
         message = 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
@@ -53,7 +54,7 @@ class AuthenticationRepository {
         position: SnackPosition.TOP,
       );
     } catch (e) {
-      Helpers().writeLog("error: ${e.toString()}");
+      Helpers.writeLog("error: ${e.toString()}");
     }
   }
 

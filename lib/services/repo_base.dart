@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
@@ -40,10 +41,10 @@ mixin RepoBase {
     await _db.collection(collection).doc(id).delete();
   }
 
-  getDataCollection(String collection) async {
+  getDataCollection(String collection, {String? orderBy}) async {
     var dataList = [];
 
-    await _db.collection(collection).get().then(
+    await _db.collection(collection).orderBy(orderBy ?? "name").get().then(
       (value) {
         for (var element in value.docs) {
           dataList.add(element);
@@ -73,14 +74,31 @@ mixin RepoBase {
   }
 
   // File Operation
-  uploadFile(String path, XFile image) async {
+  Future<String> uploadImage(
+    String path, {
+    XFile? image,
+    Uint8List? imageWeb,
+  }) async {
+    final metadata = SettableMetadata(contentType: 'image/jpeg');
     try {
-      final ref = _storage.ref(path).child(image.name);
-      await ref.putFile(File(image.path));
-      final url = await ref.getDownloadURL();
-      return url;
+      if (kIsWeb && imageWeb != null) {
+        final ref = _storage.ref().child(path);
+        await ref.putData(imageWeb, metadata);
+        final url = await ref.getDownloadURL();
+        Helpers.writeLog("url: $url");
+        return url;
+      } else if (image != null) {
+        final ref = _storage.ref(path).child(image.name);
+        await ref.putFile(File(image.path), metadata);
+        final url = await ref.getDownloadURL();
+        Helpers.writeLog("url: $url");
+        return url;
+      } else {
+        return "";
+      }
     } on FirebaseException catch (e) {
       Helpers().showErrorSnackBar("Failed to upload file: $e");
+      return "";
     }
   }
 }
