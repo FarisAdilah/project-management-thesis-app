@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 import 'package:project_management_thesis_app/utils/model/menus.dart';
@@ -48,7 +49,7 @@ class MenuList extends StatelessWidget {
         decoration: BoxDecoration(
           color: menu.id == selectedMenuId
               ? AssetColor.whitePrimary
-              : AssetColor.blueTertiaryAccent,
+              : AssetColor.blueDark,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
@@ -63,15 +64,12 @@ class MenuList extends StatelessWidget {
             const SizedBox(
               width: 20,
             ),
-            Text(
+            CustomText(
               menu.name ?? "Menu",
-              style: TextStyle(
-                color: menu.id == selectedMenuId
-                    ? AssetColor.blueTertiaryAccent
-                    : AssetColor.whitePrimary,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
+              color: menu.id == selectedMenuId
+                  ? AssetColor.blueTertiaryAccent
+                  : AssetColor.whitePrimary,
+              fontWeight: FontWeight.bold,
             ),
           ],
         ),

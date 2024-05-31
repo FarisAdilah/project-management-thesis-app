@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/controller_home_page.dart';
+import 'package:project_management_thesis_app/utils/asset_color.dart';
 
 class TabletHomePage extends StatelessWidget {
   const TabletHomePage({super.key});
@@ -11,9 +13,9 @@ class TabletHomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: const CustomText(
           'HomePage',
-          style: TextStyle(color: Colors.white),
+          color: AssetColor.whitePrimary,
         ),
         backgroundColor: Colors.grey[900],
       ),
@@ -24,7 +26,7 @@ class TabletHomePage extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Text("Test")
+            CustomText("Test")
           ],
         ),
       ),
