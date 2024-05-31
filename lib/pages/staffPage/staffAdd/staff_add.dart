@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffAdd/controller_staff_add.dart';
+import 'package:project_management_thesis_app/utils/asset_color.dart';
 
 class StaffAdd extends StatelessWidget {
   const StaffAdd({super.key});
@@ -20,12 +22,10 @@ class StaffAdd extends StatelessWidget {
           child: Obx(
             () => Column(
               children: [
-                const Text(
+                const CustomText(
                   "Create Form",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
                 const SizedBox(
                   height: 25,
@@ -101,11 +101,9 @@ class StaffAdd extends StatelessWidget {
                       children: [
                         Icon(FontAwesomeIcons.upload),
                         SizedBox(width: 10),
-                        Text(
+                        CustomText(
                           "Upload Image",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          fontWeight: FontWeight.bold,
                         ),
                       ],
                     ),
@@ -132,11 +130,9 @@ class StaffAdd extends StatelessWidget {
                       Colors.blue,
                     ),
                   ),
-                  child: const Text(
+                  child: const CustomText(
                     "Submit",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                    color: AssetColor.whitePrimary,
                   ),
                 ),
               ],
