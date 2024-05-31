@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
@@ -22,13 +23,11 @@ class ClientItemContent extends StatelessWidget {
             radius: 30,
             backgroundColor: AssetColor.blueSecondaryAccent,
             backgroundImage: null,
-            child: Text(
+            child: CustomText(
               "A",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
+              color: AssetColor.whitePrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(
@@ -37,18 +36,14 @@ class ClientItemContent extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              CustomText(
                 "${client?.name}",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+                color: AssetColor.whitePrimary,
+                fontWeight: FontWeight.bold,
               ),
-              Text(
+              CustomText(
                 "${client?.address}",
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
+                color: AssetColor.whitePrimary,
               ),
             ],
           ),

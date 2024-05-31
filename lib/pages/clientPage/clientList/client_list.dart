@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/clientPage/clientList/controller_client_list.dart';
 import 'package:project_management_thesis_app/pages/clientPage/component/client_item_content.dart';
 
@@ -20,7 +21,7 @@ class ClientList extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const Text("Ini Halaman Untuk Data Client"),
+              const CustomText("Ini Halaman Untuk Data Client"),
               const SizedBox(
                 height: 20,
               ),
