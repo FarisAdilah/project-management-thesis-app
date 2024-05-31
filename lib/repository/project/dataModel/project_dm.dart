@@ -14,7 +14,7 @@ class ProjectDM {
   String? status;
   String? startDate;
   String? endDate;
-  List<ClientDM>? client;
+  ClientDM? client;
   List<VendorDM>? vendor;
   List<TimelineDM>? timeline;
   List<PaymentDM>? payment;

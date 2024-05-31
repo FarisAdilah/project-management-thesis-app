@@ -7,6 +7,7 @@ import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class AuthenticationRepository {
+  static AuthenticationRepository get instance => AuthenticationRepository();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Authentication Operation

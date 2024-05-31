@@ -13,9 +13,9 @@ ProjectDM _$ProjectDMFromJson(Map<String, dynamic> json) => ProjectDM()
   ..status = json['status'] as String?
   ..startDate = json['startDate'] as String?
   ..endDate = json['endDate'] as String?
-  ..client = (json['client'] as List<dynamic>?)
-      ?.map((e) => ClientDM.fromJson(e as Map<String, dynamic>))
-      .toList()
+  ..client = json['client'] == null
+      ? null
+      : ClientDM.fromJson(json['client'] as Map<String, dynamic>)
   ..vendor = (json['vendor'] as List<dynamic>?)
       ?.map((e) => VendorDM.fromJson(e as Map<String, dynamic>))
       .toList()
