@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
+import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/authentication/controller_auth.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
@@ -33,15 +34,27 @@ class WebAuthentication extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'PenTools',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.penToSquare,
+                          color: AssetColor.whitePrimary,
+                          size: 28,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        CustomText(
+                          'PenTools',
+                          color: AssetColor.whitePrimary,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ],
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 15,
                     ),
                     Container(
                       width: 325,
@@ -50,26 +63,24 @@ class WebAuthentication extends StatelessWidget {
                         vertical: 25,
                       ),
                       decoration: BoxDecoration(
-                        color: AssetColor.whiteBackground,
+                        color: AssetColor.whitePrimary,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Text(
+                          const CustomText(
                             "Hello",
-                            style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            fontSize: 35,
+                            color: AssetColor.blackPrimary,
+                            fontWeight: FontWeight.bold,
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
+                          const CustomText(
                             'Please Login to Your Account',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.normal),
+                            fontSize: 15,
                           ),
                           const SizedBox(
                             height: 20,
@@ -132,7 +143,7 @@ class WebAuthentication extends StatelessWidget {
                           //           : AssetColor.blueDisabled,
                           //     ),
                           //   ),
-                          //   child: const Text(
+                          //   child: const CustomText(
                           //     "Log In",
                           //     style: TextStyle(
                           //       color: Colors.white,

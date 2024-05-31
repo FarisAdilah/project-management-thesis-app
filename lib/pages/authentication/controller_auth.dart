@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
 import 'package:project_management_thesis_app/repository/authentication/dataModel/login_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
+import 'package:project_management_thesis_app/repository/user/user_repository.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 import 'package:project_management_thesis_app/utils/storage.dart';
 
 class AuthController extends GetxController with Storage {
@@ -24,7 +26,13 @@ class AuthController extends GetxController with Storage {
     if (user != null) {
       emailController.clear();
       passwordController.clear();
-      setUserData(user);
+
+      var newUser = await UserRepository().getAllUser().then((value) {
+        return value.firstWhere((element) => element.email == user.email);
+      });
+      Helpers.writeLog("newUser: ${newUser.toJson()}");
+
+      setUserData(newUser);
       enableButton.value = false;
       Get.offAllNamed("/");
     }
