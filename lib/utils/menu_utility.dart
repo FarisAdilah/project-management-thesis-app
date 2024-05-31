@@ -32,5 +32,12 @@ class MenuUtility {
           type: MenuType.client,
           selected: false,
         ),
+        Menus(
+          id: 5,
+          name: "Profile",
+          icon: FontAwesomeIcons.userPen,
+          type: MenuType.profile,
+          selected: false,
+        )
       ];
 }

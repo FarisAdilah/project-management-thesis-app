@@ -25,6 +25,7 @@ enum MenuType {
   staff,
   vendor,
   client,
+  profile,
 }
 
 enum StorageType {
