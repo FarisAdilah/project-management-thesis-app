@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
 class CustomButton extends StatelessWidget {
@@ -33,18 +34,15 @@ class CustomButton extends StatelessWidget {
           vertical: 10,
         ),
         decoration: BoxDecoration(
-          color: isEnabled ?? false
+          color: isEnabled ?? true
               ? color ?? AssetColor.blueSecondaryAccent
               : disableColor ?? AssetColor.bluePrimaryAccent,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Text(
+        child: CustomText(
           text ?? 'Button',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
+          color: textColor ?? AssetColor.whitePrimary,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
