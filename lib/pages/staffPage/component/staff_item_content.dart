@@ -3,6 +3,7 @@ import 'package:project_management_thesis_app/globalComponent/avatar/profile_pic
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class StaffItemContent extends StatelessWidget {
   final UserDM user;
@@ -33,7 +34,7 @@ class StaffItemContent extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
               CustomText(
-                "${user.role}",
+                Helpers().getUserRole(user.role ?? "Role"),
                 color: AssetColor.whitePrimary,
               ),
             ],
