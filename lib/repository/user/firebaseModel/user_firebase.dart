@@ -13,7 +13,7 @@ class UserFirebase {
 
   UserFirebase();
 
-  factory UserFirebase.fromFirestore(
+  factory UserFirebase.fromFirestoreList(
     QueryDocumentSnapshot<Map<String, dynamic>> snapshot, {
     SnapshotOptions? options,
   }) {
@@ -26,6 +26,23 @@ class UserFirebase {
       ..role = data['role']
       ..phoneNumber = data['phoneNumber']
       ..image = data['image'];
+
+    return user;
+  }
+
+  factory UserFirebase.fromFirestoreDoc(
+    DocumentSnapshot<Map<String, dynamic>> snapshot, {
+    SnapshotOptions? options,
+  }) {
+    final data = snapshot.data();
+    final user = UserFirebase()
+      ..id = snapshot.id
+      ..email = data?['email']
+      ..name = data?['name']
+      ..password = data?['password']
+      ..role = data?['role']
+      ..phoneNumber = data?['phoneNumber']
+      ..image = data?['image'];
 
     return user;
   }

@@ -57,8 +57,8 @@ mixin RepoBase {
     return dataList;
   }
 
-  getDataDocument(String collection, String id) {
-    return _db.collection(collection).doc(id).snapshots();
+  getDataDocument(String collection, String id) async {
+    return await _db.collection(collection).doc(id).get();
   }
 
   // Authentication Operation

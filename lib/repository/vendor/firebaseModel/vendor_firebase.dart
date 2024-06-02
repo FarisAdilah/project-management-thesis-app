@@ -13,7 +13,7 @@ class VendorFirebase {
 
   VendorFirebase();
 
-  factory VendorFirebase.fromFirestore(
+  factory VendorFirebase.fromFirestoreList(
     QueryDocumentSnapshot<Map<String, dynamic>> snapshot, {
     SnapshotOptions? options,
   }) {
@@ -25,7 +25,24 @@ class VendorFirebase {
       ..image = data['image']
       ..address = data['address']
       ..phoneNumber = data['phoneNumber']
-      ..pic = data['pic'];
+      ..pic = List.from(data['pic']);
+
+    return vendor;
+  }
+
+  factory VendorFirebase.fromFirestoreDoc(
+    DocumentSnapshot<Map<String, dynamic>> snapshot, {
+    SnapshotOptions? options,
+  }) {
+    final data = snapshot.data();
+    final vendor = VendorFirebase()
+      ..id = snapshot.id
+      ..name = data?['name']
+      ..description = data?['description']
+      ..image = data?['image']
+      ..address = data?['address']
+      ..phoneNumber = data?['phoneNumber']
+      ..pic = List.from(data?['pic']);
 
     return vendor;
   }

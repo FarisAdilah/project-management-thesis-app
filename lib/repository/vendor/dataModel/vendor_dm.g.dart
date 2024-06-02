@@ -13,7 +13,9 @@ VendorDM _$VendorDMFromJson(Map<String, dynamic> json) => VendorDM()
   ..image = json['image'] as String?
   ..address = json['address'] as String?
   ..phoneNumber = json['phoneNumber'] as String?
-  ..pic = (json['pic'] as List<dynamic>?)?.map((e) => e as String).toList();
+  ..pic = (json['pic'] as List<dynamic>?)
+      ?.map((e) => PicDM.fromJson(e as Map<String, dynamic>))
+      .toList();
 
 Map<String, dynamic> _$VendorDMToJson(VendorDM instance) => <String, dynamic>{
       'id': instance.id,

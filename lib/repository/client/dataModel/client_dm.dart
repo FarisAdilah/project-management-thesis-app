@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:project_management_thesis_app/repository/pic/dataModel/pic_dm.dart';
 
 part 'client_dm.g.dart';
 
@@ -10,7 +11,7 @@ class ClientDM {
   String? image;
   String? address;
   String? phoneNumber;
-  List<String>? pic;
+  List<PicDM>? pic;
 
   ClientDM();
 

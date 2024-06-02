@@ -65,7 +65,7 @@ class UserRepository with RepoBase {
     List<UserFirebase> userDataresponseList = [];
 
     for (var element in collection) {
-      UserFirebase userDataResponse = UserFirebase.fromFirestore(element);
+      UserFirebase userDataResponse = UserFirebase.fromFirestoreList(element);
       userDataresponseList.add(userDataResponse);
     }
 
@@ -85,5 +85,22 @@ class UserRepository with RepoBase {
     }
 
     return userList;
+  }
+
+  Future<UserDM> getUserById(String id) async {
+    var data = await getDataDocument(CollectionType.users.name, id);
+
+    UserFirebase userFirebase = UserFirebase.fromFirestoreDoc(data);
+
+    UserDM user = UserDM();
+    user.id = userFirebase.id;
+    user.email = userFirebase.email;
+    user.name = userFirebase.name;
+    user.role = userFirebase.role;
+    user.image = userFirebase.image;
+    user.password = userFirebase.password;
+    user.phoneNumber = userFirebase.phoneNumber;
+
+    return user;
   }
 }
