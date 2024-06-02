@@ -11,4 +11,9 @@ class AssetColor {
   static const blueDisabled = Color.fromARGB(150, 168, 218, 220);
   static const greyBackground = Color.fromARGB(255, 240, 240, 240);
   static const grey = Color.fromARGB(255, 168, 168, 168);
+  static const green = Color.fromARGB(255, 22, 192, 152);
+  static const greenButton = Color.fromARGB(255, 40, 199, 111);
+  static const orange = Color.fromARGB(255, 255, 159, 67);
+  static const orangeButton = Color.fromARGB(255, 255, 127, 62);
+  static const purple = Color.fromARGB(255, 115, 103, 240);
 }

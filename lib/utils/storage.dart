@@ -5,12 +5,16 @@ import 'package:project_management_thesis_app/utils/constant.dart';
 mixin Storage {
   static GetStorage get _storage => GetStorage();
 
-  setUserData(UserDM user) {
-    _storage.write(StorageType.user.name, user.toJson());
+  Future<void> setUserData(UserDM user) async {
+    await _storage.write(StorageType.user.name, user.toJson());
   }
 
   UserDM? getUserData() {
     var user = _storage.read(StorageType.user.name);
-    return UserDM.fromJson(user);
+    if (user != null) {
+      return UserDM.fromJson(user);
+    } else {
+      return null;
+    }
   }
 }
