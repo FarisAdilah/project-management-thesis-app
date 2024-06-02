@@ -11,7 +11,10 @@ class AuthenticationRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Authentication Operation
-  Future<UserDM?> login(LoginDM creds) async {
+  Future<UserDM?> login(
+    LoginDM creds, {
+    bool showPopup = true,
+  }) async {
     try {
       Helpers.writeLog("credential request: ${jsonEncode(creds)}");
       final UserCredential userCredential =
@@ -25,10 +28,12 @@ class AuthenticationRepository {
       userDM.id = user?.uid;
       userDM.password = creds.password;
 
-      Helpers().showSuccessSnackBar(
-        "Login Successful",
-        position: SnackPosition.TOP,
-      );
+      if (showPopup) {
+        Helpers().showSuccessSnackBar(
+          "Login Successful",
+          position: SnackPosition.TOP,
+        );
+      }
       return userDM;
     } on FirebaseAuthException catch (e) {
       String message = "";

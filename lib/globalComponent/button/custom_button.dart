@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
   final Color? disableColor;
   final Color? textColor;
   final bool? isEnabled;
+  final double? borderRadius;
 
   const CustomButton({
     super.key,
@@ -18,6 +19,7 @@ class CustomButton extends StatelessWidget {
     this.disableColor,
     this.textColor,
     this.isEnabled,
+    this.borderRadius,
   });
 
   @override
@@ -33,7 +35,7 @@ class CustomButton extends StatelessWidget {
           color: isEnabled ?? true
               ? color ?? AssetColor.blueSecondaryAccent
               : disableColor ?? AssetColor.bluePrimaryAccent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(borderRadius ?? 20),
         ),
         child: CustomText(
           text ?? 'Button',

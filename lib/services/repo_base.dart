@@ -62,14 +62,22 @@ mixin RepoBase {
   }
 
   // Authentication Operation
-  registerWithEmailAndPassword(String email, String password) async {
+  Future<bool> registerWithEmailAndPassword(
+      String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      UserCredential user = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      if (user.user != null) {
+        return true;
+      } else {
+        return false;
+      }
     } on FirebaseAuthException catch (e) {
       Helpers().showErrorSnackBar("Failed to register: $e");
+      return false;
     }
   }
 

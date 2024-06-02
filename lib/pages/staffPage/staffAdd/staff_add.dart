@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/globalComponent/background/gradation_background.dart';
+import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
@@ -19,6 +21,14 @@ class StaffAdd extends StatelessWidget {
     final controller = Get.put(StaffAddController());
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: AssetColor.whitePrimary,
+        ),
+      ),
       body: Obx(
         () => Stack(
           children: [
@@ -103,18 +113,30 @@ class StaffAdd extends StatelessWidget {
                                 hintText: "input phone number",
                               ),
                               const SizedBox(
-                                height: 25,
+                                height: 15,
+                              ),
+                              const CustomText(
+                                "Image User",
+                                color: AssetColor.blackPrimary,
+                                fontSize: 16,
+                              ),
+                              const SizedBox(
+                                height: 15,
                               ),
                               controller.pickedImage.value.path.isNotEmpty ||
                                       controller.pickedImageWeb.value.isNotEmpty
                                   ? kIsWeb
                                       ? Image.memory(
                                           controller.pickedImageWeb.value,
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.cover,
+                                          width: 100,
+                                          height: 100,
                                         )
                                       : Image.file(
                                           controller.pickedImage.value,
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.cover,
+                                          width: 100,
+                                          height: 100,
                                         )
                                   : const SizedBox(),
                               const SizedBox(height: 15),
@@ -132,13 +154,18 @@ class StaffAdd extends StatelessWidget {
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(FontAwesomeIcons.upload),
-                                      SizedBox(width: 10),
+                                      const Icon(FontAwesomeIcons.upload),
+                                      const SizedBox(width: 10),
                                       CustomText(
-                                        "Upload Image",
+                                        controller.pickedImage.value.path
+                                                    .isNotEmpty ||
+                                                controller.pickedImageWeb.value
+                                                    .isNotEmpty
+                                            ? "Reupload Image"
+                                            : "Upload Image",
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ],
@@ -148,21 +175,46 @@ class StaffAdd extends StatelessWidget {
                               const SizedBox(
                                 height: 15,
                               ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AssetColor.orange.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: AssetColor.orange),
+                                ),
+                                child: const Row(
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.circleInfo,
+                                      applyTextScaling: true,
+                                    ),
+                                    SizedBox(width: 10),
+                                    CustomText(
+                                      "Your user password will be generated automatically by format: ",
+                                    ),
+                                    CustomText(
+                                      "<First Name>#123",
+                                      fontWeight: FontWeight.bold,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
                               Align(
                                 alignment: Alignment.center,
-                                child: ElevatedButton(
+                                child: CustomButton(
                                   onPressed: () {
                                     controller.createUser();
                                   },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      Colors.blue,
-                                    ),
-                                  ),
-                                  child: const CustomText(
-                                    "Submit",
-                                    color: AssetColor.whitePrimary,
-                                  ),
+                                  color: AssetColor.greenButton,
+                                  text: "Create New User",
+                                  textColor: AssetColor.whitePrimary,
+                                  borderRadius: 10,
                                 ),
                               ),
                             ],
@@ -172,22 +224,15 @@ class StaffAdd extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                        top: 4,
-                        bottom: 4,
-                        right: 4,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
                       ),
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                        child: Image.asset(
-                          AssetImages.backgroundCreateUser,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.bottomCenter,
-                        ),
+                      child: Image.asset(
+                        AssetImages.backgroundCreateUser,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.bottomCenter,
                       ),
                     ),
                   ),

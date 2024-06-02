@@ -13,8 +13,8 @@ import 'package:project_management_thesis_app/utils/helpers.dart';
 class UserRepository with RepoBase {
   static UserRepository get instance => UserRepository();
 
-  createUser(
-    UserDM user,
+  Future<bool> createUser(
+    UserFirebase user,
     LoginDM currentUser, {
     File? pickedImage,
     Uint8List? pickedImageWeb,
@@ -46,16 +46,31 @@ class UserRepository with RepoBase {
       }
 
       // Register the user with email and password
-      final result =
+      bool isRegister =
           await registerWithEmailAndPassword(user.email!, user.password!);
-      Helpers.writeLog("result: $result");
 
       // Save the user data to the firestore
-      await createData(CollectionType.users.name, user.toJson());
+      if (isRegister) {
+        await createData(
+          CollectionType.users.name,
+          user.toFirestore(),
+          showPopup: false,
+        );
+      }
 
-      AuthenticationRepository().login(currentUser);
+      UserDM? relog = await AuthenticationRepository().login(
+        currentUser,
+        showPopup: false,
+      );
+
+      if (relog != null) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       Helpers().showErrorSnackBar("Email and Password is not valid");
+      return false;
     }
   }
 

@@ -8,7 +8,9 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/authentication/dataModel/login_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
+import 'package:project_management_thesis_app/repository/user/firebaseModel/user_firebase.dart';
 import 'package:project_management_thesis_app/repository/user/user_repository.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 import 'package:project_management_thesis_app/utils/storage.dart';
 
@@ -31,13 +33,6 @@ class StaffAddController extends GetxController with Storage {
     "Project Manager",
     "Staff",
   ];
-
-  @override
-  void onInit() {
-    super.onInit();
-    var user = getUserData();
-    Helpers.writeLog("user: ${user?.email} ${user?.password}");
-  }
 
   Future<void> onImageButtonPressed(
     ImageSource source, {
@@ -69,15 +64,19 @@ class StaffAddController extends GetxController with Storage {
   createUser() async {
     isLoading.value = true;
 
-    UserDM user = UserDM();
+    UserFirebase user = UserFirebase();
     user.name = nameController.text;
     user.email = emailController.text;
-    user.role = roleController.text;
+    user.role = _getUserRole(roleController.text);
     user.phoneNumber = phoneNumberController.text;
     user.image = imageController.text;
-    user.password = "password"; //TODO: change default password
+    user.password = Helpers().getGeneratedPassword(
+      nameController.text,
+    );
 
-    UserDM? signedUser = getUserData();
+    Helpers.writeLog("password: ${user.password}");
+
+    UserDM? signedUser = await getUserData();
     if (signedUser == null) {
       Helpers().showErrorSnackBar("Something Wrong");
     } else {
@@ -87,12 +86,38 @@ class StaffAddController extends GetxController with Storage {
       loginDM.email = signedUser.email;
       loginDM.password = signedUser.password;
 
-      await UserRepository().createUser(user, loginDM,
-          pickedImage: pickedImage.value, pickedImageWeb: pickedImageWeb.value);
+      bool isSuccess = await UserRepository().createUser(
+        user,
+        loginDM,
+        pickedImage: pickedImage.value,
+        pickedImageWeb: pickedImageWeb.value,
+      );
 
-      Get.back();
+      Helpers.writeLog("isSuccess: $isSuccess");
+
+      if (isSuccess) {
+        Get.back();
+        Helpers.writeLog("User created successfully");
+        await Helpers().showSuccessSnackBar("User created successfully");
+      } else {
+        Helpers().showErrorSnackBar("Failed to create user");
+      }
     }
 
     isLoading.value = false;
+  }
+
+  String _getUserRole(String role) {
+    if (role == "Supervisor") {
+      return UserType.supervisor.name;
+    } else if (role == "Admin") {
+      return UserType.admin.name;
+    } else if (role == "Project Manager") {
+      return UserType.projectManager.name;
+    } else if (role == "Staff") {
+      return UserType.staff.name;
+    } else {
+      return UserType.staff.name;
+    }
   }
 }

@@ -48,7 +48,6 @@ class UserFirebase {
   }
 
   Map<String, dynamic> toFirestore() => {
-        'id': id,
         'name': name,
         'email': email,
         'password': password,
