@@ -12,8 +12,9 @@ import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.
 import 'package:project_management_thesis_app/utils/helpers.dart';
 import 'package:project_management_thesis_app/utils/menu_utility.dart';
 import 'package:project_management_thesis_app/utils/model/menus.dart';
+import 'package:project_management_thesis_app/utils/storage.dart';
 
-class HomePageController extends GetxController {
+class HomePageController extends GetxController with Storage {
   final AuthenticationRepository _authenticationRepository =
       AuthenticationRepository();
 
@@ -33,6 +34,7 @@ class HomePageController extends GetxController {
   logout() async {
     isLoading.value = true;
     await _authenticationRepository.logout();
+    await setUserData(UserDM());
     isLoading.value = false;
     Get.deleteAll();
     Get.put(WrapperController());

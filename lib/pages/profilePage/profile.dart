@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input_border.dart';
@@ -64,10 +65,12 @@ class Profile extends StatelessWidget {
                                   "Edit your profile here",
                                   color: AssetColor.whiteBackground,
                                 ),
-                                CustomText(
-                                  "id: ${controller.user.value.id ?? ""}",
-                                  color: AssetColor.whiteBackground,
-                                  fontWeight: FontWeight.bold,
+                                Obx(
+                                  () => CustomText(
+                                    "id: ${controller.user.value.id ?? ""}",
+                                    color: AssetColor.whiteBackground,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ],
                             )
@@ -182,10 +185,12 @@ class Profile extends StatelessWidget {
                   ),
                   height: 125,
                   width: 125,
-                  child: ProfilePicture(
-                    user: controller.user.value,
-                    backgroundColor: AssetColor.blueSecondaryAccent,
-                    initialNameSize: 30,
+                  child: Obx(
+                    () => ProfilePicture(
+                      user: controller.user.value,
+                      backgroundColor: AssetColor.blueSecondaryAccent,
+                      initialNameSize: 30,
+                    ),
                   ),
                 ),
               )

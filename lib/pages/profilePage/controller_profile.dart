@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 import 'package:project_management_thesis_app/utils/storage.dart';
 
 class ProfileController extends GetxController with Storage {
@@ -15,9 +16,10 @@ class ProfileController extends GetxController with Storage {
   Rx<bool> isObscure = true.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    user.value = getUserData() ?? UserDM();
+    user.value = await getUserData() ?? UserDM();
+    Helpers.writeLog("user: ${user.value.toJson()}");
 
     nameController.text = user.value.name ?? "";
     emailController.text = user.value.email ?? "";

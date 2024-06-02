@@ -9,7 +9,7 @@ mixin Storage {
     await _storage.write(StorageType.user.name, user.toJson());
   }
 
-  UserDM? getUserData() {
+  Future<UserDM?> getUserData() async {
     var user = _storage.read(StorageType.user.name);
     if (user != null) {
       return UserDM.fromJson(user);

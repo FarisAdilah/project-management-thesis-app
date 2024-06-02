@@ -29,16 +29,16 @@ class MainPageController extends GetxController with Storage {
   @override
   void onInit() async {
     super.onInit();
-    _getCurrentUser();
     await _getAllUser();
+    await _getCurrentUser();
     await _getAllVendors();
     await _getAllClients();
     await _getAllProjects();
     isLoading.value = false;
   }
 
-  _getCurrentUser() {
-    currentUser.value = getUserData() ?? UserDM();
+  _getCurrentUser() async {
+    currentUser.value = await getUserData() ?? UserDM();
     Helpers.writeLog("currentUser: ${jsonEncode(currentUser.value)}");
   }
 
