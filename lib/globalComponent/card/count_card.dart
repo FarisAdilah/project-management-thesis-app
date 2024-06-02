@@ -27,11 +27,12 @@ class CountCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AssetColor.whiteBackground,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: AssetColor.grey.withOpacity(0.5),
+            spreadRadius: 3,
             blurRadius: 5.0,
-            offset: Offset(0, 8),
+            offset: const Offset(0, 5),
           ),
         ],
       ),

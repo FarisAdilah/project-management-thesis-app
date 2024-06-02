@@ -23,11 +23,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (onPressed != null) {
-          onPressed!();
-        }
-      },
+      onTap: onPressed != null ? () => onPressed!() : null,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 35,

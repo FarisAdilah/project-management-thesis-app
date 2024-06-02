@@ -7,6 +7,7 @@ class CustomInputBorder extends StatelessWidget {
   final TextEditingController? controller;
   final bool? isPassword;
   final bool? enabled;
+  final VoidCallback? obscureCallback;
 
   const CustomInputBorder({
     super.key,
@@ -15,6 +16,7 @@ class CustomInputBorder extends StatelessWidget {
     this.controller,
     this.isPassword,
     this.enabled,
+    this.obscureCallback,
   });
 
   @override
@@ -38,9 +40,12 @@ class CustomInputBorder extends StatelessWidget {
             enabled ?? true ? AssetColor.whiteBackground : AssetColor.grey,
         filled: true,
         suffixIcon: icon != null
-            ? Icon(
-                icon,
-                color: borderColor ?? AssetColor.grey,
+            ? InkWell(
+                onTap: () => obscureCallback != null ? obscureCallback!() : {},
+                child: Icon(
+                  icon,
+                  color: borderColor ?? AssetColor.grey,
+                ),
               )
             : null,
       ),
