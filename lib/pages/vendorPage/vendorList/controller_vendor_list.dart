@@ -10,6 +10,8 @@ class VendorListController extends GetxController {
 
   RxList<VendorDM> vendors = <VendorDM>[].obs;
 
+  RxBool isLoading = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -17,6 +19,7 @@ class VendorListController extends GetxController {
   }
 
   _getVendorList() async {
+    isLoading.value = true;
     var response = await _vendorRepository.getAllVendor();
 
     if (response.isNotEmpty) {
@@ -25,5 +28,6 @@ class VendorListController extends GetxController {
     } else {
       Helpers().showErrorSnackBar("Failed to get vendor data");
     }
+    isLoading.value = false;
   }
 }

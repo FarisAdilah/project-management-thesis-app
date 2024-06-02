@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
+import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/staffPage/component/staff_item_content.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/controller_staff_list.dart';
@@ -16,38 +17,45 @@ class StaffList extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(StaffListController());
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      body: Obx(
+        () => Stack(
           children: [
-            const CustomText("Ini Halaman Untuk Data Staff"),
-            const SizedBox(
-              height: 20,
-            ),
-            CustomButton(
-              onPressed: () => controller.showCreateForm(context),
-              text: "Add Staff",
-              color: AssetColor.blueTertiaryAccent,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Obx(
-              () => ListView.builder(
-                itemCount: controller.users.length,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  UserDM user = controller.users[index];
+            Padding(
+              padding: const EdgeInsets.all(25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CustomText("Ini Halaman Untuk Data Staff"),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomButton(
+                    onPressed: () => controller.showCreateForm(context),
+                    text: "Add Staff",
+                    color: AssetColor.blueTertiaryAccent,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Obx(
+                    () => ListView.builder(
+                      itemCount: controller.users.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        UserDM user = controller.users[index];
 
-                  return StaffItemContent(
-                    user: user,
-                  );
-                },
+                        return StaffItemContent(
+                          user: user,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
+            controller.isLoading.value ? const Loading() : const SizedBox()
           ],
         ),
       ),

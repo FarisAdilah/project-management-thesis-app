@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input_border.dart';
@@ -114,12 +115,19 @@ class Profile extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                Expanded(
-                                  child: _buildInput(
-                                    "Password",
-                                    FontAwesomeIcons.eyeSlash,
-                                    controller: controller.passwordController,
-                                    isPassword: true,
+                                Obx(
+                                  () => Expanded(
+                                    child: _buildInput(
+                                      "Password",
+                                      controller.isObscure.value
+                                          ? FontAwesomeIcons.eyeSlash
+                                          : FontAwesomeIcons.eye,
+                                      controller: controller.passwordController,
+                                      isPassword: controller.isObscure.value,
+                                      obscureCallback: () {
+                                        controller.toggleObscure();
+                                      },
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
@@ -195,6 +203,7 @@ Widget _buildInput(
   TextEditingController? controller,
   bool? isPassword,
   bool? enabled,
+  VoidCallback? obscureCallback,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,6 +222,7 @@ Widget _buildInput(
         controller: controller,
         isPassword: isPassword,
         enabled: enabled,
+        obscureCallback: obscureCallback,
       ),
     ],
   );

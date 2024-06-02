@@ -57,7 +57,7 @@ class MenuList extends StatelessWidget {
             Icon(
               menu.icon,
               color: menu.id == selectedMenuId
-                  ? AssetColor.blueTertiaryAccent
+                  ? AssetColor.blueDark
                   : AssetColor.whitePrimary,
               size: 15,
             ),
@@ -67,7 +67,7 @@ class MenuList extends StatelessWidget {
             CustomText(
               menu.name ?? "Menu",
               color: menu.id == selectedMenuId
-                  ? AssetColor.blueTertiaryAccent
+                  ? AssetColor.blueDark
                   : AssetColor.whitePrimary,
               fontWeight: FontWeight.bold,
             ),

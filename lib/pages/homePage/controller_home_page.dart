@@ -6,6 +6,7 @@ import 'package:project_management_thesis_app/pages/homePage/component/mainPage/
 import 'package:project_management_thesis_app/pages/profilePage/profile.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/staff_list.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorList/vendor_list.dart';
+import 'package:project_management_thesis_app/pages/wrapper/controller_wrapper.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
@@ -33,7 +34,8 @@ class HomePageController extends GetxController {
     isLoading.value = true;
     await _authenticationRepository.logout();
     isLoading.value = false;
-    Get.offAllNamed("/");
+    Get.deleteAll();
+    Get.put(WrapperController());
   }
 
   setSelectedMenu(Menus menu) {

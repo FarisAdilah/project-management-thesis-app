@@ -12,6 +12,8 @@ class ProfileController extends GetxController with Storage {
   final phoneController = TextEditingController();
   final roleController = TextEditingController();
 
+  Rx<bool> isObscure = true.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -22,5 +24,9 @@ class ProfileController extends GetxController with Storage {
     passwordController.text = user.value.password ?? "";
     phoneController.text = user.value.phoneNumber ?? "";
     roleController.text = user.value.role ?? "";
+  }
+
+  toggleObscure() {
+    isObscure.value = !isObscure.value;
   }
 }

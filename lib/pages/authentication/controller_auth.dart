@@ -32,9 +32,9 @@ class AuthController extends GetxController with Storage {
       });
       Helpers.writeLog("newUser: ${newUser.toJson()}");
 
-      setUserData(newUser);
+      await setUserData(newUser);
       enableButton.value = false;
-      Get.offAllNamed("/");
+      Get.delete<AuthController>();
     }
   }
 
@@ -54,6 +54,7 @@ class AuthController extends GetxController with Storage {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    dispose();
     super.dispose();
   }
 }

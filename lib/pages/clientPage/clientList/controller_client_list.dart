@@ -8,6 +8,8 @@ class ClientListController extends GetxController {
 
   RxList<ClientDM> clients = <ClientDM>[].obs;
 
+  RxBool isLoading = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -15,6 +17,8 @@ class ClientListController extends GetxController {
   }
 
   _getClientList() async {
+    isLoading.value = true;
+
     var response = await _clientRepository.getAllClient();
 
     if (response.isNotEmpty) {
@@ -22,5 +26,7 @@ class ClientListController extends GetxController {
     } else {
       Helpers().showErrorSnackBar("Failed to get client data");
     }
+
+    isLoading.value = false;
   }
 }

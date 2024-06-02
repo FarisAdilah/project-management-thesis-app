@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/authentication/dataModel/login_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
@@ -22,6 +23,15 @@ class StaffAddController extends GetxController with Storage {
   Rx<File> pickedImage = File("").obs;
   Rx<Uint8List> pickedImageWeb = Uint8List(0).obs;
 
+  RxBool isLoading = false.obs;
+
+  List role = [
+    "Supervisor",
+    "Admin",
+    "Project Manager",
+    "Staff",
+  ];
+
   @override
   void onInit() {
     super.onInit();
@@ -34,6 +44,9 @@ class StaffAddController extends GetxController with Storage {
     required BuildContext context,
   }) async {
     XFile? pickedFile = await _picker.pickImage(source: source);
+
+    isLoading.value = true;
+
     if (pickedFile != null) {
       if (kIsWeb) {
         Helpers.writeLog("helloooo kIsWeb: $kIsWeb");
@@ -49,16 +62,20 @@ class StaffAddController extends GetxController with Storage {
     } else {
       Helpers.writeLog("No image selected.");
     }
+
+    isLoading.value = false;
   }
 
   createUser() async {
+    isLoading.value = true;
+
     UserDM user = UserDM();
     user.name = nameController.text;
     user.email = emailController.text;
     user.role = roleController.text;
     user.phoneNumber = phoneNumberController.text;
     user.image = imageController.text;
-    user.password = "password";
+    user.password = "password"; //TODO: change default password
 
     UserDM? signedUser = getUserData();
     if (signedUser == null) {
@@ -75,5 +92,7 @@ class StaffAddController extends GetxController with Storage {
 
       Get.back();
     }
+
+    isLoading.value = false;
   }
 }

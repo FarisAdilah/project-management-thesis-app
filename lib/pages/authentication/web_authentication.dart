@@ -24,9 +24,9 @@ class WebAuthentication extends StatelessWidget {
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AssetColor.bluePrimaryAccent,
-                      AssetColor.blueSecondaryAccent,
                       AssetColor.blueTertiaryAccent,
+                      AssetColor.blueSecondaryAccent,
+                      AssetColor.bluePrimaryAccent,
                     ],
                   ),
                 ),
@@ -125,32 +125,13 @@ class WebAuthentication extends StatelessWidget {
                           ),
                           Obx(
                             () => CustomButton(
-                              onPressed: () => controller.enableButton.value
-                                  ? controller.login()
+                              onPressed: controller.enableButton.value
+                                  ? () => controller.login()
                                   : null,
                               isEnabled: controller.enableButton.value,
                               text: 'Log In',
                             ),
                           ),
-                          // TextButton(
-                          //   onPressed: () => controller.enableButton.value
-                          //       ? controller.login()
-                          //       : (),
-                          //   style: ButtonStyle(
-                          //     backgroundColor: MaterialStatePropertyAll(
-                          //       controller.enableButton.value
-                          //           ? AssetColor.bluePrimaryAccent
-                          //           : AssetColor.blueDisabled,
-                          //     ),
-                          //   ),
-                          //   child: const CustomText(
-                          //     "Log In",
-                          //     style: TextStyle(
-                          //       color: Colors.white,
-                          //       fontWeight: FontWeight.w200,
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       ),
                     )
