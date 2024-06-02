@@ -50,4 +50,29 @@ class Helpers {
 
     return initialName;
   }
+
+  String getGeneratedPassword(String username) {
+    String password = "";
+    String firstName = username.split(" ")[0];
+
+    password = "${firstName.toLowerCase()}#123";
+
+    return password;
+  }
+
+  String getUserRole(String role) {
+    String userRole = "";
+
+    if (role == UserType.supervisor.name) {
+      userRole = "Supervisor";
+    } else if (role == UserType.admin.name) {
+      userRole = "Admin";
+    } else if (role == UserType.projectManager.name) {
+      userRole = "Project Manager";
+    } else if (role == UserType.staff.name) {
+      userRole = "Staff";
+    }
+
+    return userRole;
+  }
 }
