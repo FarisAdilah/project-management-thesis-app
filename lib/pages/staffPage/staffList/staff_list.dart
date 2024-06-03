@@ -21,35 +21,73 @@ class StaffList extends StatelessWidget {
       body: Obx(
         () => Stack(
           children: [
-            Padding(
+            Container(
+              color: AssetColor.greyBackground,
               padding: const EdgeInsets.all(25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomText("Ini Halaman Untuk Data Staff"),
+                  const CustomText(
+                    "User List",
+                    color: AssetColor.blackPrimary,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Obx(
+                    () {
+                      int supervisor = controller.totalSupervisor.value;
+                      int admin = controller.totalAdmin.value;
+                      int projectManager = controller.totalProjectManager.value;
+                      int staff = controller.totalStaff.value;
+                      return Row(
+                        children: [
+                          _buildTag(supervisor, "Supervisor"),
+                          const SizedBox(width: 10),
+                          _buildTag(admin, "Admin"),
+                          const SizedBox(width: 10),
+                          _buildTag(projectManager, "Project Manager"),
+                          const SizedBox(width: 10),
+                          _buildTag(staff, "Staff"),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Divider(
+                    color: AssetColor.grey,
+                    thickness: 1,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   CustomButton(
                     onPressed: () => controller.showCreateForm(context),
-                    text: "Add Staff",
-                    color: AssetColor.blueTertiaryAccent,
+                    text: "Add New User",
+                    color: AssetColor.greenButton,
+                    borderRadius: 8,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  Obx(
-                    () => ListView.builder(
-                      itemCount: controller.users.length,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        UserDM user = controller.users[index];
+                  Expanded(
+                    child: Obx(
+                      () => ListView.builder(
+                        itemCount: controller.users.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          UserDM user = controller.users[index];
 
-                        return StaffItemContent(
-                          user: user,
-                        );
-                      },
+                          return StaffItemContent(
+                            user: user,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -61,4 +99,40 @@ class StaffList extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildTag(int count, String title) {
+  return Container(
+    padding: const EdgeInsets.symmetric(
+      horizontal: 10,
+      vertical: 5,
+    ),
+    decoration: BoxDecoration(
+        color: AssetColor.whiteBackground,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: AssetColor.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 5,
+            offset: const Offset(0, 5),
+          ),
+        ]),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        CustomText(
+          count.toString(),
+          color: AssetColor.greenButton,
+          fontSize: 16,
+        ),
+        const SizedBox(width: 8),
+        CustomText(
+          title,
+          color: AssetColor.blackPrimary,
+          fontSize: 16,
+        ),
+      ],
+    ),
+  );
 }

@@ -16,4 +16,6 @@ class AssetColor {
   static const orange = Color.fromARGB(255, 255, 159, 67);
   static const orangeButton = Color.fromARGB(255, 255, 127, 62);
   static const purple = Color.fromARGB(255, 115, 103, 240);
+  static const black = Color.fromARGB(255, 0, 0, 0);
+  static const redButton = Color.fromARGB(255, 234, 84, 85);
 }
