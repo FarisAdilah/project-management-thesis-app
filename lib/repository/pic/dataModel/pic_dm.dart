@@ -1,5 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'pic_dm.g.dart';
+
+@JsonSerializable()
 class PicDM {
-  String? id;
   String? name;
   String? email;
   String? phoneNumber;
@@ -7,23 +11,7 @@ class PicDM {
 
   PicDM();
 
-  factory PicDM.fromJson(Map<String, dynamic> json) {
-    PicDM pic = PicDM();
-    pic.id = json['id'];
-    pic.name = json['name'];
-    pic.email = json['email'];
-    pic.phoneNumber = json['phoneNumber'];
-    pic.role = json['role'];
-    return pic;
-  }
+  factory PicDM.fromJson(Map<String, dynamic> json) => _$PicDMFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'phoneNumber': phoneNumber,
-      'role': role,
-    };
-  }
+  Map<String, dynamic> toJson() => _$PicDMToJson(this);
 }

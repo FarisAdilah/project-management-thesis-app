@@ -1,5 +1,4 @@
 import 'package:project_management_thesis_app/repository/pic/dataModel/pic_dm.dart';
-import 'package:project_management_thesis_app/repository/pic/pic_repository.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/firebaseModel/vendor_firebase.dart';
 import 'package:project_management_thesis_app/services/repo_base.dart';
@@ -27,18 +26,17 @@ class VendorRepository with RepoBase {
       vendorDM.id = element.id;
       vendorDM.address = element.address;
       vendorDM.description = element.description;
+      vendorDM.email = element.email;
       vendorDM.image = element.image;
       vendorDM.name = element.name;
       vendorDM.phoneNumber = element.phoneNumber;
 
-      List<PicDM> pic = [];
+      PicDM pic = PicDM();
+      pic.email = element.pic?.email;
+      pic.name = element.pic?.name;
+      pic.phoneNumber = element.pic?.phoneNumber;
+      pic.role = element.pic?.role;
 
-      if (element.pic?.isNotEmpty ?? false) {
-        for (var element in element.pic!) {
-          PicDM picDM = await PicRepository().getPicById(element);
-          pic.add(picDM);
-        }
-      }
       vendorDM.pic = pic;
 
       vendorDMList.add(vendorDM);
@@ -67,19 +65,17 @@ class VendorRepository with RepoBase {
     vendorDM.id = vendor.id;
     vendorDM.address = vendor.address;
     vendorDM.description = vendor.description;
+    vendorDM.email = vendor.email;
     vendorDM.image = vendor.image;
     vendorDM.name = vendor.name;
     vendorDM.phoneNumber = vendor.phoneNumber;
 
-    List<PicDM> pic = [];
+    PicDM pic = PicDM();
+    pic.email = vendor.pic?.email;
+    pic.name = vendor.pic?.name;
+    pic.phoneNumber = vendor.pic?.phoneNumber;
+    pic.role = vendor.pic?.role;
 
-    if (vendor.pic?.isNotEmpty ?? false) {
-      for (var element in vendor.pic!) {
-        PicDM picDM = await PicRepository().getPicById(element);
-
-        pic.add(picDM);
-      }
-    }
     vendorDM.pic = pic;
 
     return vendorDM;

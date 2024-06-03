@@ -1,7 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'pic_firebase.g.dart';
+
+@JsonSerializable()
 class PicFirebase {
-  String? id;
   String? name;
   String? email;
   String? phoneNumber;
@@ -9,38 +11,8 @@ class PicFirebase {
 
   PicFirebase();
 
-  factory PicFirebase.fromFirestoreList(
-      QueryDocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data();
-    final pic = PicFirebase()
-      ..id = snapshot.id
-      ..name = data['name']
-      ..email = data['email']
-      ..phoneNumber = data['phoneNumber']
-      ..role = data['role'];
+  factory PicFirebase.fromJson(Map<String, dynamic> json) =>
+      _$PicFirebaseFromJson(json);
 
-    return pic;
-  }
-
-  factory PicFirebase.fromFirestoreDoc(
-      DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data();
-    final pic = PicFirebase()
-      ..id = snapshot.id
-      ..name = data?['name']
-      ..email = data?['email']
-      ..phoneNumber = data?['phoneNumber']
-      ..role = data?['role'];
-
-    return pic;
-  }
-
-  Map<String, dynamic> toFirestore() {
-    return {
-      'name': name,
-      'email': email,
-      'phoneNumber': phoneNumber,
-      'role': role,
-    };
-  }
+  Map<String, dynamic> toJson() => _$PicFirebaseToJson(this);
 }

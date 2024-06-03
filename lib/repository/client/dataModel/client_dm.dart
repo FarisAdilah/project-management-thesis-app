@@ -8,10 +8,11 @@ class ClientDM {
   String? id;
   String? name;
   String? description;
+  String? email;
   String? image;
   String? address;
   String? phoneNumber;
-  List<PicDM>? pic;
+  PicDM? pic;
 
   ClientDM();
 

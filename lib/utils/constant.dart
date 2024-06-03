@@ -11,7 +11,6 @@ enum CollectionType {
   timelines,
   scheduleTasks,
   clients,
-  pics,
   vendors,
   payments,
 }

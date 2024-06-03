@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:project_management_thesis_app/repository/pic/firebaseModel/pic_firebase.dart';
 
-@JsonSerializable()
 class ClientFirebase {
   String? id;
   String? name;
   String? description;
+  String? email;
   String? image;
   String? address;
   String? phoneNumber;
-  List<String>? pic;
+  PicFirebase? pic;
 
   ClientFirebase();
 
@@ -22,10 +22,11 @@ class ClientFirebase {
       ..id = snapshot.id
       ..name = data['name']
       ..description = data['description']
+      ..email = data['email']
       ..image = data['image']
       ..address = data['address']
       ..phoneNumber = data['phoneNumber']
-      ..pic = List.from(data['pic']);
+      ..pic = PicFirebase.fromJson(data['pic']);
 
     return client;
   }
@@ -39,10 +40,11 @@ class ClientFirebase {
       ..id = snapshot.id
       ..name = data?['name']
       ..description = data?['description']
+      ..email = data?['email']
       ..image = data?['image']
       ..address = data?['address']
       ..phoneNumber = data?['phoneNumber']
-      ..pic = List.from(data?['pic']);
+      ..pic = PicFirebase.fromJson(data?['pic']);
 
     return client;
   }
@@ -51,6 +53,7 @@ class ClientFirebase {
         'id': id,
         'name': name,
         'description': description,
+        'email': email,
         'image': image,
         'address': address,
         'phoneNumber': phoneNumber,
