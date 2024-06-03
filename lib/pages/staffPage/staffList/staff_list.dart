@@ -113,7 +113,6 @@ Widget _buildTag(int count, String title) {
         boxShadow: [
           BoxShadow(
             color: AssetColor.grey.withOpacity(0.5),
-            spreadRadius: 3,
             blurRadius: 5,
             offset: const Offset(0, 5),
           ),

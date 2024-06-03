@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
@@ -18,7 +17,7 @@ class StaffItemContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 30),
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         color: AssetColor.whiteBackground,
         borderRadius: BorderRadius.circular(10),
@@ -36,7 +35,7 @@ class StaffItemContent extends StatelessWidget {
         children: [
           ProfilePicture(user: user),
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
           Expanded(
             flex: 2,
@@ -58,7 +57,7 @@ class StaffItemContent extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
           Expanded(
             flex: 2,
@@ -80,7 +79,7 @@ class StaffItemContent extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
           Expanded(
             flex: 2,
@@ -102,9 +101,10 @@ class StaffItemContent extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
           Expanded(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -123,9 +123,10 @@ class StaffItemContent extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
           Expanded(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -144,9 +145,10 @@ class StaffItemContent extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
           Expanded(
+            flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
