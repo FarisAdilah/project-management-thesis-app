@@ -41,6 +41,7 @@ class CustomButton extends StatelessWidget {
           text ?? 'Button',
           color: textColor ?? AssetColor.whitePrimary,
           fontWeight: FontWeight.bold,
+          textAlign: TextAlign.center,
         ),
       ),
     );

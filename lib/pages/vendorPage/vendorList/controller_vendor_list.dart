@@ -11,6 +11,7 @@ class VendorListController extends GetxController {
   RxList<VendorDM> vendors = <VendorDM>[].obs;
 
   RxBool isLoading = false.obs;
+  RxInt selectedIndex = (-1).obs;
 
   @override
   void onInit() {
@@ -29,5 +30,10 @@ class VendorListController extends GetxController {
       Helpers().showErrorSnackBar("Failed to get vendor data");
     }
     isLoading.value = false;
+  }
+
+  setSelectedVendor(int index) {
+    selectedIndex.value = index;
+    Helpers.writeLog("selectedVendor: $selectedIndex");
   }
 }
