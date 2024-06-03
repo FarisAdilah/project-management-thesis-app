@@ -61,6 +61,10 @@ class Helpers {
   }
 
   String getUserRole(String role) {
+    if (role.isEmpty) {
+      return "Role";
+    }
+
     String userRole = "";
 
     if (role == UserType.supervisor.name) {
