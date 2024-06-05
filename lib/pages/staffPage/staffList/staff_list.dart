@@ -70,6 +70,14 @@ class StaffList extends StatelessWidget {
                     text: "Add New User",
                     color: AssetColor.greenButton,
                     borderRadius: 8,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AssetColor.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 20,
