@@ -21,6 +21,7 @@ class VendorItemContent extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(
         right: 25,
+        bottom: 25,
       ),
       decoration: BoxDecoration(
         color: AssetColor.whiteBackground,
