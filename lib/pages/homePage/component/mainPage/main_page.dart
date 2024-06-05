@@ -22,182 +22,184 @@ class MainHomePage extends StatelessWidget {
       body: Obx(
         () => Stack(
           children: [
-            Container(
-              color: AssetColor.greyBackground,
-              padding: const EdgeInsets.all(25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header (Welcom, Search Bar, Profile Picture)
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Obx(
-                              () => CustomText(
-                                "Welcome, ${controller.currentUser.value.name ?? ''}!",
-                                fontSize: 30,
-                                color: AssetColor.blueSecondaryAccent,
-                                fontWeight: FontWeight.bold,
+            SingleChildScrollView(
+              child: Container(
+                color: AssetColor.greyBackground,
+                padding: const EdgeInsets.all(25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header (Welcom, Search Bar, Profile Picture)
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Obx(
+                                () => CustomText(
+                                  "Welcome, ${controller.currentUser.value.name ?? ''}!",
+                                  fontSize: 30,
+                                  color: AssetColor.blueSecondaryAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const CustomText(
+                                "Let's manage your project here",
+                                fontSize: 20,
+                                color: AssetColor.blueTertiaryAccent,
+                              )
+                            ],
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 2,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: SearchBar(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  AssetColor.whiteBackground),
+                              surfaceTintColor: MaterialStatePropertyAll(
+                                  AssetColor.whiteBackground),
+                              padding: MaterialStatePropertyAll(
+                                EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                              ),
+                              hintText: "Search your project here...",
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Obx(
+                              () => ProfilePicture(
+                                user: controller.currentUser.value,
                               ),
                             ),
-                            const CustomText(
-                              "Let's manage your project here",
-                              fontSize: 20,
-                              color: AssetColor.blueTertiaryAccent,
-                            )
-                          ],
-                        ),
-                      ),
-                      const Expanded(
-                        flex: 2,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: SearchBar(
-                            backgroundColor: MaterialStatePropertyAll(
-                                AssetColor.whiteBackground),
-                            surfaceTintColor: MaterialStatePropertyAll(
-                                AssetColor.whiteBackground),
-                            padding: MaterialStatePropertyAll(
-                              EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                            ),
-                            hintText: "Search your project here...",
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Obx(
-                            () => ProfilePicture(
-                              user: controller.currentUser.value,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  const CustomText(
-                    "General Summary",
-                    color: AssetColor.blueTertiaryAccent,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Obx(
-                    () => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: CountCard(
-                            title: "Total Staff",
-                            countItem: controller.users.length,
-                            icon: FontAwesomeIcons.users,
-                            margin: const EdgeInsets.only(right: 20),
-                          ),
-                        ),
-                        Expanded(
-                          child: CountCard(
-                            countItem: controller.projects.length,
-                            title: "Total Project",
-                            icon: FontAwesomeIcons.solidFolderOpen,
-                            margin: const EdgeInsets.only(right: 20),
-                          ),
-                        ),
-                        Expanded(
-                          child: CountCard(
-                            countItem: controller.vendors.length,
-                            title: "Total Vendor",
-                            icon: FontAwesomeIcons.userGear,
-                            margin: const EdgeInsets.only(right: 20),
-                          ),
-                        ),
-                        Expanded(
-                          child: CountCard(
-                            countItem: controller.clients.length,
-                            title: "Total Client",
-                            icon: FontAwesomeIcons.userTie,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  const CustomText(
-                    "List Project",
-                    color: AssetColor.blueTertiaryAccent,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(25),
-                    decoration: BoxDecoration(
-                      color: AssetColor.whiteBackground,
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AssetColor.grey.withOpacity(0.5),
-                          spreadRadius: 3,
-                          blurRadius: 5,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
+                    const SizedBox(
+                      height: 50,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CustomText(
-                          "All Projects",
-                          color: AssetColor.blackPrimary,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        _buildRow(
-                          "Project Name",
-                          "Client",
-                          "Start Date",
-                          "End Date",
-                          "Status",
-                          isTitle: true,
-                        ),
-                        Obx(
-                          () => ListView.builder(
-                            itemCount: controller.projects.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              ProjectDM project = controller.projects[index];
+                    const CustomText(
+                      "General Summary",
+                      color: AssetColor.blueTertiaryAccent,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: CountCard(
+                              title: "Total Staff",
+                              countItem: controller.users.length,
+                              icon: FontAwesomeIcons.users,
+                              margin: const EdgeInsets.only(right: 20),
+                            ),
+                          ),
+                          Expanded(
+                            child: CountCard(
+                              countItem: controller.projects.length,
+                              title: "Total Project",
+                              icon: FontAwesomeIcons.solidFolderOpen,
+                              margin: const EdgeInsets.only(right: 20),
+                            ),
+                          ),
+                          Expanded(
+                            child: CountCard(
+                              countItem: controller.vendors.length,
+                              title: "Total Vendor",
+                              icon: FontAwesomeIcons.userGear,
+                              margin: const EdgeInsets.only(right: 20),
+                            ),
+                          ),
+                          Expanded(
+                            child: CountCard(
+                              countItem: controller.clients.length,
+                              title: "Total Client",
+                              icon: FontAwesomeIcons.userTie,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    const CustomText(
+                      "List Project",
+                      color: AssetColor.blueTertiaryAccent,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(25),
+                      decoration: BoxDecoration(
+                        color: AssetColor.whiteBackground,
+                        borderRadius: BorderRadius.circular(25),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AssetColor.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 5,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const CustomText(
+                            "All Projects",
+                            color: AssetColor.blackPrimary,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _buildRow(
+                            "Project Name",
+                            "Client",
+                            "Start Date",
+                            "End Date",
+                            "Status",
+                            isTitle: true,
+                          ),
+                          Obx(
+                            () => ListView.builder(
+                              itemCount: controller.projects.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                ProjectDM project = controller.projects[index];
 
-                              return _buildRow(
-                                project.name ?? "name",
-                                project.client?.name ?? "client",
-                                project.startDate ?? "start date",
-                                project.endDate ?? "end date",
-                                project.status ?? "status",
-                              );
-                            },
+                                return _buildRow(
+                                  project.name ?? "name",
+                                  project.client?.name ?? "client",
+                                  project.startDate ?? "start date",
+                                  project.endDate ?? "end date",
+                                  project.status ?? "status",
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             controller.isLoading.value ? const Loading() : const SizedBox(),
