@@ -31,6 +31,7 @@ class MainHomePage extends StatelessWidget {
                   children: [
                     // Header (Welcom, Search Bar, Profile Picture)
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           flex: 2,
@@ -58,11 +59,11 @@ class MainHomePage extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.center,
                             child: SearchBar(
-                              backgroundColor: MaterialStatePropertyAll(
+                              backgroundColor: WidgetStatePropertyAll(
                                   AssetColor.whiteBackground),
-                              surfaceTintColor: MaterialStatePropertyAll(
+                              surfaceTintColor: WidgetStatePropertyAll(
                                   AssetColor.whiteBackground),
-                              padding: MaterialStatePropertyAll(
+                              padding: WidgetStatePropertyAll(
                                 EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
                               ),
