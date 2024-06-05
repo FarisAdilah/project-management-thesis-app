@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorAdd/vendor_add.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/vendor_repository.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
@@ -35,5 +36,9 @@ class VendorListController extends GetxController {
   setSelectedVendor(int index) {
     selectedIndex.value = index;
     Helpers.writeLog("selectedVendor: $selectedIndex");
+  }
+
+  showCreateForm(context) {
+    Get.to(() => const VendorAdd())?.whenComplete(() => _getVendorList());
   }
 }

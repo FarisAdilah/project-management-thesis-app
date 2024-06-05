@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/component/vendor_detail.dart';
@@ -45,11 +46,29 @@ class VendorList extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
+                  CustomButton(
+                    onPressed: () => controller.showCreateForm(context),
+                    text: "Add New Vendor",
+                    color: AssetColor.greenButton,
+                    borderRadius: 8,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AssetColor.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   Expanded(
                     child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
+                        childAspectRatio: 0.85,
                       ),
                       shrinkWrap: true,
                       itemCount: controller.vendors.length,

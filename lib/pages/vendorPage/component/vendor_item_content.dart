@@ -5,6 +5,7 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class VendorItemContent extends StatelessWidget {
   final VendorDM vendor;
@@ -19,6 +20,9 @@ class VendorItemContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(
+        right: 25,
+      ),
       decoration: BoxDecoration(
         color: AssetColor.whiteBackground,
         borderRadius: BorderRadius.circular(10),
@@ -35,9 +39,11 @@ class VendorItemContent extends StatelessWidget {
           Expanded(
             child: Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AssetColor.whiteBackground,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: vendor.image?.isNotEmpty ?? false
+                    ? AssetColor.whiteBackground
+                    : AssetColor.greyBackground,
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
@@ -47,10 +53,20 @@ class VendorItemContent extends StatelessWidget {
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: Image.network(
-                  vendor.image ?? "",
-                  fit: BoxFit.cover,
-                ),
+                child: vendor.image?.isNotEmpty ?? false
+                    ? Image.network(
+                        vendor.image ?? "",
+                        fit: BoxFit.fitWidth,
+                      )
+                    : Center(
+                        child: CustomText(
+                          Helpers().getInitialName(
+                            vendor.name ?? "vendor name",
+                          ),
+                          color: AssetColor.blueTertiaryAccent,
+                          fontSize: 30,
+                        ),
+                      ),
               ),
             ),
           ),

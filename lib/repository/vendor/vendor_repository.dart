@@ -1,3 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/pic/dataModel/pic_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/firebaseModel/vendor_firebase.dart';
@@ -79,5 +84,41 @@ class VendorRepository with RepoBase {
     vendorDM.pic = pic;
 
     return vendorDM;
+  }
+
+  Future<bool> createVendor(
+    VendorFirebase vendor, {
+    File? image,
+    Uint8List? imageWeb,
+  }) async {
+    String url = "";
+
+    // Upload image to Firebase Storage
+    if (kIsWeb && imageWeb != null) {
+      String imageName =
+          vendor.name?.trim().toLowerCase().replaceAll(" ", "_") ?? "";
+      url = await uploadImage(
+        "images/$imageName",
+        imageWeb: imageWeb,
+      );
+    } else if (image != null) {
+      XFile imageToUpload = XFile(image.path);
+      url = await uploadImage(
+        "images",
+        image: imageToUpload,
+      );
+    }
+
+    // Set Image Url
+    if (url.isNotEmpty) {
+      vendor.image = url;
+    } else {
+      Helpers().showErrorSnackBar("Failed to upload image");
+    }
+
+    bool isSuccess =
+        await createData(CollectionType.vendors.name, vendor.toFirestore());
+
+    return isSuccess;
   }
 }

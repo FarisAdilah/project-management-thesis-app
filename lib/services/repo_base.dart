@@ -13,24 +13,26 @@ mixin RepoBase {
   static FirebaseStorage get _storage => FirebaseStorage.instance;
 
   // Base Repo for Repository Data Operation
-  createData(
+  Future<bool> createData(
     String collection,
     Map<String, dynamic> data, {
     bool showPopup = false,
     String successMessage = "Your data has been created successfully!",
     String failedMessage = "Failed to create data",
   }) async {
+    bool isCreated = false;
     await _db.collection(collection).add(data).whenComplete(() {
+      isCreated = true;
       if (showPopup) {
         Helpers().showSuccessSnackBar(successMessage);
       }
-    }).catchError(
-      (error) => showPopup
-          ? Helpers().showErrorSnackBar(
-              "$failedMessage: $error",
-            )
-          : (),
-    );
+    }).catchError((error) => showPopup
+        ? Helpers().showErrorSnackBar(
+            "$failedMessage: $error",
+          )
+        : ());
+
+    return isCreated;
   }
 
   updateData(String collection, String id, Map<String, dynamic> data) async {

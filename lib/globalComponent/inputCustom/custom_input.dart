@@ -6,12 +6,14 @@ class CustomInput extends StatelessWidget {
   final String title;
   final TextEditingController controller;
   final String? hintText;
+  final TextInputType? inputType;
 
   const CustomInput({
     super.key,
     required this.title,
     required this.controller,
     this.hintText,
+    this.inputType,
   });
 
   @override
@@ -34,6 +36,7 @@ class CustomInput extends StatelessWidget {
               fontWeight: FontWeight.normal,
             ),
           ),
+          keyboardType: inputType,
         ),
       ],
     );

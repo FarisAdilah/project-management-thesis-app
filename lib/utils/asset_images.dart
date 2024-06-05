@@ -6,4 +6,6 @@ class AssetImages {
   static const String iconProfileResume = '${asset}icon_profile_resume.png';
   static const String backgroundCreateUser =
       '${asset}create_user_background.png';
+  static const String backgroundCreateExternal =
+      '${asset}create_external_background.png';
 }
