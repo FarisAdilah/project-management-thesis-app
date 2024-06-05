@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/vendorAdd/component/controller_add_pic.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/pic/controller_add_pic.dart';
 import 'package:project_management_thesis_app/repository/pic/firebaseModel/pic_firebase.dart';
 
 class AddPic extends StatelessWidget {

@@ -5,7 +5,6 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
-import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class VendorItemContent extends StatelessWidget {
   final VendorDM vendor;
@@ -58,13 +57,13 @@ class VendorItemContent extends StatelessWidget {
                         vendor.image ?? "",
                         fit: BoxFit.fitWidth,
                       )
-                    : Center(
+                    : Padding(
+                        padding: const EdgeInsets.all(8),
                         child: CustomText(
-                          Helpers().getInitialName(
-                            vendor.name ?? "vendor name",
-                          ),
+                          "${vendor.name?.toUpperCase()}",
                           color: AssetColor.blueTertiaryAccent,
                           fontSize: 30,
+                          textAlign: TextAlign.center,
                         ),
                       ),
               ),

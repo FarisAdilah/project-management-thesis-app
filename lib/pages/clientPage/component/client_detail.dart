@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
+import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
-import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class VendorDetail extends StatelessWidget {
-  final VendorDM vendor;
+class ClientDetail extends StatelessWidget {
+  final ClientDM client;
   final VoidCallback onPressed;
 
-  const VendorDetail({
+  const ClientDetail({
     super.key,
-    required this.vendor,
+    required this.client,
     required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    Helpers.writeLog("vendor: ${vendor.name} ${vendor.email}");
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -44,14 +42,14 @@ class VendorDetail extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          vendor.image?.isNotEmpty ?? false
+                          client.image?.isNotEmpty ?? false
                               ? Image.network(
-                                  vendor.image ?? "",
+                                  client.image ?? "",
                                   height: 90,
                                   fit: BoxFit.cover,
                                 )
                               : const SizedBox(),
-                          vendor.image?.isNotEmpty ?? false
+                          client.image?.isNotEmpty ?? false
                               ? const SizedBox(width: 25)
                               : const SizedBox(),
                           Expanded(
@@ -60,12 +58,12 @@ class VendorDetail extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 CustomText(
-                                  vendor.name ?? "name",
+                                  client.name ?? "name",
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 CustomText(
-                                  vendor.address ?? "address",
+                                  client.address ?? "address",
                                   fontSize: 16,
                                 ),
                                 Row(
@@ -92,7 +90,7 @@ class VendorDetail extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                             ),
                                             CustomText(
-                                              vendor.email ?? "email",
+                                              client.email ?? "email",
                                               fontSize: 12,
                                             ),
                                           ],
@@ -119,7 +117,7 @@ class VendorDetail extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                             ),
                                             CustomText(
-                                              vendor.phoneNumber ?? "phone",
+                                              client.phoneNumber ?? "phone",
                                               fontSize: 12,
                                             ),
                                           ],
@@ -153,7 +151,7 @@ class VendorDetail extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 CustomText(
-                  vendor.description ?? "description",
+                  client.description ?? "description",
                   fontSize: 16,
                   textAlign: TextAlign.justify,
                 ),
@@ -171,7 +169,7 @@ class VendorDetail extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 CustomText(
-                  vendor.pic?.name ?? "name",
+                  client.pic?.name ?? "name",
                 ),
                 const SizedBox(height: 10),
                 const CustomText(
@@ -181,7 +179,7 @@ class VendorDetail extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 CustomText(
-                  vendor.pic?.role ?? "role",
+                  client.pic?.role ?? "role",
                 ),
                 const SizedBox(height: 10),
                 const CustomText(
@@ -212,7 +210,7 @@ class VendorDetail extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                             CustomText(
-                              vendor.pic?.email ?? "email",
+                              client.pic?.email ?? "email",
                               fontSize: 12,
                             ),
                           ],
@@ -238,7 +236,7 @@ class VendorDetail extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                             CustomText(
-                              vendor.pic?.phoneNumber ?? "phone",
+                              client.pic?.phoneNumber ?? "phone",
                               fontSize: 12,
                             ),
                           ],

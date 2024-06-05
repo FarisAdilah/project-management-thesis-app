@@ -1,25 +1,23 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/globalComponent/createForm/pic/add_pic.dart';
+import 'package:project_management_thesis_app/repository/client/client_repository.dart';
+import 'package:project_management_thesis_app/repository/client/firebaseModel/client_firebase.dart';
 import 'package:project_management_thesis_app/repository/pic/firebaseModel/pic_firebase.dart';
-import 'package:project_management_thesis_app/repository/vendor/firebaseModel/vendor_firebase.dart';
-import 'package:project_management_thesis_app/repository/vendor/vendor_repository.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class VendorAddController extends GetxController {
+class ClientAddController extends GetxController {
   RxBool isLoading = false.obs;
 
-  // Vendor Controller
+  // Client Controller
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final descriptionController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final addressController = TextEditingController();
-  final imageController = TextEditingController();
 
   Rx<PicFirebase> pic = PicFirebase().obs;
 
@@ -72,28 +70,28 @@ class VendorAddController extends GetxController {
     pic.value = PicFirebase();
   }
 
-  createVendor() async {
+  createClient() async {
     isLoading.value = true;
 
-    VendorFirebase vendor = VendorFirebase();
-    vendor.address = addressController.text;
-    vendor.description = descriptionController.text;
-    vendor.email = emailController.text;
-    vendor.name = nameController.text;
-    vendor.phoneNumber = phoneNumberController.text;
-    vendor.pic = pic.value;
+    ClientFirebase client = ClientFirebase();
+    client.address = addressController.text;
+    client.description = descriptionController.text;
+    client.email = emailController.text;
+    client.name = nameController.text;
+    client.phoneNumber = phoneNumberController.text;
+    client.pic = pic.value;
 
-    bool isSuccess = await VendorRepository().createVendor(
-      vendor,
+    bool isSuccess = await ClientRepository().createClient(
+      client,
       image: pickedImage.value,
       imageWeb: pickedImageWeb.value,
     );
 
     if (isSuccess) {
       Get.back();
-      await Helpers().showSuccessSnackBar("Vendor created successfully");
+      await Helpers().showSuccessSnackBar("Client created successfully");
     } else {
-      Helpers().showErrorSnackBar("Failed to create vendor");
+      Helpers().showErrorSnackBar("Failed to create client");
     }
 
     isLoading.value = false;

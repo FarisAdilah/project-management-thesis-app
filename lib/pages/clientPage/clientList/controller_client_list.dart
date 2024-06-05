@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientAdd/client_add.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
@@ -9,6 +10,7 @@ class ClientListController extends GetxController {
   RxList<ClientDM> clients = <ClientDM>[].obs;
 
   RxBool isLoading = false.obs;
+  RxInt selectedIndex = (-1).obs;
 
   @override
   void onInit() {
@@ -28,5 +30,14 @@ class ClientListController extends GetxController {
     }
 
     isLoading.value = false;
+  }
+
+  setSelectedClient(int index) {
+    selectedIndex.value = index;
+    Helpers.writeLog("selectedClient: $selectedIndex");
+  }
+
+  showCreateForm() {
+    Get.to(() => const ClientAdd())?.whenComplete(() => _getClientList());
   }
 }

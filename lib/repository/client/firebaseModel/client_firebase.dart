@@ -57,6 +57,6 @@ class ClientFirebase {
         'image': image,
         'address': address,
         'phoneNumber': phoneNumber,
-        'pic': pic,
+        'pic': pic?.toJson(),
       };
 }

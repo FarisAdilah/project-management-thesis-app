@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/pic/dataModel/pic_dm.dart';
 import 'package:project_management_thesis_app/repository/client/firebaseModel/client_firebase.dart';
@@ -68,5 +72,41 @@ class ClientRepository with RepoBase {
     clientDM.pic = pic;
 
     return clientDM;
+  }
+
+  Future<bool> createClient(
+    ClientFirebase client, {
+    File? image,
+    Uint8List? imageWeb,
+  }) async {
+    String url = "";
+
+    // Upload image to Firebase Storage
+    if (kIsWeb && imageWeb != null) {
+      String imageName =
+          client.name?.trim().toLowerCase().replaceAll(" ", "_") ?? "";
+      url = await uploadImage(
+        "images/$imageName",
+        imageWeb: imageWeb,
+      );
+    } else if (image != null) {
+      XFile imageToUpload = XFile(image.path);
+      url = await uploadImage(
+        "images",
+        image: imageToUpload,
+      );
+    }
+
+    // Set Image Url
+    if (url.isNotEmpty) {
+      client.image = url;
+    } else {
+      Helpers().showErrorSnackBar("Failed to upload image");
+    }
+
+    bool isSuccess =
+        await createData(CollectionType.clients.name, client.toFirestore());
+
+    return isSuccess;
   }
 }
