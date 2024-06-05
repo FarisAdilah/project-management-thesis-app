@@ -35,12 +35,53 @@ mixin RepoBase {
     return isCreated;
   }
 
-  updateData(String collection, String id, Map<String, dynamic> data) async {
-    await _db.collection(collection).doc(id).update(data);
+  Future<bool> updateData(
+    String collection,
+    String id,
+    Map<String, dynamic> data, {
+    bool showPopup = false,
+    String successMessage = "Your data has been updated successfully!",
+    String failedMessage = "Failed to update data",
+  }) async {
+    bool isUpdated = false;
+    await _db.collection(collection).doc(id).update(data).then(
+      (value) {
+        isUpdated = true;
+        if (showPopup) {
+          Helpers().showSuccessSnackBar(successMessage);
+        }
+      },
+      onError: (error) {
+        if (showPopup) {
+          Helpers().showErrorSnackBar("$failedMessage: $error");
+        }
+      },
+    );
+
+    return isUpdated;
   }
 
-  deleteData(String collection, String id) async {
-    await _db.collection(collection).doc(id).delete();
+  Future<bool> deleteData(
+    String collection,
+    String id, {
+    bool showPopup = false,
+    String successMessage = "Your data has been deleted successfully!",
+    String failedMessage = "Failed to delete data",
+  }) async {
+    bool isDeleted = false;
+    await _db.collection(collection).doc(id).delete().then(
+      (value) {
+        isDeleted = true;
+        if (showPopup) {
+          Helpers()
+              .showSuccessSnackBar("Your data has been deleted successfully!");
+        }
+      },
+      onError: (error) {
+        Helpers().showErrorSnackBar("Failed to delete data: $error");
+      },
+    );
+    return isDeleted;
   }
 
   getDataCollection(String collection, {String? orderBy}) async {
@@ -108,6 +149,27 @@ mixin RepoBase {
       }
     } on FirebaseException catch (e) {
       Helpers().showErrorSnackBar("Failed to upload file: $e");
+      return "";
+    }
+  }
+
+  Future<bool> deleteImage(String path) async {
+    try {
+      await _storage.ref().child(path).delete();
+      return true;
+    } on FirebaseException catch (e) {
+      Helpers().showErrorSnackBar("Failed to delete file: $e");
+      return false;
+    }
+  }
+
+  Future<String> getImageRefFromUrl(String url) async {
+    try {
+      final ref = _storage.refFromURL(url).name;
+      Helpers.writeLog("image ref: $ref");
+      return ref;
+    } on FirebaseException catch (e) {
+      Helpers().showErrorSnackBar("Failed to get image ref: $e");
       return "";
     }
   }

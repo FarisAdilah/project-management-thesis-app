@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:project_management_thesis_app/pages/staffPage/staffAdd/staff_add.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffForm/staff_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/user/user_repository.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
@@ -60,6 +59,21 @@ class StaffListController extends GetxController {
   }
 
   showCreateForm(BuildContext context) {
-    Get.to(() => const StaffAdd())?.whenComplete(() => _getUsersData());
+    Get.to(() => const StaffForm())?.whenComplete(() => _getUsersData());
+  }
+
+  onUpdateUser() {
+    _getUsersData();
+  }
+
+  onDeleteUser(UserDM user) async {
+    isLoading.value = true;
+    bool isDeleted = await _userRepository.deleteUser(user);
+    if (isDeleted) {
+      Helpers().showSuccessSnackBar("User has been deleted successfully");
+      _getUsersData();
+    } else {
+      Helpers().showErrorSnackBar("Failed to delete user");
+    }
   }
 }

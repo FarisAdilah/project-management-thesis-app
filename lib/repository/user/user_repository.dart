@@ -23,15 +23,15 @@ class UserRepository with RepoBase {
 
     if (user.email != null && user.password != null) {
       // Upload the image to the storage
-      if (kIsWeb && pickedImageWeb != null) {
+      if (kIsWeb && (pickedImageWeb?.isNotEmpty ?? false)) {
         String username =
             user.name?.trim().toLowerCase().replaceAll(" ", "-") ?? "";
         url = await uploadImage(
           "images/$username",
           imageWeb: pickedImageWeb,
         );
-      } else if (pickedImage != null) {
-        XFile image = XFile(pickedImage.path);
+      } else if (pickedImage?.path.isNotEmpty ?? false) {
+        XFile image = XFile(pickedImage?.path ?? "");
         url = await uploadImage(
           "images",
           image: image,
@@ -70,6 +70,96 @@ class UserRepository with RepoBase {
       }
     } else {
       Helpers().showErrorSnackBar("Email and Password is not valid");
+      return false;
+    }
+  }
+
+  Future<bool> updateUser(
+    UserFirebase user,
+    String currUserName, {
+    File? pickedImage,
+    Uint8List? pickedImageWeb,
+  }) async {
+    String url = "";
+    bool isDeleted = false;
+
+    // Upload the image to the storage
+    if (kIsWeb && (pickedImageWeb?.isNotEmpty ?? false)) {
+      Helpers.writeLog("upload image web");
+      String username = currUserName.trim().toLowerCase().replaceAll(" ", "-");
+
+      isDeleted = await deleteImage("images/$username");
+
+      if (isDeleted) {
+        url = await uploadImage(
+          "images/$username",
+          imageWeb: pickedImageWeb,
+        );
+      } else {
+        Helpers().showErrorSnackBar("Something went wrong");
+        return false;
+      }
+    } else if (pickedImage?.path.isNotEmpty ?? false) {
+      Helpers.writeLog("upload image mobile");
+      XFile image = XFile(pickedImage?.path ?? "");
+
+      String ref = await getImageRefFromUrl(user.image ?? "");
+      isDeleted = await deleteImage("images/$ref");
+
+      if (isDeleted) {
+        url = await uploadImage(
+          "images",
+          image: image,
+        );
+      } else {
+        Helpers().showErrorSnackBar("Something went wrong");
+        return false;
+      }
+    } else {
+      Helpers.writeLog("gambarnya sama nih");
+      url = user.image ?? "";
+    }
+
+    // Get the image url from the storage
+    if (url.isNotEmpty) {
+      user.image = url;
+    }
+
+    // Update the user data to the firestore
+    bool isUpdated = await updateData(
+      CollectionType.users.name,
+      user.id ?? "",
+      user.toFirestore(),
+    );
+
+    Helpers.writeLog("isUpdated: $isUpdated");
+
+    if (isUpdated) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> deleteUser(UserDM user) async {
+    String url = await getImageRefFromUrl(user.image ?? "");
+
+    bool isDeleteImage;
+    if (url.isNotEmpty) {
+      isDeleteImage = await deleteImage("images/$url");
+    } else {
+      Helpers().showErrorSnackBar("Something went wrong");
+      return false;
+    }
+
+    bool isDeleted = false;
+    if (isDeleteImage) {
+      isDeleted = await deleteData(CollectionType.users.name, user.id ?? "");
+    }
+
+    if (isDeleted) {
+      return true;
+    } else {
       return false;
     }
   }

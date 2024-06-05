@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,16 +8,28 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/staffPage/staffAdd/controller_staff_add.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffForm/controller_staff_form.dart';
+import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class StaffAdd extends StatelessWidget {
-  const StaffAdd({super.key});
+class StaffForm extends StatelessWidget {
+  final UserDM? userDM;
+  final bool isUpdate;
+
+  const StaffForm({
+    super.key,
+    this.userDM,
+    this.isUpdate = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(StaffAddController());
+    final controller = Get.put(StaffFormController(userToUpdate: userDM));
+
+    Helpers.writeLog("image web: ${controller.pickedImageWeb.value}");
+    Helpers.writeLog("image mobile: ${controller.pickedImage.value.path}");
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -53,11 +64,14 @@ class StaffAdd extends StatelessWidget {
                           () => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const CustomText(
-                                "Register Your Staff",
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                textAlign: TextAlign.start,
+                              Center(
+                                child: CustomText(
+                                  isUpdate
+                                      ? "Update Your Staff"
+                                      : "Register Your Staff",
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               const SizedBox(
                                 height: 25,
@@ -123,9 +137,18 @@ class StaffAdd extends StatelessWidget {
                               const SizedBox(
                                 height: 15,
                               ),
-                              controller.pickedImage.value.path.isNotEmpty ||
-                                      controller.pickedImageWeb.value.isNotEmpty
-                                  ? kIsWeb
+                              (controller.userToUpdate?.image?.isNotEmpty ??
+                                          false) &&
+                                      controller
+                                          .pickedImage.value.path.isEmpty &&
+                                      controller.pickedImageWeb.value.isEmpty
+                                  ? Image.network(
+                                      controller.userToUpdate?.image ?? "",
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 100,
+                                    )
+                                  : kIsWeb
                                       ? Image.memory(
                                           controller.pickedImageWeb.value,
                                           fit: BoxFit.cover,
@@ -137,8 +160,7 @@ class StaffAdd extends StatelessWidget {
                                           fit: BoxFit.cover,
                                           width: 100,
                                           height: 100,
-                                        )
-                                  : const SizedBox(),
+                                        ),
                               const SizedBox(height: 15),
                               InkWell(
                                 onTap: () {
@@ -163,7 +185,10 @@ class StaffAdd extends StatelessWidget {
                                         controller.pickedImage.value.path
                                                     .isNotEmpty ||
                                                 controller.pickedImageWeb.value
-                                                    .isNotEmpty
+                                                    .isNotEmpty ||
+                                                (controller.userToUpdate?.image
+                                                        ?.isNotEmpty ??
+                                                    false)
                                             ? "Reupload Image"
                                             : "Upload Image",
                                         fontWeight: FontWeight.bold,
@@ -175,44 +200,54 @@ class StaffAdd extends StatelessWidget {
                               const SizedBox(
                                 height: 15,
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 15,
-                                  vertical: 10,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AssetColor.orange.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: AssetColor.orange),
-                                ),
-                                child: const Row(
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.circleInfo,
-                                      applyTextScaling: true,
-                                    ),
-                                    SizedBox(width: 10),
-                                    CustomText(
-                                      "Your user password will be generated automatically by format: ",
-                                    ),
-                                    CustomText(
-                                      "<First Name>#123",
-                                      fontWeight: FontWeight.bold,
+                              !isUpdate
+                                  ? Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 10,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            AssetColor.orange.withOpacity(0.3),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: AssetColor.orange),
+                                      ),
+                                      child: const Row(
+                                        children: [
+                                          Icon(
+                                            FontAwesomeIcons.circleInfo,
+                                            applyTextScaling: true,
+                                          ),
+                                          SizedBox(width: 10),
+                                          CustomText(
+                                            "Your user password will be generated automatically by format: ",
+                                          ),
+                                          CustomText(
+                                            "<First Name>#123",
+                                            fontWeight: FontWeight.bold,
+                                          )
+                                        ],
+                                      ),
                                     )
-                                  ],
-                                ),
-                              ),
+                                  : const SizedBox(),
                               const SizedBox(
-                                height: 50,
+                                height: 30,
                               ),
                               Align(
                                 alignment: Alignment.center,
                                 child: CustomButton(
                                   onPressed: () {
-                                    controller.createUser();
+                                    if (isUpdate) {
+                                      controller.updateUser();
+                                    } else {
+                                      controller.createUser();
+                                    }
                                   },
                                   color: AssetColor.greenButton,
-                                  text: "Create New User",
+                                  text: isUpdate
+                                      ? "Update User"
+                                      : "Create New User",
                                   textColor: AssetColor.whitePrimary,
                                   borderRadius: 10,
                                 ),

@@ -93,6 +93,8 @@ class StaffList extends StatelessWidget {
 
                           return StaffItemContent(
                             user: user,
+                            onUpdate: () => controller.onUpdateUser(),
+                            onDelete: () => controller.onDeleteUser(user),
                           );
                         },
                       ),

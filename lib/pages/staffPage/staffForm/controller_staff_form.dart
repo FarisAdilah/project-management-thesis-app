@@ -13,12 +13,18 @@ import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 import 'package:project_management_thesis_app/utils/storage.dart';
 
-class StaffAddController extends GetxController with Storage {
+class StaffFormController extends GetxController with Storage {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final roleController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final imageController = TextEditingController();
+
+  final UserDM? userToUpdate;
+
+  StaffFormController({
+    this.userToUpdate,
+  });
 
   final ImagePicker _picker = ImagePicker();
   Rx<File> pickedImage = File("").obs;
@@ -32,6 +38,19 @@ class StaffAddController extends GetxController with Storage {
     "Project Manager",
     "Staff",
   ];
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    if (userToUpdate != null) {
+      nameController.text = userToUpdate?.name ?? "";
+      emailController.text = userToUpdate?.email ?? "";
+      roleController.text = Helpers().getUserRole(userToUpdate?.role ?? "");
+      phoneNumberController.text = userToUpdate?.phoneNumber ?? "";
+      imageController.text = userToUpdate?.image ?? "";
+    }
+  }
 
   Future<void> onImageButtonPressed(
     ImageSource source, {
@@ -118,5 +137,37 @@ class StaffAddController extends GetxController with Storage {
     } else {
       return UserType.staff.name;
     }
+  }
+
+  updateUser() async {
+    isLoading.value = true;
+
+    UserFirebase user = UserFirebase();
+    user.id = userToUpdate?.id;
+    user.password = userToUpdate?.password;
+    user.name = nameController.text;
+    user.email = emailController.text;
+    user.role = _getUserRole(roleController.text);
+    user.phoneNumber = phoneNumberController.text;
+    user.image = userToUpdate?.image;
+
+    bool isSuccess = await UserRepository().updateUser(
+      user,
+      userToUpdate?.name ?? "",
+      pickedImage: pickedImage.value,
+      pickedImageWeb: pickedImageWeb.value,
+    );
+
+    Helpers.writeLog("isSuccess: $isSuccess");
+
+    if (isSuccess) {
+      Get.back();
+      Helpers.writeLog("User updated successfully");
+      await Helpers().showSuccessSnackBar("User updated successfully");
+    } else {
+      Helpers().showErrorSnackBar("Failed to update user");
+    }
+
+    isLoading.value = false;
   }
 }
