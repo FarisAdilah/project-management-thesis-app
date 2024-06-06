@@ -188,7 +188,7 @@ class MainHomePage extends StatelessWidget {
 
                                 return _buildRow(
                                   project.name ?? "name",
-                                  project.client?.name ?? "client",
+                                  project.clientId ?? "client",
                                   project.startDate ?? "start date",
                                   project.endDate ?? "end date",
                                   project.status ?? "status",

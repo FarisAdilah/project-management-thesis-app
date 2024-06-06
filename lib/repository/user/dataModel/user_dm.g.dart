@@ -13,7 +13,9 @@ UserDM _$UserDMFromJson(Map<String, dynamic> json) => UserDM()
   ..password = json['password'] as String?
   ..role = json['role'] as String?
   ..phoneNumber = json['phoneNumber'] as String?
-  ..image = json['image'] as String?;
+  ..image = json['image'] as String?
+  ..projectId =
+      (json['projectId'] as List<dynamic>?)?.map((e) => e as String).toList();
 
 Map<String, dynamic> _$UserDMToJson(UserDM instance) => <String, dynamic>{
       'id': instance.id,
@@ -23,4 +25,5 @@ Map<String, dynamic> _$UserDMToJson(UserDM instance) => <String, dynamic>{
       'role': instance.role,
       'phoneNumber': instance.phoneNumber,
       'image': instance.image,
+      'projectId': instance.projectId,
     };

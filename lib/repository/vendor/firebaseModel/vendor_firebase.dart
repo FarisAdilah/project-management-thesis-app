@@ -10,6 +10,7 @@ class VendorFirebase {
   String? address;
   String? phoneNumber;
   PicFirebase? pic;
+  List<String>? projectId;
 
   VendorFirebase();
 
@@ -26,7 +27,8 @@ class VendorFirebase {
       ..image = data['image']
       ..address = data['address']
       ..phoneNumber = data['phoneNumber']
-      ..pic = PicFirebase.fromJson(data['pic']);
+      ..pic = PicFirebase.fromJson(data['pic'])
+      ..projectId = List<String>.from(data['projectId']);
 
     return vendor;
   }
@@ -44,13 +46,13 @@ class VendorFirebase {
       ..image = data?['image']
       ..address = data?['address']
       ..phoneNumber = data?['phoneNumber']
-      ..pic = PicFirebase.fromJson(data?['pic']);
+      ..pic = PicFirebase.fromJson(data?['pic'])
+      ..projectId = List<String>.from(data?['projectId']);
 
     return vendor;
   }
 
   Map<String, dynamic> toFirestore() => {
-        'id': id,
         'name': name,
         'description': description,
         'email': email,
@@ -58,5 +60,6 @@ class VendorFirebase {
         'address': address,
         'phoneNumber': phoneNumber,
         'pic': pic?.toJson(),
+        'projectId': projectId,
       };
 }

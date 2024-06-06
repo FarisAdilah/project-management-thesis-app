@@ -16,7 +16,6 @@ class ClientRepository with RepoBase {
     List collection = await getDataCollection(CollectionType.clients.name);
 
     List<ClientFirebase> clientList = [];
-
     for (var element in collection) {
       ClientFirebase client = ClientFirebase.fromFirestoreList(element);
       clientList.add(client);
@@ -24,7 +23,6 @@ class ClientRepository with RepoBase {
     Helpers.writeLog("clientList: ${clientList.length}");
 
     List<ClientDM> clientDMList = [];
-
     for (var element in clientList) {
       ClientDM clientDM = ClientDM();
       clientDM.id = element.id;
@@ -34,6 +32,49 @@ class ClientRepository with RepoBase {
       clientDM.image = element.image;
       clientDM.name = element.name;
       clientDM.phoneNumber = element.phoneNumber;
+      clientDM.projectId = element.projectId;
+
+      PicDM picDM = PicDM();
+      picDM.email = element.pic?.email;
+      picDM.name = element.pic?.name;
+      picDM.phoneNumber = element.pic?.phoneNumber;
+      picDM.role = element.pic?.role;
+
+      clientDM.pic = picDM;
+
+      clientDMList.add(clientDM);
+    }
+    Helpers.writeLog("clientDMList: ${clientDMList.length}");
+
+    return clientDMList;
+  }
+
+  Future<List<ClientDM>> getMultipleClient(String projectId) async {
+    List collection = await getMultipleDocument(
+      CollectionType.clients.name,
+      "projectId",
+      projectId,
+      isArray: true,
+    );
+
+    List<ClientFirebase> clientList = [];
+    for (var element in collection) {
+      ClientFirebase client = ClientFirebase.fromFirestoreList(element);
+      clientList.add(client);
+    }
+    Helpers.writeLog("clientList: ${clientList.length}");
+
+    List<ClientDM> clientDMList = [];
+    for (var element in clientList) {
+      ClientDM clientDM = ClientDM();
+      clientDM.id = element.id;
+      clientDM.address = element.address;
+      clientDM.description = element.description;
+      clientDM.email = element.email;
+      clientDM.image = element.image;
+      clientDM.name = element.name;
+      clientDM.phoneNumber = element.phoneNumber;
+      clientDM.projectId = element.projectId;
 
       PicDM picDM = PicDM();
       picDM.email = element.pic?.email;
@@ -62,6 +103,7 @@ class ClientRepository with RepoBase {
     clientDM.image = client.image;
     clientDM.name = client.name;
     clientDM.phoneNumber = client.phoneNumber;
+    clientDM.projectId = client.projectId;
 
     PicDM pic = PicDM();
     pic.email = client.pic?.email;

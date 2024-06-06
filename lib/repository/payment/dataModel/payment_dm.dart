@@ -6,9 +6,11 @@ part 'payment_dm.g.dart';
 class PaymentDM {
   String? id;
   String? paymentName;
-  String? clientName;
-  String? vendorName;
+  String? clientId;
+  String? vendorId;
   String? paymentAmount;
+  String? deadline;
+  String? projectId;
 
   PaymentDM();
 

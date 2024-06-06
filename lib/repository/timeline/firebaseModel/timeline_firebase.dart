@@ -4,10 +4,10 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class TimelineFirebase {
   String? id;
-  String? timelineName;
+  String? name;
   String? startDate;
   String? endDate;
-  List<String>? tasksId;
+  String? projectId;
 
   TimelineFirebase();
 
@@ -18,10 +18,10 @@ class TimelineFirebase {
     final data = querySnapshot.data();
     final timeline = TimelineFirebase()
       ..id = querySnapshot.id
-      ..timelineName = data['timelineName']
+      ..name = data['name']
       ..startDate = data['startDate']
       ..endDate = data['endDate']
-      ..tasksId = List.from(data['taskId']);
+      ..projectId = data['projectId'];
 
     return timeline;
   }
@@ -33,19 +33,19 @@ class TimelineFirebase {
     final data = snapshot.data();
     final timeline = TimelineFirebase()
       ..id = snapshot.id
-      ..timelineName = data?['timelineName']
+      ..name = data?['name']
       ..startDate = data?['startDate']
       ..endDate = data?['endDate']
-      ..tasksId = List.from(data?['taskId']);
+      ..projectId = data?['projectId'];
 
     return timeline;
   }
 
   Map<String, dynamic> toFirestore() => {
         'id': id,
-        'timelineName': timelineName,
+        'name': name,
         'startDate': startDate,
         'endDate': endDate,
-        'taskId': tasksId,
+        'projectId': projectId,
       };
 }

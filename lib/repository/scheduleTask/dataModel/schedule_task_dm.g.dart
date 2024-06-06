@@ -12,9 +12,8 @@ ScheduleTaskDM _$ScheduleTaskDMFromJson(Map<String, dynamic> json) =>
       ..name = json['name'] as String?
       ..startDate = json['startDate'] as String?
       ..endDate = json['endDate'] as String?
-      ..staff = json['staff'] == null
-          ? null
-          : UserDM.fromJson(json['staff'] as Map<String, dynamic>);
+      ..timelineId = json['timelineId'] as String?
+      ..staffId = json['staffId'] as String?;
 
 Map<String, dynamic> _$ScheduleTaskDMToJson(ScheduleTaskDM instance) =>
     <String, dynamic>{
@@ -22,5 +21,6 @@ Map<String, dynamic> _$ScheduleTaskDMToJson(ScheduleTaskDM instance) =>
       'name': instance.name,
       'startDate': instance.startDate,
       'endDate': instance.endDate,
-      'staff': instance.staff,
+      'timelineId': instance.timelineId,
+      'staffId': instance.staffId,
     };

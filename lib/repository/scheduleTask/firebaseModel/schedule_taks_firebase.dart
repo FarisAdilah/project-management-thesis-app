@@ -8,6 +8,7 @@ class ScheduleTaskFirebase {
   String? startDate;
   String? endDate;
   String? staffId;
+  String? timelineId;
 
   ScheduleTaskFirebase();
 
@@ -21,7 +22,8 @@ class ScheduleTaskFirebase {
       ..name = data['name']
       ..startDate = data['startDate']
       ..endDate = data['endDate']
-      ..staffId = data['staffId'];
+      ..staffId = data['staffId']
+      ..timelineId = data['timelineId'];
 
     return scheduleTask;
   }
@@ -36,7 +38,8 @@ class ScheduleTaskFirebase {
       ..name = data!['name']
       ..startDate = data['startDate']
       ..endDate = data['endDate']
-      ..staffId = data['staffId'];
+      ..staffId = data['staffId']
+      ..timelineId = data['timelineId'];
 
     return scheduleTask;
   }
@@ -47,5 +50,6 @@ class ScheduleTaskFirebase {
         'startDate': startDate,
         'endDate': endDate,
         'staffId': staffId,
+        'timelineId': timelineId,
       };
 }

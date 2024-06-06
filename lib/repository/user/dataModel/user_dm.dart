@@ -11,6 +11,7 @@ class UserDM {
   String? role;
   String? phoneNumber;
   String? image;
+  List<String>? projectId;
 
   UserDM();
 

@@ -13,6 +13,7 @@ class VendorDM {
   String? address;
   String? phoneNumber;
   PicDM? pic;
+  List<String>? projectId;
 
   VendorDM();
 

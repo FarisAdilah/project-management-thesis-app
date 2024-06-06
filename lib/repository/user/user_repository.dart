@@ -168,14 +168,12 @@ class UserRepository with RepoBase {
     List collection = await getDataCollection(CollectionType.users.name);
 
     List<UserFirebase> userDataresponseList = [];
-
     for (var element in collection) {
       UserFirebase userDataResponse = UserFirebase.fromFirestoreList(element);
       userDataresponseList.add(userDataResponse);
     }
 
     List<UserDM> userList = [];
-
     for (var element in userDataresponseList) {
       UserDM user = UserDM();
       user.id = element.id;
@@ -185,6 +183,39 @@ class UserRepository with RepoBase {
       user.image = element.image;
       user.password = element.password;
       user.phoneNumber = element.phoneNumber;
+      user.projectId = element.projectId;
+
+      userList.add(user);
+    }
+
+    return userList;
+  }
+
+  Future<List<UserDM>> getMultipleUser(String projectId) async {
+    List collection = await getMultipleDocument(
+      CollectionType.users.name,
+      "projectId",
+      projectId,
+      isArray: true,
+    );
+
+    List<UserFirebase> userDataresponseList = [];
+    for (var element in collection) {
+      UserFirebase userDataResponse = UserFirebase.fromFirestoreList(element);
+      userDataresponseList.add(userDataResponse);
+    }
+
+    List<UserDM> userList = [];
+    for (var element in userDataresponseList) {
+      UserDM user = UserDM();
+      user.id = element.id;
+      user.email = element.email;
+      user.name = element.name;
+      user.role = element.role;
+      user.image = element.image;
+      user.password = element.password;
+      user.phoneNumber = element.phoneNumber;
+      user.projectId = element.projectId;
 
       userList.add(user);
     }
@@ -196,7 +227,6 @@ class UserRepository with RepoBase {
     var data = await getDataDocument(CollectionType.users.name, id);
 
     UserFirebase userFirebase = UserFirebase.fromFirestoreDoc(data);
-
     UserDM user = UserDM();
     user.id = userFirebase.id;
     user.email = userFirebase.email;
@@ -205,6 +235,7 @@ class UserRepository with RepoBase {
     user.image = userFirebase.image;
     user.password = userFirebase.password;
     user.phoneNumber = userFirebase.phoneNumber;
+    user.projectId = userFirebase.projectId;
 
     return user;
   }

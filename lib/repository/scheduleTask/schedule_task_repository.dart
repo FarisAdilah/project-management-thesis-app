@@ -1,12 +1,10 @@
 import 'package:project_management_thesis_app/repository/scheduleTask/dataModel/schedule_task_dm.dart';
 import 'package:project_management_thesis_app/repository/scheduleTask/firebaseModel/schedule_taks_firebase.dart';
-import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
-import 'package:project_management_thesis_app/repository/user/user_repository.dart';
 import 'package:project_management_thesis_app/services/repo_base.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 
-class ScheudleTaskRepository with RepoBase {
-  static ScheudleTaskRepository get instance => ScheudleTaskRepository();
+class ScheduleTaskRepository with RepoBase {
+  static ScheduleTaskRepository get instance => ScheduleTaskRepository();
 
   Future<List<ScheduleTaskDM>> getAllScheduleTask() async {
     List collection =
@@ -26,13 +24,43 @@ class ScheudleTaskRepository with RepoBase {
       task.name = element.name;
       task.startDate = element.startDate;
       task.endDate = element.endDate;
+      task.timelineId = element.timelineId;
+      task.staffId = element.staffId;
 
-      if (element.staffId != null) {
-        UserDM staff = await UserRepository().getUserById(element.staffId!);
-        task.staff = staff;
-      } else {
-        return [];
-      }
+      taskDM.add(task);
+    }
+
+    return taskDM;
+  }
+
+  Future<List<ScheduleTaskDM>> getMultipleScheduleTask(
+    String id,
+    TaskFieldType field,
+  ) async {
+    List collection = await getMultipleDocument(
+      CollectionType.scheduleTasks.name,
+      field.name,
+      id,
+      isArray: false,
+    );
+
+    List<ScheduleTaskFirebase> scheduleTaskList = [];
+    for (var element in collection) {
+      ScheduleTaskFirebase task =
+          ScheduleTaskFirebase.fromFirestoreList(element);
+      scheduleTaskList.add(task);
+    }
+
+    List<ScheduleTaskDM> taskDM = [];
+    for (var element in scheduleTaskList) {
+      ScheduleTaskDM task = ScheduleTaskDM();
+      task.id = element.id;
+      task.name = element.name;
+      task.startDate = element.startDate;
+      task.endDate = element.endDate;
+      task.timelineId = element.timelineId;
+      task.staffId = element.staffId;
+
       taskDM.add(task);
     }
 
@@ -47,13 +75,8 @@ class ScheudleTaskRepository with RepoBase {
     taskDM.name = task.name;
     taskDM.startDate = task.startDate;
     taskDM.endDate = task.endDate;
-
-    if (task.staffId != null && (task.staffId?.isNotEmpty ?? false)) {
-      UserDM staff = await UserRepository().getUserById(task.staffId!);
-      taskDM.staff = staff;
-    } else {
-      return ScheduleTaskDM();
-    }
+    taskDM.timelineId = task.timelineId;
+    taskDM.staffId = task.staffId;
 
     return taskDM;
   }

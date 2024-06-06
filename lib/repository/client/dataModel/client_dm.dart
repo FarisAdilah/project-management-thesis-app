@@ -13,6 +13,7 @@ class ClientDM {
   String? address;
   String? phoneNumber;
   PicDM? pic;
+  List<String>? projectId;
 
   ClientDM();
 

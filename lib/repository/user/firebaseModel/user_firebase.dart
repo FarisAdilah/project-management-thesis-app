@@ -10,6 +10,7 @@ class UserFirebase {
   String? role;
   String? phoneNumber;
   String? image;
+  List<String>? projectId;
 
   UserFirebase();
 
@@ -25,7 +26,8 @@ class UserFirebase {
       ..password = data['password']
       ..role = data['role']
       ..phoneNumber = data['phoneNumber']
-      ..image = data['image'];
+      ..image = data['image']
+      ..projectId = List.from(data['projectId']);
 
     return user;
   }
@@ -42,7 +44,8 @@ class UserFirebase {
       ..password = data?['password']
       ..role = data?['role']
       ..phoneNumber = data?['phoneNumber']
-      ..image = data?['image'];
+      ..image = data?['image']
+      ..projectId = List.from(data?['projectId']);
 
     return user;
   }
@@ -54,5 +57,6 @@ class UserFirebase {
         'role': role,
         'phoneNumber': phoneNumber,
         'image': image,
+        'projectId': projectId,
       };
 }

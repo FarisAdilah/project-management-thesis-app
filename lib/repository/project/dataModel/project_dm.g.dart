@@ -13,18 +13,11 @@ ProjectDM _$ProjectDMFromJson(Map<String, dynamic> json) => ProjectDM()
   ..status = json['status'] as String?
   ..startDate = json['startDate'] as String?
   ..endDate = json['endDate'] as String?
-  ..client = json['client'] == null
-      ? null
-      : ClientDM.fromJson(json['client'] as Map<String, dynamic>)
-  ..vendor = (json['vendor'] as List<dynamic>?)
-      ?.map((e) => VendorDM.fromJson(e as Map<String, dynamic>))
-      .toList()
-  ..timeline = (json['timeline'] as List<dynamic>?)
-      ?.map((e) => TimelineDM.fromJson(e as Map<String, dynamic>))
-      .toList()
-  ..payment = (json['payment'] as List<dynamic>?)
-      ?.map((e) => PaymentDM.fromJson(e as Map<String, dynamic>))
-      .toList();
+  ..clientId = json['clientId'] as String?
+  ..vendorId =
+      (json['vendorId'] as List<dynamic>?)?.map((e) => e as String).toList()
+  ..userId =
+      (json['userId'] as List<dynamic>?)?.map((e) => e as String).toList();
 
 Map<String, dynamic> _$ProjectDMToJson(ProjectDM instance) => <String, dynamic>{
       'id': instance.id,
@@ -33,8 +26,7 @@ Map<String, dynamic> _$ProjectDMToJson(ProjectDM instance) => <String, dynamic>{
       'status': instance.status,
       'startDate': instance.startDate,
       'endDate': instance.endDate,
-      'client': instance.client,
-      'vendor': instance.vendor,
-      'timeline': instance.timeline,
-      'payment': instance.payment,
+      'clientId': instance.clientId,
+      'vendorId': instance.vendorId,
+      'userId': instance.userId,
     };

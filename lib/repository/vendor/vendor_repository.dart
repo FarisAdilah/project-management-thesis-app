@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,6 +34,7 @@ class VendorRepository with RepoBase {
       vendorDM.image = element.image;
       vendorDM.name = element.name;
       vendorDM.phoneNumber = element.phoneNumber;
+      vendorDM.projectId = element.projectId;
 
       PicDM pic = PicDM();
       pic.email = element.pic?.email;
@@ -51,11 +51,38 @@ class VendorRepository with RepoBase {
     return vendorDMList;
   }
 
-  Future<List<VendorDM>> getMultipleVendor(List<String> ids) async {
-    List<VendorDM> vendorDMList = [];
+  Future<List<VendorDM>> getMultipleVendor(String projectId) async {
+    List collection = await getMultipleDocument(
+      CollectionType.vendors.name,
+      "projectId",
+      projectId,
+      isArray: true,
+    );
 
-    for (var id in ids) {
-      VendorDM vendorDM = await getVendorById(id);
+    List<VendorFirebase> vendorList = [];
+    for (var element in collection) {
+      VendorFirebase vendor = VendorFirebase.fromFirestoreList(element);
+      vendorList.add(vendor);
+    }
+
+    List<VendorDM> vendorDMList = [];
+    for (var vendor in vendorList) {
+      VendorDM vendorDM = VendorDM();
+      vendorDM.id = vendor.id;
+      vendorDM.address = vendor.address;
+      vendorDM.description = vendor.description;
+      vendorDM.email = vendor.email;
+      vendorDM.image = vendor.image;
+      vendorDM.name = vendor.name;
+      vendorDM.phoneNumber = vendor.phoneNumber;
+      vendorDM.projectId = vendor.projectId;
+
+      PicDM pic = PicDM();
+      pic.email = vendor.pic?.email;
+      pic.name = vendor.pic?.name;
+      pic.phoneNumber = vendor.pic?.phoneNumber;
+      pic.role = vendor.pic?.role;
+
       vendorDMList.add(vendorDM);
     }
 
@@ -74,6 +101,7 @@ class VendorRepository with RepoBase {
     vendorDM.image = vendor.image;
     vendorDM.name = vendor.name;
     vendorDM.phoneNumber = vendor.phoneNumber;
+    vendorDM.projectId = vendor.projectId;
 
     PicDM pic = PicDM();
     pic.email = vendor.pic?.email;

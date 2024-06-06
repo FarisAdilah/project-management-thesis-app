@@ -3,9 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PaymentFirebase {
   String? id;
   String? name;
-  String? clientName;
-  String? vendorName;
+  String? clientId;
+  String? vendorId;
   String? amount;
+  String? deadline;
+  String? projectId;
 
   PaymentFirebase();
 
@@ -17,9 +19,11 @@ class PaymentFirebase {
     final payment = PaymentFirebase()
       ..id = snapshot.id
       ..name = data['name']
-      ..clientName = data['clientName']
-      ..vendorName = data['vendorName']
-      ..amount = data['amount'];
+      ..clientId = data['clientName']
+      ..vendorId = data['vendorName']
+      ..amount = data['amount']
+      ..deadline = data['deadline']
+      ..projectId = data['projectId'];
 
     return payment;
   }
@@ -32,9 +36,11 @@ class PaymentFirebase {
     final payment = PaymentFirebase()
       ..id = snapshot.id
       ..name = data!['name']
-      ..clientName = data['clientName']
-      ..vendorName = data['vendorName']
-      ..amount = data['amount'];
+      ..clientId = data['clientName']
+      ..vendorId = data['vendorName']
+      ..amount = data['amount']
+      ..deadline = data['deadline']
+      ..projectId = data['projectId'];
 
     return payment;
   }
@@ -42,8 +48,10 @@ class PaymentFirebase {
   Map<String, dynamic> toFirestore() => {
         'id': id,
         'name': name,
-        'clientName': clientName,
-        'vendorName': vendorName,
+        'clientName': clientId,
+        'vendorName': vendorId,
         'amount': amount,
+        'deadline': deadline,
+        'projectId': projectId,
       };
 }

@@ -100,6 +100,41 @@ mixin RepoBase {
     return dataList;
   }
 
+  getMultipleDocument(String collection, String field, String id,
+      {bool isArray = false}) async {
+    var datalist = [];
+
+    if (isArray) {
+      await _db
+          .collection(collection)
+          .where(field, arrayContains: id)
+          .get()
+          .then(
+        (value) {
+          for (var element in value.docs) {
+            datalist.add(element);
+          }
+        },
+        onError: (error) {
+          Helpers().showErrorSnackBar("Failed to get data: $error");
+        },
+      );
+    } else {
+      await _db.collection(collection).where(field, isEqualTo: id).get().then(
+        (value) {
+          for (var element in value.docs) {
+            datalist.add(element);
+          }
+        },
+        onError: (error) {
+          Helpers().showErrorSnackBar("Failed to get data: $error");
+        },
+      );
+    }
+
+    return datalist;
+  }
+
   getDataDocument(String collection, String id) async {
     return await _db.collection(collection).doc(id).get();
   }

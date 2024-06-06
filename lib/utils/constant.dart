@@ -32,6 +32,17 @@ enum StorageType {
   user,
 }
 
+enum ProjectFieldType {
+  userId,
+  clientId,
+  vendorId,
+}
+
+enum TaskFieldType {
+  timelineId,
+  staffId,
+}
+
 class Constant {
   static const bool showLog = true;
   static const String logIdentifier = "PenTools-log";

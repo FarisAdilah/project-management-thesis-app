@@ -19,10 +19,12 @@ class PaymentRepository with RepoBase {
     for (var payment in paymentList) {
       PaymentDM paymentDM = PaymentDM();
       paymentDM.id = payment.id;
-      paymentDM.clientName = payment.clientName;
+      paymentDM.clientId = payment.clientId;
       paymentDM.paymentAmount = payment.amount;
       paymentDM.paymentName = payment.name;
-      paymentDM.vendorName = payment.vendorName;
+      paymentDM.vendorId = payment.vendorId;
+      paymentDM.deadline = payment.deadline;
+      paymentDM.projectId = payment.projectId;
 
       paymentListDM.add(paymentDM);
     }
@@ -30,11 +32,31 @@ class PaymentRepository with RepoBase {
     return paymentListDM;
   }
 
-  Future<List<PaymentDM>> getMultiplePayment(List<String> ids) async {
-    List<PaymentDM> paymentListDM = [];
+  Future<List<PaymentDM>> getMultiplePayment(String projectId) async {
+    List collection = await getMultipleDocument(
+      CollectionType.payments.name,
+      "projectId",
+      projectId,
+      isArray: true,
+    );
 
-    for (var id in ids) {
-      PaymentDM paymentDM = await getPaymentById(id);
+    List<PaymentFirebase> paymentList = [];
+    for (var element in collection) {
+      PaymentFirebase payment = PaymentFirebase.fromFirestoreList(element);
+      paymentList.add(payment);
+    }
+
+    List<PaymentDM> paymentListDM = [];
+    for (var payment in paymentList) {
+      PaymentDM paymentDM = PaymentDM();
+      paymentDM.id = payment.id;
+      paymentDM.clientId = payment.clientId;
+      paymentDM.paymentAmount = payment.amount;
+      paymentDM.paymentName = payment.name;
+      paymentDM.vendorId = payment.vendorId;
+      paymentDM.deadline = payment.deadline;
+      paymentDM.projectId = payment.projectId;
+
       paymentListDM.add(paymentDM);
     }
 
@@ -47,10 +69,12 @@ class PaymentRepository with RepoBase {
 
     PaymentDM paymentDM = PaymentDM();
     paymentDM.id = payment.id;
-    paymentDM.clientName = payment.clientName;
+    paymentDM.clientId = payment.clientId;
     paymentDM.paymentAmount = payment.amount;
     paymentDM.paymentName = payment.name;
-    paymentDM.vendorName = payment.vendorName;
+    paymentDM.vendorId = payment.vendorId;
+    paymentDM.deadline = payment.deadline;
+    paymentDM.projectId = payment.projectId;
 
     return paymentDM;
   }

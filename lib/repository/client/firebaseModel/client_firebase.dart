@@ -10,6 +10,7 @@ class ClientFirebase {
   String? address;
   String? phoneNumber;
   PicFirebase? pic;
+  List<String>? projectId;
 
   ClientFirebase();
 
@@ -26,7 +27,8 @@ class ClientFirebase {
       ..image = data['image']
       ..address = data['address']
       ..phoneNumber = data['phoneNumber']
-      ..pic = PicFirebase.fromJson(data['pic']);
+      ..pic = PicFirebase.fromJson(data['pic'])
+      ..projectId = List.from(data['projectId']);
 
     return client;
   }
@@ -44,7 +46,8 @@ class ClientFirebase {
       ..image = data?['image']
       ..address = data?['address']
       ..phoneNumber = data?['phoneNumber']
-      ..pic = PicFirebase.fromJson(data?['pic']);
+      ..pic = PicFirebase.fromJson(data?['pic'])
+      ..projectId = List.from(data?['projectId']);
 
     return client;
   }
@@ -58,5 +61,6 @@ class ClientFirebase {
         'address': address,
         'phoneNumber': phoneNumber,
         'pic': pic?.toJson(),
+        'projectId': projectId,
       };
 }

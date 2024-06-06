@@ -9,14 +9,13 @@ class ProjectFirebase {
   String? status;
   String? startDate;
   String? endDate;
-  String? client;
-  List<String>? vendor;
-  List<String>? timeline;
-  List<String>? payment;
+  String? clientId;
+  List<String>? vendorId;
+  List<String>? userId;
 
   ProjectFirebase();
 
-  factory ProjectFirebase.fromFirestore(
+  factory ProjectFirebase.fromFirestoreList(
     QueryDocumentSnapshot<Map<String, dynamic>> snapshot, {
     SnapshotOptions? options,
   }) {
@@ -28,10 +27,28 @@ class ProjectFirebase {
       ..status = data['status']
       ..startDate = data['startDate']
       ..endDate = data['endDate']
-      ..client = data['client']
-      ..vendor = List.from(data['vendor'])
-      ..timeline = List.from(data['timeline'])
-      ..payment = List.from(data['payment']);
+      ..clientId = data['clientId']
+      ..vendorId = List.from(data['vendorId'])
+      ..userId = List.from(data['userId']);
+
+    return project;
+  }
+
+  factory ProjectFirebase.fromFirestoreDoc(
+    DocumentSnapshot<Map<String, dynamic>> snapshot, {
+    SnapshotOptions? options,
+  }) {
+    final data = snapshot.data();
+    final project = ProjectFirebase()
+      ..id = snapshot.id
+      ..name = data!['name']
+      ..description = data['description']
+      ..status = data['status']
+      ..startDate = data['startDate']
+      ..endDate = data['endDate']
+      ..clientId = data['clientId']
+      ..vendorId = List.from(data['vendorId'])
+      ..userId = List.from(data['userId']);
 
     return project;
   }
@@ -43,9 +60,8 @@ class ProjectFirebase {
         'status': status,
         'startDate': startDate,
         'endDate': endDate,
-        'client': client,
-        'vendor': vendor,
-        'timeline': timeline,
-        'payment': payment,
+        'clientId': clientId,
+        'vendorId': vendorId,
+        'userId': userId,
       };
 }

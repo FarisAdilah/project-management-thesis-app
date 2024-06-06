@@ -8,18 +8,16 @@ part of 'timeline_dm.dart';
 
 TimelineDM _$TimelineDMFromJson(Map<String, dynamic> json) => TimelineDM()
   ..id = json['id'] as String?
-  ..timelineName = json['timelineName'] as String?
+  ..name = json['name'] as String?
   ..startDate = json['startDate'] as String?
   ..endDate = json['endDate'] as String?
-  ..scheduleTask = (json['scheduleTask'] as List<dynamic>?)
-      ?.map((e) => ScheduleTaskDM.fromJson(e as Map<String, dynamic>))
-      .toList();
+  ..projectId = json['projectId'] as String?;
 
 Map<String, dynamic> _$TimelineDMToJson(TimelineDM instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'timelineName': instance.timelineName,
+      'name': instance.name,
       'startDate': instance.startDate,
       'endDate': instance.endDate,
-      'scheduleTask': instance.scheduleTask,
+      'projectId': instance.projectId,
     };

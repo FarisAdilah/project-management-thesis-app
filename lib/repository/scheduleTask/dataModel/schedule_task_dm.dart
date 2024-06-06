@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 
 part 'schedule_task_dm.g.dart';
 
@@ -9,7 +8,8 @@ class ScheduleTaskDM {
   String? name;
   String? startDate;
   String? endDate;
-  UserDM? staff;
+  String? timelineId;
+  String? staffId;
 
   ScheduleTaskDM();
 
