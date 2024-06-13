@@ -84,7 +84,7 @@ class ClientItemContent extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 15,
                   ),
                   const CustomText(
                     "Email",

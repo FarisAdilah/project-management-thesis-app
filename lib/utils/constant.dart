@@ -43,6 +43,13 @@ enum TaskFieldType {
   staffId,
 }
 
+enum ProjectStatusType {
+  pending,
+  ongoing,
+  closing,
+  completed,
+}
+
 class Constant {
   static const bool showLog = true;
   static const String logIdentifier = "PenTools-log";

@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
+import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/card/count_card.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/controller_main_page.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/project_pending_item_content.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class MainHomePage extends StatelessWidget {
   const MainHomePage({
@@ -22,10 +26,11 @@ class MainHomePage extends StatelessWidget {
       body: Obx(
         () => Stack(
           children: [
-            SingleChildScrollView(
-              child: Container(
-                color: AssetColor.greyBackground,
-                padding: const EdgeInsets.all(25),
+            Container(
+              height: double.infinity,
+              color: AssetColor.greyBackground,
+              padding: const EdgeInsets.all(25),
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -86,6 +91,7 @@ class MainHomePage extends StatelessWidget {
                     const SizedBox(
                       height: 50,
                     ),
+                    // General Summary
                     const CustomText(
                       "General Summary",
                       color: AssetColor.blueTertiaryAccent,
@@ -136,6 +142,46 @@ class MainHomePage extends StatelessWidget {
                     const SizedBox(
                       height: 50,
                     ),
+                    controller.currentUser.value.role ==
+                            UserType.supervisor.name
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const CustomText(
+                                "Pending Aprroval Project",
+                                color: AssetColor.blueTertiaryAccent,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                height: 325,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: controller.pendingProjects.length,
+                                  itemBuilder: (context, index) {
+                                    ProjectDM pendingProject =
+                                        controller.pendingProjects[index];
+
+                                    return PendingItemContent(
+                                      pendingProject: pendingProject,
+                                      onPressed: () {
+                                        controller
+                                            .showPendingDetail(pendingProject);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
                     const CustomText(
                       "List Project",
                       color: AssetColor.blueTertiaryAccent,
@@ -162,11 +208,30 @@ class MainHomePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const CustomText(
-                            "All Projects",
-                            color: AssetColor.blackPrimary,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
+                          Row(
+                            children: [
+                              const CustomText(
+                                "All Projects",
+                                color: AssetColor.blackPrimary,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              controller.currentUser.value.role ==
+                                      UserType.admin.name
+                                  ? const SizedBox(width: 20)
+                                  : const SizedBox(),
+                              controller.currentUser.value.role ==
+                                      UserType.admin.name
+                                  ? CustomButton(
+                                      text: "Add New Project",
+                                      color: AssetColor.greenButton,
+                                      borderRadius: 8,
+                                      onPressed: () {
+                                        controller.createProject();
+                                      },
+                                    )
+                                  : const SizedBox(),
+                            ],
                           ),
                           const SizedBox(
                             height: 20,
@@ -186,12 +251,47 @@ class MainHomePage extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 ProjectDM project = controller.projects[index];
 
-                                return _buildRow(
-                                  project.name ?? "name",
-                                  project.clientId ?? "client",
-                                  project.startDate ?? "start date",
-                                  project.endDate ?? "end date",
-                                  project.status ?? "status",
+                                return InkWell(
+                                  onTap: () => controller.showProjectDetail(
+                                    project.id ?? "",
+                                  ),
+                                  onHover: (value) =>
+                                      controller.setHoverValue(value, index),
+                                  child: Obx(
+                                    () => AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        decoration: BoxDecoration(
+                                          color: controller.isHoverListProject
+                                                      .value &&
+                                                  controller
+                                                          .selectedIndexProject
+                                                          .value ==
+                                                      index
+                                              ? AssetColor.greyBackground
+                                              : AssetColor.whiteBackground,
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: AssetColor.grey
+                                                  .withOpacity(0.5),
+                                              width: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        child: _buildRow(
+                                          project.name ?? "",
+                                          project.clientName ?? "",
+                                          Helpers().convertDateStringFormat(
+                                            project.startDate ?? "2024-04-04",
+                                          ),
+                                          Helpers().convertDateStringFormat(
+                                            project.endDate ?? "2024-04-04",
+                                          ),
+                                          project.status ?? "",
+                                        )),
+                                  ),
                                 );
                               },
                             ),
@@ -219,37 +319,27 @@ Widget _buildRow(
   String status, {
   bool? isTitle,
 }) {
-  return Column(
+  return Row(
     children: [
-      const SizedBox(height: 8),
-      Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: _buildCell(name, isTitle: isTitle),
-          ),
-          Expanded(
-            flex: 1,
-            child: _buildCell(client, isTitle: isTitle),
-          ),
-          Expanded(
-            flex: 1,
-            child: _buildCell(startDate, isTitle: isTitle),
-          ),
-          Expanded(
-            flex: 1,
-            child: _buildCell(endDate, isTitle: isTitle),
-          ),
-          Expanded(
-            flex: 1,
-            child: _buildCell(status, isTitle: isTitle),
-          ),
-        ],
+      Expanded(
+        flex: 2,
+        child: _buildCell(name, isTitle: isTitle),
       ),
-      const SizedBox(height: 8),
-      const Divider(
-        color: AssetColor.grey,
-        thickness: 1,
+      Expanded(
+        flex: 2,
+        child: _buildCell(client, isTitle: isTitle),
+      ),
+      Expanded(
+        flex: 1,
+        child: _buildCell(startDate, isTitle: isTitle),
+      ),
+      Expanded(
+        flex: 1,
+        child: _buildCell(endDate, isTitle: isTitle),
+      ),
+      Expanded(
+        flex: 1,
+        child: _buildCell(status, isTitle: isTitle, isStatus: true),
       ),
     ],
   );
@@ -258,10 +348,50 @@ Widget _buildRow(
 Widget _buildCell(
   String title, {
   bool? isTitle,
+  bool? isStatus,
 }) {
-  return CustomText(
-    title,
-    color: isTitle ?? false ? AssetColor.grey : AssetColor.blackPrimary,
-    fontSize: 20,
+  return (isStatus ?? false) && !(isTitle ?? false)
+      ? _buildStatus(title)
+      : CustomText(
+          title,
+          color: isTitle ?? false ? AssetColor.grey : AssetColor.blackPrimary,
+          fontSize: 20,
+        );
+}
+
+Widget _buildStatus(String status) {
+  Color statusColor;
+  String title;
+  if (status == ProjectStatusType.pending.name ||
+      status == ProjectStatusType.closing.name) {
+    statusColor = AssetColor.redButton;
+    title = "Pending";
+  } else if (status == ProjectStatusType.ongoing.name) {
+    statusColor = AssetColor.orange;
+    title = "Ongoing";
+  } else {
+    statusColor = AssetColor.green;
+    title = "Completed";
+  }
+
+  return Row(
+    children: [
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: statusColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: statusColor,
+            width: 1,
+          ),
+        ),
+        child: CustomText(
+          title,
+          color: statusColor,
+          fontSize: 20,
+        ),
+      ),
+    ],
   );
 }

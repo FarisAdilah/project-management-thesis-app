@@ -2,9 +2,11 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/pages/clientPage/clientAdd/client_add.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
+import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
+import 'package:project_management_thesis_app/utils/storage.dart';
 
-class ClientListController extends GetxController {
+class ClientListController extends GetxController with Storage {
   final _clientRepository = ClientRepository.instance;
 
   RxList<ClientDM> clients = <ClientDM>[].obs;
@@ -12,10 +14,13 @@ class ClientListController extends GetxController {
   RxBool isLoading = false.obs;
   RxInt selectedIndex = (-1).obs;
 
+  UserDM? currentUser = UserDM();
+
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    _getClientList();
+    currentUser = await getUserData();
+    await _getClientList();
   }
 
   _getClientList() async {

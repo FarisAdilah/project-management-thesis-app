@@ -150,6 +150,7 @@ class StaffFormController extends GetxController with Storage {
     user.role = _getUserRole(roleController.text);
     user.phoneNumber = phoneNumberController.text;
     user.image = userToUpdate?.image;
+    user.projectId = userToUpdate?.projectId;
 
     bool isSuccess = await UserRepository().updateUser(
       user,

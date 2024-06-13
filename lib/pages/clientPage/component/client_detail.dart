@@ -31,94 +31,100 @@ class ClientDetail extends StatelessWidget {
             color: AssetColor.whiteBackground,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          client.image?.isNotEmpty ?? false
-                              ? Image.network(
-                                  client.image ?? "",
-                                  height: 90,
-                                  fit: BoxFit.cover,
-                                )
-                              : const SizedBox(),
-                          client.image?.isNotEmpty ?? false
-                              ? const SizedBox(width: 25)
-                              : const SizedBox(),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                CustomText(
-                                  client.name ?? "name",
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                CustomText(
-                                  client.address ?? "address",
-                                  fontSize: 16,
-                                ),
-                                Row(
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              client.image?.isNotEmpty ?? false
+                                  ? Image.network(
+                                      client.image ?? "",
+                                      height: 90,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const SizedBox(),
+                              client.image?.isNotEmpty ?? false
+                                  ? const SizedBox(width: 25)
+                                  : const SizedBox(),
+                              Expanded(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
+                                    CustomText(
+                                      client.name ?? "name",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    CustomText(
+                                      client.address ?? "address",
+                                      fontSize: 16,
+                                    ),
                                     Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const Icon(
-                                          FontAwesomeIcons.envelope,
-                                          color: AssetColor.grey,
-                                          size: 32,
-                                          applyTextScaling: true,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                        Row(
                                           children: [
-                                            const CustomText(
-                                              "Email",
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
+                                            const Icon(
+                                              FontAwesomeIcons.envelope,
+                                              color: AssetColor.grey,
+                                              size: 28,
+                                              applyTextScaling: true,
                                             ),
-                                            CustomText(
-                                              client.email ?? "email",
-                                              fontSize: 12,
+                                            const SizedBox(width: 10),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const CustomText(
+                                                  "Email",
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                CustomText(
+                                                  client.email ?? "email",
+                                                  fontSize: 12,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 25),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          FontAwesomeIcons.phone,
-                                          color: AssetColor.grey,
-                                          applyTextScaling: true,
-                                          size: 32,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        const SizedBox(width: 25),
+                                        Row(
                                           children: [
-                                            const CustomText(
-                                              "Phone Number",
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
+                                            const Icon(
+                                              FontAwesomeIcons.phone,
+                                              color: AssetColor.grey,
+                                              applyTextScaling: true,
+                                              size: 25,
                                             ),
-                                            CustomText(
-                                              client.phoneNumber ?? "phone",
-                                              fontSize: 12,
+                                            const SizedBox(width: 10),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const CustomText(
+                                                  "Phone Number",
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                CustomText(
+                                                  client.phoneNumber ?? "phone",
+                                                  fontSize: 12,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
@@ -126,118 +132,114 @@ class ClientDetail extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    // const SizedBox(height: 5),
+                    const Divider(
+                      color: AssetColor.grey,
+                      thickness: 1,
+                    ),
+                    const SizedBox(height: 5),
+                    const CustomText(
+                      "Description",
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 8),
+                    CustomText(
+                      client.description ?? "description",
+                      fontSize: 16,
+                      textAlign: TextAlign.justify,
+                    ),
+                    const SizedBox(height: 20),
+                    const CustomText(
+                      "Person In Charge",
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 10),
+                    const CustomText(
+                      "Name",
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 8),
+                    CustomText(
+                      client.pic?.name ?? "name",
+                    ),
+                    const SizedBox(height: 10),
+                    const CustomText(
+                      "Role",
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 8),
+                    CustomText(
+                      client.pic?.role ?? "role",
+                    ),
+                    const SizedBox(height: 10),
+                    const CustomText(
+                      "Contact Information",
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              FontAwesomeIcons.envelope,
+                              color: AssetColor.grey,
+                              size: 28,
+                              applyTextScaling: true,
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const CustomText(
+                                  "Email",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                CustomText(
+                                  client.pic?.email ?? "email",
+                                  fontSize: 12,
+                                ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(FontAwesomeIcons.xmark),
-                      onPressed: onPressed,
-                    ),
-                  ],
-                ),
-                // const SizedBox(height: 5),
-                const Divider(
-                  color: AssetColor.grey,
-                  thickness: 1,
-                ),
-                const SizedBox(height: 5),
-                const CustomText(
-                  "Description",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                const SizedBox(height: 8),
-                CustomText(
-                  client.description ?? "description",
-                  fontSize: 16,
-                  textAlign: TextAlign.justify,
-                ),
-                const SizedBox(height: 20),
-                const CustomText(
-                  "Person In Charge",
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                const SizedBox(height: 10),
-                const CustomText(
-                  "Name",
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                const SizedBox(height: 8),
-                CustomText(
-                  client.pic?.name ?? "name",
-                ),
-                const SizedBox(height: 10),
-                const CustomText(
-                  "Role",
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                const SizedBox(height: 8),
-                CustomText(
-                  client.pic?.role ?? "role",
-                ),
-                const SizedBox(height: 10),
-                const CustomText(
-                  "Contact Information",
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.envelope,
-                          color: AssetColor.grey,
-                          size: 32,
-                          applyTextScaling: true,
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const CustomText(
-                              "Email",
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            CustomText(
-                              client.pic?.email ?? "email",
-                              fontSize: 12,
-                            ),
                           ],
                         ),
-                      ],
-                    ),
-                    const SizedBox(width: 25),
-                    Row(
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.phone,
-                          color: AssetColor.grey,
-                          applyTextScaling: true,
-                          size: 32,
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        const SizedBox(width: 25),
+                        Row(
                           children: [
-                            const CustomText(
-                              "Phone Number",
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                            const Icon(
+                              FontAwesomeIcons.phone,
+                              color: AssetColor.grey,
+                              applyTextScaling: true,
+                              size: 25,
                             ),
-                            CustomText(
-                              client.pic?.phoneNumber ?? "phone",
-                              fontSize: 12,
+                            const SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const CustomText(
+                                  "Phone Number",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                CustomText(
+                                  client.pic?.phoneNumber ?? "phone",
+                                  fontSize: 12,
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -245,8 +247,16 @@ class ClientDetail extends StatelessWidget {
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: IconButton(
+                  icon: const Icon(FontAwesomeIcons.xmark),
+                  onPressed: onPressed,
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 
 class Helpers {
@@ -78,5 +79,15 @@ class Helpers {
     }
 
     return userRole;
+  }
+
+  String convertDateStringFormat(String date, {String format = "dd/MM/yyyy"}) {
+    if (date.isEmpty) {
+      return "";
+    }
+    DateTime dateTime = DateTime.parse(date);
+    String formattedDate = DateFormat("d MMMM y").format(dateTime);
+
+    return formattedDate;
   }
 }

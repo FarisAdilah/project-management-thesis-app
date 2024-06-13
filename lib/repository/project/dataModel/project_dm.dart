@@ -13,6 +13,7 @@ class ProjectDM {
   String? clientId;
   List<String>? vendorId;
   List<String>? userId;
+  String? clientName;
 
   ProjectDM();
 

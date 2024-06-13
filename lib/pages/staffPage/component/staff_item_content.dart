@@ -6,10 +6,12 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/pages/staffPage/staffForm/staff_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class StaffItemContent extends StatelessWidget {
   final UserDM user;
+  final UserDM currentUser;
   final VoidCallback onUpdate;
   final VoidCallback onDelete;
 
@@ -18,6 +20,7 @@ class StaffItemContent extends StatelessWidget {
     required this.user,
     required this.onUpdate,
     required this.onDelete,
+    required this.currentUser,
   });
 
   @override
@@ -153,73 +156,70 @@ class StaffItemContent extends StatelessWidget {
           const SizedBox(
             width: 15,
           ),
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(
-                  "Action",
-                  color: AssetColor.grey.withOpacity(0.5),
-                  fontWeight: FontWeight.w600,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 5),
-                      decoration: BoxDecoration(
-                        color: AssetColor.purple,
-                        borderRadius: BorderRadius.circular(5),
+          currentUser.role == UserType.supervisor.name
+              ? Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        "Action",
+                        color: AssetColor.grey.withOpacity(0.5),
+                        fontWeight: FontWeight.w600,
                       ),
-                      child: IconButton(
-                        constraints: BoxConstraints.tight(const Size(30, 30)),
-                        padding: const EdgeInsets.all(0),
-                        iconSize: 18,
-                        icon: const Icon(
-                          FontAwesomeIcons.penToSquare,
-                          color: AssetColor.whiteBackground,
-                        ),
-                        onPressed: () {
-                          Get.to(
-                            () => StaffForm(
-                              userDM: user,
-                              isUpdate: true,
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              color: AssetColor.purple,
+                              borderRadius: BorderRadius.circular(5),
                             ),
-                          )?.whenComplete(onUpdate);
-                        },
+                            child: IconButton(
+                              constraints:
+                                  BoxConstraints.tight(const Size(30, 30)),
+                              padding: const EdgeInsets.all(0),
+                              iconSize: 18,
+                              icon: const Icon(
+                                FontAwesomeIcons.penToSquare,
+                                color: AssetColor.whiteBackground,
+                              ),
+                              onPressed: () {
+                                Get.to(
+                                  () => StaffForm(
+                                    userDM: user,
+                                    isUpdate: true,
+                                  ),
+                                )?.whenComplete(onUpdate);
+                              },
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: AssetColor.redButton,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: IconButton(
+                              constraints:
+                                  BoxConstraints.tight(const Size(30, 30)),
+                              padding: const EdgeInsets.all(0),
+                              iconSize: 18,
+                              icon: const Icon(
+                                FontAwesomeIcons.trashCan,
+                                color: AssetColor.whiteBackground,
+                              ),
+                              onPressed: onDelete,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AssetColor.redButton,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: IconButton(
-                        constraints: BoxConstraints.tight(const Size(30, 30)),
-                        padding: const EdgeInsets.all(0),
-                        iconSize: 18,
-                        icon: const Icon(
-                          FontAwesomeIcons.trashCan,
-                          color: AssetColor.whiteBackground,
-                        ),
-                        onPressed: onDelete,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
-      // ListTile(
-      //   title: CustomText("${user.name}"),
-      //   subtitle: CustomText("Role: ${user.role}"),
-      //   onTap: () {
-      //     Helpers().showSuccessSnackBar("${user.id}");
-      //   },
-      // ),
     );
   }
 }

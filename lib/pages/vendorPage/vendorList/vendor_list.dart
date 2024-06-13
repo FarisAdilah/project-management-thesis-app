@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
@@ -9,6 +8,7 @@ import 'package:project_management_thesis_app/pages/vendorPage/component/vendor_
 import 'package:project_management_thesis_app/pages/vendorPage/vendorList/controller_vendor_list.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 
 class VendorList extends StatelessWidget {
   const VendorList({super.key});
@@ -46,23 +46,30 @@ class VendorList extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  CustomButton(
-                    onPressed: () => controller.showCreateForm(context),
-                    text: "Add New Vendor",
-                    color: AssetColor.greenButton,
-                    borderRadius: 8,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AssetColor.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  controller.currentUser?.role == UserType.admin.name
+                      ? Column(
+                          children: [
+                            CustomButton(
+                              onPressed: () =>
+                                  controller.showCreateForm(context),
+                              text: "Add New Vendor",
+                              color: AssetColor.greenButton,
+                              borderRadius: 8,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AssetColor.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                   Expanded(
                     child: GridView.builder(
                       gridDelegate:

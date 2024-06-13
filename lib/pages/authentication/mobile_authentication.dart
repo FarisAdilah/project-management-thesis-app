@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/authentication/controller_auth.dart';
 
 class MobileAuthentication extends StatelessWidget {
   const MobileAuthentication({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AuthController());
+    // TODO: Implement MOBILE LAYOUT
+    // final controller = Get.put(AuthController());
 
     return Scaffold(
       appBar: AppBar(title: const CustomText('Mobiles Authentication Page')),

@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorAdd/vendor_add.dart';
+import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/vendor_repository.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
+import 'package:project_management_thesis_app/utils/storage.dart';
 
-class VendorListController extends GetxController {
+class VendorListController extends GetxController with Storage {
   final _vendorRepository = VendorRepository.instance;
 
   RxList<VendorDM> vendors = <VendorDM>[].obs;
@@ -14,10 +16,13 @@ class VendorListController extends GetxController {
   RxBool isLoading = false.obs;
   RxInt selectedIndex = (-1).obs;
 
+  UserDM? currentUser = UserDM();
+
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    _getVendorList();
+    currentUser = await getUserData();
+    await _getVendorList();
   }
 
   _getVendorList() async {

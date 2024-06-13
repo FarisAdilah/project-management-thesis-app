@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input_border.dart';
@@ -62,7 +60,7 @@ class Profile extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const CustomText(
-                                  "Edit your profile here",
+                                  "See your profile here",
                                   color: AssetColor.whiteBackground,
                                 ),
                                 Obx(

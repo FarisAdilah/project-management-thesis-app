@@ -7,6 +7,7 @@ import 'package:project_management_thesis_app/pages/staffPage/component/staff_it
 import 'package:project_management_thesis_app/pages/staffPage/staffList/controller_staff_list.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 
 class StaffList extends StatelessWidget {
   const StaffList({
@@ -65,23 +66,30 @@ class StaffList extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  CustomButton(
-                    onPressed: () => controller.showCreateForm(context),
-                    text: "Add New User",
-                    color: AssetColor.greenButton,
-                    borderRadius: 8,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AssetColor.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  controller.currentUser?.role == UserType.supervisor.name
+                      ? Column(
+                          children: [
+                            CustomButton(
+                              onPressed: () =>
+                                  controller.showCreateForm(context),
+                              text: "Add New User",
+                              color: AssetColor.greenButton,
+                              borderRadius: 8,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AssetColor.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                   Expanded(
                     child: Obx(
                       () => ListView.builder(
@@ -93,6 +101,7 @@ class StaffList extends StatelessWidget {
 
                           return StaffItemContent(
                             user: user,
+                            currentUser: controller.currentUser ?? UserDM(),
                             onUpdate: () => controller.onUpdateUser(),
                             onDelete: () => controller.onDeleteUser(user),
                           );

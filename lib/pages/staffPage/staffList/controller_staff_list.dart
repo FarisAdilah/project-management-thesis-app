@@ -10,8 +10,9 @@ import 'package:project_management_thesis_app/repository/user/user_repository.da
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
+import 'package:project_management_thesis_app/utils/storage.dart';
 
-class StaffListController extends GetxController {
+class StaffListController extends GetxController with Storage {
   final _userRepository = UserRepository.instance;
 
   RxList<UserDM> users = <UserDM>[].obs;
@@ -23,10 +24,14 @@ class StaffListController extends GetxController {
   RxString imageUrl = "".obs;
   RxBool isLoading = false.obs;
 
+  UserDM? currentUser;
+
   @override
   void onInit() async {
     super.onInit();
     _getImage();
+    currentUser = await getUserData();
+    Helpers.writeLog("currentUser Staff Page: ${jsonEncode(currentUser)}");
     await _getUsersData();
   }
 

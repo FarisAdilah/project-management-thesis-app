@@ -75,7 +75,7 @@ class ProjectRepository with RepoBase {
 
   Future<ProjectDM?> getProjectById(String id) async {
     var data = await getDataDocument(CollectionType.projects.name, id);
-    ProjectFirebase project = ProjectFirebase.fromFirestoreList(data);
+    ProjectFirebase project = ProjectFirebase.fromFirestoreDoc(data);
 
     ProjectDM projectDM = ProjectDM();
     projectDM.id = project.id;

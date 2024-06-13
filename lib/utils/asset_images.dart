@@ -8,4 +8,8 @@ class AssetImages {
       '${asset}create_user_background.png';
   static const String backgroundCreateExternal =
       '${asset}create_external_background.png';
+  static const String backgroundCreateProject =
+      '${asset}create_project_background.png';
+  static const String backgroundCreateTimeline =
+      '${asset}create_timeline_background.png';
 }

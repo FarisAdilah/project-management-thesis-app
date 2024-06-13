@@ -35,7 +35,6 @@ class TimelineRepository with RepoBase {
       CollectionType.timelines.name,
       "projectId",
       projectId,
-      isArray: true,
     );
 
     List<TimelineFirebase> timelineList = [];
@@ -46,13 +45,15 @@ class TimelineRepository with RepoBase {
     }
 
     List<TimelineDM> timelineDMList = [];
-    for (var timeline in timelineList) {
+    for (var element in timelineList) {
       TimelineDM timelineDM = TimelineDM();
-      timelineDM.id = timeline.id;
-      timelineDM.startDate = timeline.startDate;
-      timelineDM.endDate = timeline.endDate;
-      timelineDM.name = timeline.name;
-      timelineDM.projectId = timeline.projectId;
+      timelineDM.id = element.id;
+      timelineDM.startDate = element.startDate;
+      timelineDM.endDate = element.endDate;
+      timelineDM.name = element.name;
+      timelineDM.projectId = element.projectId;
+
+      timelineDMList.add(timelineDM);
     }
 
     return timelineDMList;

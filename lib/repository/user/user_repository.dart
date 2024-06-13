@@ -191,13 +191,41 @@ class UserRepository with RepoBase {
     return userList;
   }
 
-  Future<List<UserDM>> getMultipleUser(String projectId) async {
+  Future<List<UserDM>> getMultipleUserByProject(String projectId) async {
     List collection = await getMultipleDocument(
       CollectionType.users.name,
       "projectId",
       projectId,
       isArray: true,
     );
+
+    List<UserFirebase> userDataresponseList = [];
+    for (var element in collection) {
+      UserFirebase userDataResponse = UserFirebase.fromFirestoreList(element);
+      userDataresponseList.add(userDataResponse);
+    }
+
+    List<UserDM> userList = [];
+    for (var element in userDataresponseList) {
+      UserDM user = UserDM();
+      user.id = element.id;
+      user.email = element.email;
+      user.name = element.name;
+      user.role = element.role;
+      user.image = element.image;
+      user.password = element.password;
+      user.phoneNumber = element.phoneNumber;
+      user.projectId = element.projectId;
+
+      userList.add(user);
+    }
+
+    return userList;
+  }
+
+  Future<List<UserDM>> getMupltipleUserByRole(String role) async {
+    List collection =
+        await getMultipleDocument(CollectionType.users.name, "role", role);
 
     List<UserFirebase> userDataresponseList = [];
     for (var element in collection) {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/controller_home_page.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
 class MobileHomePage extends StatelessWidget {
@@ -9,7 +7,8 @@ class MobileHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomePageController());
+    // TODO: IMPLEMENT MOBILE LAYOUT
+    // final controller = Get.put(HomePageController());
 
     return Scaffold(
       appBar: AppBar(

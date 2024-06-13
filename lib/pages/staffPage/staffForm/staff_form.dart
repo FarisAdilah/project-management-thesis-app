@@ -149,18 +149,24 @@ class StaffForm extends StatelessWidget {
                                       height: 100,
                                     )
                                   : kIsWeb
-                                      ? Image.memory(
-                                          controller.pickedImageWeb.value,
-                                          fit: BoxFit.cover,
-                                          width: 100,
-                                          height: 100,
-                                        )
-                                      : Image.file(
-                                          controller.pickedImage.value,
-                                          fit: BoxFit.cover,
-                                          width: 100,
-                                          height: 100,
-                                        ),
+                                      ? controller
+                                              .pickedImageWeb.value.isNotEmpty
+                                          ? Image.memory(
+                                              controller.pickedImageWeb.value,
+                                              fit: BoxFit.cover,
+                                              width: 100,
+                                              height: 100,
+                                            )
+                                          : const SizedBox()
+                                      : controller
+                                              .pickedImage.value.path.isNotEmpty
+                                          ? Image.file(
+                                              controller.pickedImage.value,
+                                              fit: BoxFit.cover,
+                                              width: 100,
+                                              height: 100,
+                                            )
+                                          : const SizedBox(),
                               const SizedBox(height: 15),
                               InkWell(
                                 onTap: () {

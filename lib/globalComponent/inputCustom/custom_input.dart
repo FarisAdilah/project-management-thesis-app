@@ -3,17 +3,23 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
 class CustomInput extends StatelessWidget {
-  final String title;
+  final String? title;
   final TextEditingController controller;
   final String? hintText;
   final TextInputType? inputType;
+  final IconData? suffixIcon;
+  final bool isPopupInput;
+  final VoidCallback? onTap;
 
   const CustomInput({
     super.key,
-    required this.title,
+    this.title,
     required this.controller,
     this.hintText,
     this.inputType,
+    this.suffixIcon,
+    this.isPopupInput = false,
+    this.onTap,
   });
 
   @override
@@ -21,23 +27,50 @@ class CustomInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomText(
-          title,
-          color: AssetColor.blackPrimary,
-          fontSize: 16,
-        ),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: hintText ?? "input $title",
-            hintStyle: TextStyle(
-              color: AssetColor.grey.withOpacity(0.5),
-              fontFamily: "Jost",
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          keyboardType: inputType,
-        ),
+        title != null
+            ? CustomText(
+                title ?? "Input",
+                color: AssetColor.blackPrimary,
+                fontSize: 16,
+              )
+            : Container(),
+        isPopupInput
+            ? TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: hintText ?? "input $title",
+                  hintStyle: TextStyle(
+                    color: AssetColor.grey.withOpacity(0.5),
+                    fontFamily: "Jost",
+                    fontWeight: FontWeight.normal,
+                  ),
+                  suffixIcon: suffixIcon != null
+                      ? InkWell(
+                          onTap: onTap,
+                          child: Icon(suffixIcon),
+                        )
+                      : null,
+                  border: const UnderlineInputBorder(),
+                  disabledBorder: const UnderlineInputBorder(),
+                ),
+                onTap: onTap,
+                readOnly: true,
+                keyboardType: TextInputType.none,
+              )
+            : TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: hintText ?? "input $title",
+                  hintStyle: TextStyle(
+                    color: AssetColor.grey.withOpacity(0.5),
+                    fontFamily: "Jost",
+                    fontWeight: FontWeight.normal,
+                  ),
+                  suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
+                  border: const UnderlineInputBorder(),
+                ),
+                keyboardType: inputType,
+              ),
       ],
     );
   }

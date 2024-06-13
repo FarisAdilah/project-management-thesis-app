@@ -83,6 +83,8 @@ class VendorRepository with RepoBase {
       pic.phoneNumber = vendor.pic?.phoneNumber;
       pic.role = vendor.pic?.role;
 
+      vendorDM.pic = pic;
+
       vendorDMList.add(vendorDM);
     }
 
