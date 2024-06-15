@@ -12,4 +12,6 @@ class AssetImages {
       '${asset}create_project_background.png';
   static const String backgroundCreateTimeline =
       '${asset}create_timeline_background.png';
+  static const String backgroundCreatePayment =
+      '${asset}create_payment_background.png';
 }

@@ -25,6 +25,7 @@ class PaymentRepository with RepoBase {
       paymentDM.vendorId = payment.vendorId;
       paymentDM.deadline = payment.deadline;
       paymentDM.projectId = payment.projectId;
+      paymentDM.status = payment.status;
 
       paymentListDM.add(paymentDM);
     }
@@ -37,7 +38,6 @@ class PaymentRepository with RepoBase {
       CollectionType.payments.name,
       "projectId",
       projectId,
-      isArray: true,
     );
 
     List<PaymentFirebase> paymentList = [];
@@ -56,6 +56,7 @@ class PaymentRepository with RepoBase {
       paymentDM.vendorId = payment.vendorId;
       paymentDM.deadline = payment.deadline;
       paymentDM.projectId = payment.projectId;
+      paymentDM.status = payment.status;
 
       paymentListDM.add(paymentDM);
     }
@@ -75,6 +76,7 @@ class PaymentRepository with RepoBase {
     paymentDM.vendorId = payment.vendorId;
     paymentDM.deadline = payment.deadline;
     paymentDM.projectId = payment.projectId;
+    paymentDM.status = payment.status;
 
     return paymentDM;
   }

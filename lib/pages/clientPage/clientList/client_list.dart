@@ -17,6 +17,7 @@ class ClientList extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(ClientListController());
 
+    // IMPLEMENT EDIT & UPDATE UI
     return Scaffold(
       body: Obx(
         () => Stack(

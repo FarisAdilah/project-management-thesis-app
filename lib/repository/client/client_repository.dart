@@ -49,13 +49,15 @@ class ClientRepository with RepoBase {
     return clientDMList;
   }
 
-  Future<List<ClientDM>> getMultipleClient(String projectId) async {
+  Future<List<ClientDM>> getMultipleClientByProject(String projectId) async {
     List collection = await getMultipleDocument(
       CollectionType.clients.name,
       "projectId",
       projectId,
       isArray: true,
     );
+
+    Helpers.writeLog("collection: ${collection.length}");
 
     List<ClientFirebase> clientList = [];
     for (var element in collection) {

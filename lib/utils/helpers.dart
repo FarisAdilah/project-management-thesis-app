@@ -90,4 +90,18 @@ class Helpers {
 
     return formattedDate;
   }
+
+  String currencyFormat(String amount) {
+    if (amount.isEmpty) {
+      return "";
+    }
+
+    return NumberFormat.currency(
+      locale: "id_ID",
+      symbol: "Rp",
+      decimalDigits: 0,
+    ).format(
+      int.parse(amount),
+    );
+  }
 }

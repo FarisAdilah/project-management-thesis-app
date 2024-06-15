@@ -10,6 +10,8 @@ class CustomInput extends StatelessWidget {
   final IconData? suffixIcon;
   final bool isPopupInput;
   final VoidCallback? onTap;
+  final bool readOnly;
+  final bool enabled;
 
   const CustomInput({
     super.key,
@@ -20,6 +22,8 @@ class CustomInput extends StatelessWidget {
     this.suffixIcon,
     this.isPopupInput = false,
     this.onTap,
+    this.readOnly = false,
+    this.enabled = true,
   });
 
   @override
@@ -70,6 +74,8 @@ class CustomInput extends StatelessWidget {
                   border: const UnderlineInputBorder(),
                 ),
                 keyboardType: inputType,
+                readOnly: readOnly,
+                enabled: enabled,
               ),
       ],
     );

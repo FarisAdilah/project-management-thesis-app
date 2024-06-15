@@ -5,10 +5,15 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_client_vendor.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_payment.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_staff.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timeline_add.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
+import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
+import 'package:project_management_thesis_app/repository/payment/payment_repository.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/project/project_repository.dart';
+import 'package:project_management_thesis_app/repository/scheduleTask/dataModel/schedule_task_dm.dart';
+import 'package:project_management_thesis_app/repository/scheduleTask/schedule_task_repository.dart';
 import 'package:project_management_thesis_app/repository/timeline/dataModel/timeline_dm.dart';
 import 'package:project_management_thesis_app/repository/timeline/timeline_repository.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
@@ -26,6 +31,8 @@ class ProjectDetailController extends GetxController
   final _userRepo = UserRepository.instance;
   final _clientRepo = ClientRepository.instance;
   final _vendorRepo = VendorRepository.instance;
+  final _taskRepo = ScheduleTaskRepository.instance;
+  final _paymentRepo = PaymentRepository.instance;
   final String projectId;
 
   RxBool isLoading = false.obs;
@@ -34,6 +41,10 @@ class ProjectDetailController extends GetxController
   Rx<ClientDM> projectClient = ClientDM().obs;
   RxList<VendorDM> projectVendor = <VendorDM>[].obs;
   RxList<UserDM> projectStaff = <UserDM>[].obs;
+  RxList<PaymentDM> projectPayment = <PaymentDM>[].obs;
+
+  Rx<TimelineDM> selectedTimeline = TimelineDM().obs;
+  RxList<ScheduleTaskDM> task = <ScheduleTaskDM>[].obs;
 
   ProjectDetailController({required this.projectId});
 
@@ -62,6 +73,7 @@ class ProjectDetailController extends GetxController
     await getProjectStaff();
     await getProjectClient();
     await getProjectVendor();
+    await getProjectPayment();
   }
 
   getProjectData() async {
@@ -83,13 +95,16 @@ class ProjectDetailController extends GetxController
     var timeline = await _timelineRepo.getMultipleTimeline(projectId);
     if (timeline.isNotEmpty) {
       projectTimeline.value = timeline;
+
       tabTimelineList.value = timeline.map((e) => e.name ?? "").toList();
       tabTimelineList.add("add");
+
       tabTimelineController = TabController(
         length: tabTimelineList.length,
         vsync: this,
         initialIndex: 0,
       );
+      setTimeline(0);
     }
 
     Helpers.writeLog("projectTimeline: ${jsonEncode(timeline)}");
@@ -132,6 +147,52 @@ class ProjectDetailController extends GetxController
     }
 
     Helpers.writeLog("projectVendor: ${jsonEncode(projectVendor)}");
+
+    isLoading.value = false;
+  }
+
+  setTimeline(int index) async {
+    if (index == tabTimelineList.length - 1) {
+      Get.to(() => const AddTimeline());
+      tabTimelineController.animateTo(0);
+    } else {
+      tabTimelineController.index = index;
+      selectedTimeline.value = projectTimeline[index];
+      await getTimelineTask(selectedTimeline.value.id ?? "");
+    }
+  }
+
+  getTimelineTask(String timelineId) async {
+    isLoading.value = true;
+
+    var taskData = await _taskRepo.getMultipleScheduleTask(
+      timelineId,
+      TaskFieldType.timelineId,
+    );
+    if (taskData.isNotEmpty) {
+      task.value = taskData;
+    }
+
+    Helpers.writeLog("task: ${jsonEncode(task)}");
+
+    isLoading.value = false;
+  }
+
+  UserDM getStaffofTask(staffId) {
+    var staff =
+        projectStaff.firstWhereOrNull((element) => element.id == staffId);
+    return staff ?? UserDM();
+  }
+
+  getProjectPayment() async {
+    isLoading.value = true;
+
+    var payment = await _paymentRepo.getMultiplePayment(projectId);
+    if (payment.isNotEmpty) {
+      projectPayment.value = payment;
+    }
+
+    Helpers.writeLog("projectPayment: ${jsonEncode(payment)}");
 
     isLoading.value = false;
   }
@@ -180,9 +241,18 @@ class ProjectDetailController extends GetxController
         },
       );
     } else if (selectedInfoIndex.value == 1) {
-      return const ClientVendorProject();
+      return ClientVendorProject(
+        client: projectClient.value,
+        vendors: projectVendor,
+      );
     } else if (selectedInfoIndex.value == 2) {
-      return const PaymentProject();
+      return PaymentProject(
+        projectId: projectId,
+        payments: projectPayment,
+        onCreatePayment: (newPayment) {
+          // TODO: Create New Payment Integration
+        },
+      );
     } else {
       return Container();
     }

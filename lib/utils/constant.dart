@@ -15,11 +15,6 @@ enum CollectionType {
   payments,
 }
 
-enum ExternalType {
-  vendor,
-  client,
-}
-
 enum MenuType {
   home,
   staff,
@@ -48,6 +43,12 @@ enum ProjectStatusType {
   ongoing,
   closing,
   completed,
+}
+
+enum PaymentStatusType {
+  pending,
+  approved,
+  rejected,
 }
 
 class Constant {

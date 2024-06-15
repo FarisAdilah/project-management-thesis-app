@@ -4,9 +4,10 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/controller_project_detail.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timeline_add.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
+import 'package:project_management_thesis_app/repository/scheduleTask/dataModel/schedule_task_dm.dart';
 import 'package:project_management_thesis_app/repository/timeline/dataModel/timeline_dm.dart';
+import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
@@ -229,68 +230,6 @@ class ProjectDetail extends StatelessWidget {
                           ),
                         ),
                         controller.getInfoWidget(),
-                        // Container(
-                        //   height: 400,
-                        //   decoration: BoxDecoration(
-                        //     color: AssetColor.whiteBackground,
-                        //     borderRadius: BorderRadius.circular(15),
-                        //     boxShadow: [
-                        //       BoxShadow(
-                        //         color: AssetColor.blackPrimary.withOpacity(0.1),
-                        //         blurRadius: 10,
-                        //         offset: const Offset(0, 5),
-                        //       ),
-                        //     ],
-                        //   ),
-                        //   child: TabBarView(
-                        //     clipBehavior: Clip.antiAliasWithSaveLayer,
-                        //     controller: controller.tabInfoController,
-                        //     children: controller.tabInfoList.map((String title) {
-                        //       Helpers.writeLog("title: $title");
-
-                        //       TimelineDM? timeline = controller.projectTimeline
-                        //           .firstWhereOrNull(
-                        //               (element) => element.name == title);
-                        //       return Container(
-                        //         padding: const EdgeInsets.symmetric(
-                        //           horizontal: 25,
-                        //           vertical: 25,
-                        //         ),
-                        //         decoration: BoxDecoration(
-                        //           color: AssetColor.whiteBackground,
-                        //           borderRadius: BorderRadius.circular(15),
-                        //           boxShadow: [
-                        //             BoxShadow(
-                        //               color: AssetColor.blackPrimary
-                        //                   .withOpacity(0.1),
-                        //               blurRadius: 10,
-                        //               offset: const Offset(0, 5),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //         child: Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: [
-                        //             const CustomText(
-                        //               "Start Date: ",
-                        //               fontSize: 20,
-                        //               color: AssetColor.blackPrimary,
-                        //               fontWeight: FontWeight.bold,
-                        //             ),
-                        //             const SizedBox(height: 5),
-                        //             CustomText(
-                        //               Helpers().convertDateStringFormat(
-                        //                 timeline?.startDate ?? "2024-04-04",
-                        //               ),
-                        //               fontSize: 16,
-                        //               color: AssetColor.blackPrimary,
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       );
-                        //     }).toList(),
-                        //   ),
-                        // ),
                       ],
                     ),
                     const SizedBox(height: 50),
@@ -323,13 +262,7 @@ class ProjectDetail extends StatelessWidget {
                                   ),
                             ],
                             onTap: (index) {
-                              if (index ==
-                                  controller.tabTimelineList.length - 1) {
-                                Get.to(() => const AddTimeline());
-                                controller.tabTimelineController.animateTo(0);
-                              } else {
-                                controller.tabTimelineController.index = index;
-                              }
+                              controller.setTimeline(index);
                             },
                           ),
                         ),
@@ -346,54 +279,186 @@ class ProjectDetail extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: TabBarView(
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            controller: controller.tabTimelineController,
-                            children:
-                                controller.tabTimelineList.map((String title) {
-                              Helpers.writeLog("title: $title");
+                          child: Obx(
+                            () => TabBarView(
+                              controller: controller.tabTimelineController,
+                              children: controller.tabTimelineList
+                                  .map((String title) {
+                                Helpers.writeLog("title: $title");
 
-                              TimelineDM? timeline = controller.projectTimeline
-                                  .firstWhereOrNull(
-                                      (element) => element.name == title);
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 25,
-                                  vertical: 25,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AssetColor.whiteBackground,
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AssetColor.blackPrimary
-                                          .withOpacity(0.1),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 5),
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const CustomText(
-                                      "Start Date: ",
-                                      fontSize: 20,
-                                      color: AssetColor.blackPrimary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    CustomText(
-                                      Helpers().convertDateStringFormat(
-                                        timeline?.startDate ?? "2024-04-04",
+                                TimelineDM timeline =
+                                    controller.selectedTimeline.value;
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 25,
+                                    vertical: 25,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AssetColor.whiteBackground,
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AssetColor.blackPrimary
+                                            .withOpacity(0.1),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 5),
                                       ),
-                                      fontSize: 16,
-                                      color: AssetColor.blackPrimary,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CustomText(
+                                        timeline.name ?? "Timeline Name",
+                                        fontSize: 24,
+                                        color: AssetColor.blackPrimary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              const CustomText(
+                                                "Start Date",
+                                                fontSize: 20,
+                                                color: AssetColor.blackPrimary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 25,
+                                                  vertical: 10,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: AssetColor.orange,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: CustomText(
+                                                  Helpers()
+                                                      .convertDateStringFormat(
+                                                    timeline.startDate ??
+                                                        "2024-04-04",
+                                                  ),
+                                                  fontSize: 16,
+                                                  color: AssetColor
+                                                      .whiteBackground,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 20),
+                                          const Icon(
+                                              FontAwesomeIcons.arrowRight),
+                                          const SizedBox(width: 20),
+                                          Column(
+                                            children: [
+                                              const CustomText(
+                                                "End Date",
+                                                fontSize: 20,
+                                                color: AssetColor.blackPrimary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 25,
+                                                  vertical: 10,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: AssetColor.orange,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: CustomText(
+                                                  Helpers()
+                                                      .convertDateStringFormat(
+                                                    timeline.endDate ??
+                                                        "2024-04-04",
+                                                  ),
+                                                  fontSize: 16,
+                                                  color: AssetColor
+                                                      .whiteBackground,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Expanded(
+                                        child: Obx(
+                                          () {
+                                            return GridView.builder(
+                                              padding: const EdgeInsets.all(0),
+                                              itemCount: controller.task.length,
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 4,
+                                                crossAxisSpacing: 10,
+                                                mainAxisSpacing: 10,
+                                                childAspectRatio: 4,
+                                              ),
+                                              itemBuilder: (context, index) {
+                                                ScheduleTaskDM task =
+                                                    controller.task[index];
+
+                                                UserDM staff =
+                                                    controller.getStaffofTask(
+                                                        task.staffId ?? "");
+
+                                                return Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 15,
+                                                    vertical: 10,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: AssetColor
+                                                        .blueSecondaryAccent,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      CustomText(
+                                                        task.name ??
+                                                            "Task Name",
+                                                        fontSize: 16,
+                                                        color: AssetColor
+                                                            .whiteBackground,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      CustomText(
+                                                        staff.name ??
+                                                            "Staff Name",
+                                                        fontSize: 14,
+                                                        color: AssetColor
+                                                            .whiteBackground,
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
                       ],

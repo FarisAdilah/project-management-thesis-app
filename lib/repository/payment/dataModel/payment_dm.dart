@@ -11,6 +11,7 @@ class PaymentDM {
   String? paymentAmount;
   String? deadline;
   String? projectId;
+  String? status;
 
   PaymentDM();
 

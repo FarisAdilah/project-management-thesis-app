@@ -8,6 +8,7 @@ class PaymentFirebase {
   String? amount;
   String? deadline;
   String? projectId;
+  String? status;
 
   PaymentFirebase();
 
@@ -19,11 +20,12 @@ class PaymentFirebase {
     final payment = PaymentFirebase()
       ..id = snapshot.id
       ..name = data['name']
-      ..clientId = data['clientName']
-      ..vendorId = data['vendorName']
+      ..clientId = data['clientId']
+      ..vendorId = data['vendorId']
       ..amount = data['amount']
       ..deadline = data['deadline']
-      ..projectId = data['projectId'];
+      ..projectId = data['projectId']
+      ..status = data['status'];
 
     return payment;
   }
@@ -36,11 +38,12 @@ class PaymentFirebase {
     final payment = PaymentFirebase()
       ..id = snapshot.id
       ..name = data!['name']
-      ..clientId = data['clientName']
-      ..vendorId = data['vendorName']
+      ..clientId = data['clientId']
+      ..vendorId = data['vendorId']
       ..amount = data['amount']
       ..deadline = data['deadline']
-      ..projectId = data['projectId'];
+      ..projectId = data['projectId']
+      ..status = data['status'];
 
     return payment;
   }
@@ -48,10 +51,11 @@ class PaymentFirebase {
   Map<String, dynamic> toFirestore() => {
         'id': id,
         'name': name,
-        'clientName': clientId,
-        'vendorName': vendorId,
+        'clientId': clientId,
+        'vendorId': vendorId,
         'amount': amount,
         'deadline': deadline,
         'projectId': projectId,
+        'status': status,
       };
 }

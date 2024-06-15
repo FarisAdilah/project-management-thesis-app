@@ -17,6 +17,7 @@ class VendorList extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(VendorListController());
 
+    // TODO: IMPLEMENT EDIT & UPDATE UI
     return Scaffold(
       body: Obx(
         () => Stack(
