@@ -8,16 +8,26 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/vendorAdd/controller_vendor_add.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorAdd/controller_vendor_form.dart';
+import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class VendorAdd extends StatelessWidget {
-  const VendorAdd({super.key});
+class VendorForm extends StatelessWidget {
+  final bool isUpdate;
+  final VendorDM? vendor;
+
+  const VendorForm({
+    super.key,
+    this.isUpdate = false,
+    this.vendor,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(VendorAddController());
+    final controller = Get.put(VendorFormController(
+      vendorToUpdate: vendor,
+    ));
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -52,9 +62,11 @@ class VendorAdd extends StatelessWidget {
                           () => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Center(
+                              Center(
                                 child: CustomText(
-                                  "Vendor Registration",
+                                  isUpdate
+                                      ? "Update Vendor"
+                                      : "Vendor Registration",
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
                                   textAlign: TextAlign.start,
@@ -63,9 +75,11 @@ class VendorAdd extends StatelessWidget {
                               // const SizedBox(
                               //   height: 10,
                               // ),
-                              const Center(
+                              Center(
                                 child: CustomText(
-                                  "Register your vendor data",
+                                  isUpdate
+                                      ? "Update your vendor data"
+                                      : "Register your vendor data",
                                   fontSize: 16,
                                   textAlign: TextAlign.start,
                                 ),
@@ -131,20 +145,29 @@ class VendorAdd extends StatelessWidget {
                                     ? 15
                                     : 0,
                               ),
-                              controller.pickedImage.value.path.isNotEmpty ||
-                                      controller.pickedImageWeb.value.isNotEmpty
-                                  ? kIsWeb
-                                      ? Image.memory(
-                                          controller.pickedImageWeb.value,
-                                          fit: BoxFit.cover,
-                                          height: 100,
-                                        )
-                                      : Image.file(
-                                          controller.pickedImage.value,
-                                          fit: BoxFit.cover,
-                                          height: 100,
-                                        )
-                                  : const SizedBox(),
+                              controller.vendorToUpdate?.image?.isNotEmpty ??
+                                      false
+                                  ? Image.network(
+                                      controller.vendorToUpdate!.image!,
+                                      fit: BoxFit.cover,
+                                      height: 100,
+                                    )
+                                  : controller.pickedImage.value.path
+                                              .isNotEmpty ||
+                                          controller
+                                              .pickedImageWeb.value.isNotEmpty
+                                      ? kIsWeb
+                                          ? Image.memory(
+                                              controller.pickedImageWeb.value,
+                                              fit: BoxFit.cover,
+                                              height: 100,
+                                            )
+                                          : Image.file(
+                                              controller.pickedImage.value,
+                                              fit: BoxFit.cover,
+                                              height: 100,
+                                            )
+                                      : const SizedBox(),
                               const SizedBox(height: 15),
                               InkWell(
                                 onTap: () {
@@ -172,7 +195,10 @@ class VendorAdd extends StatelessWidget {
                                         controller.pickedImage.value.path
                                                     .isNotEmpty ||
                                                 controller.pickedImageWeb.value
-                                                    .isNotEmpty
+                                                    .isNotEmpty ||
+                                                (controller.vendorToUpdate
+                                                        ?.image?.isNotEmpty ??
+                                                    false)
                                             ? "Reupload Image"
                                             : "Upload Image",
                                         fontWeight: FontWeight.bold,
@@ -266,10 +292,16 @@ class VendorAdd extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: CustomButton(
                                   onPressed: () {
-                                    controller.createVendor();
+                                    if (isUpdate) {
+                                      controller.updateVendor();
+                                    } else {
+                                      controller.createVendor();
+                                    }
                                   },
                                   color: AssetColor.greenButton,
-                                  text: "Create New Vendor",
+                                  text: isUpdate
+                                      ? "Update Vendor"
+                                      : "Create New Vendor",
                                   textColor: AssetColor.whitePrimary,
                                   borderRadius: 10,
                                 ),

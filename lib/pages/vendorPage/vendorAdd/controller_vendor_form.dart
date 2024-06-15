@@ -6,11 +6,14 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/globalComponent/createForm/pic/add_pic.dart';
 import 'package:project_management_thesis_app/repository/pic/firebaseModel/pic_firebase.dart';
+import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/firebaseModel/vendor_firebase.dart';
 import 'package:project_management_thesis_app/repository/vendor/vendor_repository.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class VendorAddController extends GetxController {
+class VendorFormController extends GetxController {
+  final _vendorRepo = VendorRepository.instance;
+
   RxBool isLoading = false.obs;
 
   // Vendor Controller
@@ -23,9 +26,39 @@ class VendorAddController extends GetxController {
 
   Rx<PicFirebase> pic = PicFirebase().obs;
 
+  final VendorDM? vendorToUpdate;
+
+  VendorFormController({
+    this.vendorToUpdate,
+  });
+
   final ImagePicker _picker = ImagePicker();
   Rx<File> pickedImage = File("").obs;
   Rx<Uint8List> pickedImageWeb = Uint8List(0).obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    Helpers.writeLog("vendorToUpdate: ${vendorToUpdate?.toJson()}");
+
+    if (vendorToUpdate != null) {
+      nameController.text = vendorToUpdate?.name ?? "";
+      emailController.text = vendorToUpdate?.email ?? "";
+      descriptionController.text = vendorToUpdate?.description ?? "";
+      phoneNumberController.text = vendorToUpdate?.phoneNumber ?? "";
+      addressController.text = vendorToUpdate?.address ?? "";
+      imageController.text = vendorToUpdate?.image ?? "";
+
+      PicFirebase picFirebase = PicFirebase();
+      picFirebase.name = vendorToUpdate?.pic?.name ?? "";
+      picFirebase.email = vendorToUpdate?.pic?.email ?? "";
+      picFirebase.phoneNumber = vendorToUpdate?.pic?.phoneNumber ?? "";
+      picFirebase.role = vendorToUpdate?.pic?.role ?? "";
+
+      pic.value = picFirebase;
+    }
+  }
 
   Future<void> onImageButtonPressed(
     ImageSource source, {
@@ -82,8 +115,10 @@ class VendorAddController extends GetxController {
     vendor.name = nameController.text;
     vendor.phoneNumber = phoneNumberController.text;
     vendor.pic = pic.value;
+    vendor.image = "";
+    vendor.projectId = [];
 
-    bool isSuccess = await VendorRepository().createVendor(
+    bool isSuccess = await _vendorRepo.createVendor(
       vendor,
       image: pickedImage.value,
       imageWeb: pickedImageWeb.value,
@@ -94,6 +129,37 @@ class VendorAddController extends GetxController {
       await Helpers().showSuccessSnackBar("Vendor created successfully");
     } else {
       Helpers().showErrorSnackBar("Failed to create vendor");
+    }
+
+    isLoading.value = false;
+  }
+
+  updateVendor() async {
+    isLoading.value = true;
+
+    VendorFirebase vendor = VendorFirebase();
+    vendor.id = vendorToUpdate?.id;
+    vendor.address = addressController.text;
+    vendor.description = descriptionController.text;
+    vendor.email = emailController.text;
+    vendor.name = nameController.text;
+    vendor.phoneNumber = phoneNumberController.text;
+    vendor.image = vendorToUpdate?.image;
+    vendor.projectId = vendorToUpdate?.projectId;
+    vendor.pic = pic.value;
+
+    bool isSuccess = await _vendorRepo.updateVendor(
+      vendor,
+      image: pickedImage.value,
+      imageWeb: pickedImageWeb.value,
+    );
+
+    if (isSuccess) {
+      Get.back();
+      Helpers.writeLog("Vendor updated successfully");
+      Helpers().showSuccessSnackBar("Vendor updated successfully");
+    } else {
+      Helpers().showErrorSnackBar("Failed to update vendor");
     }
 
     isLoading.value = false;

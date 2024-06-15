@@ -151,4 +151,90 @@ class VendorRepository with RepoBase {
 
     return isSuccess;
   }
+
+  Future<bool> updateVendor(
+    VendorFirebase vendor, {
+    File? image,
+    Uint8List? imageWeb,
+  }) async {
+    String url = "";
+    bool isDeleted = false;
+
+    // Upload image to Firebase Storage
+    if (kIsWeb && (imageWeb?.isNotEmpty ?? false)) {
+      String imageName =
+          vendor.name?.trim().toLowerCase().replaceAll(" ", "_") ?? "";
+
+      isDeleted = await deleteImage("images/$imageName");
+
+      if (isDeleted) {
+        url = await uploadImage(
+          "images/$imageName",
+          imageWeb: imageWeb,
+        );
+      } else {
+        Helpers().showErrorSnackBar("Something went wrong");
+        return false;
+      }
+    } else if (image?.path.isNotEmpty ?? false) {
+      XFile imageToUpload = XFile(image?.path ?? "");
+
+      String ref = await getImageRefFromUrl(vendor.image ?? "");
+      isDeleted = await deleteImage("images/$ref");
+
+      if (isDeleted) {
+        url = await uploadImage(
+          "images",
+          image: imageToUpload,
+        );
+      } else {
+        Helpers().showErrorSnackBar("Something went wrong");
+        return false;
+      }
+    } else {
+      url = vendor.image ?? "";
+    }
+
+    // Set Image Url
+    if (url.isNotEmpty) {
+      vendor.image = url;
+    } else {
+      Helpers().showErrorSnackBar("Failed to upload image");
+    }
+
+    bool isSuccess = await updateData(
+      CollectionType.vendors.name,
+      vendor.id ?? "",
+      vendor.toFirestore(),
+    );
+
+    if (isSuccess) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> deleteVendor(String id, String imageUrl) async {
+    String url = await getImageRefFromUrl(imageUrl);
+
+    bool isDeleteImage;
+    if (url.isNotEmpty) {
+      isDeleteImage = await deleteImage("images/$url");
+    } else {
+      Helpers().showErrorSnackBar("Something went wrong");
+      return false;
+    }
+
+    bool isDeleted = false;
+    if (isDeleteImage) {
+      isDeleted = await deleteData(CollectionType.vendors.name, id);
+    }
+
+    if (isDeleted) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

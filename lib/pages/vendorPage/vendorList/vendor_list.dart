@@ -51,8 +51,7 @@ class VendorList extends StatelessWidget {
                       ? Column(
                           children: [
                             CustomButton(
-                              onPressed: () =>
-                                  controller.showCreateForm(context),
+                              onPressed: () => controller.showCreateForm(),
                               text: "Add New Vendor",
                               color: AssetColor.greenButton,
                               borderRadius: 8,
@@ -100,7 +99,13 @@ class VendorList extends StatelessWidget {
                   vendor: controller.selectedIndex.value != -1
                       ? controller.vendors[controller.selectedIndex.value]
                       : VendorDM(),
-                  onPressed: () => controller.setSelectedVendor(-1),
+                  onClose: () => controller.setSelectedVendor(-1),
+                  onEditVendor: (vendor) {
+                    controller.showEditForm(vendor);
+                  },
+                  onDeleteVendor: (vendor) {
+                    controller.onDeleteVendor(vendor);
+                  },
                 ),
               ),
             ),

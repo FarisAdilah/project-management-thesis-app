@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
@@ -7,12 +8,16 @@ import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class VendorDetail extends StatelessWidget {
   final VendorDM vendor;
-  final VoidCallback onPressed;
+  final VoidCallback onClose;
+  final Function(VendorDM) onEditVendor;
+  final Function(VendorDM) onDeleteVendor;
 
   const VendorDetail({
     super.key,
     required this.vendor,
-    required this.onPressed,
+    required this.onClose,
+    required this.onEditVendor,
+    required this.onDeleteVendor,
   });
 
   @override
@@ -246,6 +251,27 @@ class VendorDetail extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomButton(
+                          text: "Edit",
+                          textColor: AssetColor.whiteBackground,
+                          borderRadius: 10,
+                          color: AssetColor.orangeButton,
+                          onPressed: () => onEditVendor(vendor),
+                        ),
+                        const SizedBox(width: 10),
+                        CustomButton(
+                          text: "Delete",
+                          textColor: AssetColor.whiteBackground,
+                          borderRadius: 10,
+                          color: AssetColor.redButton,
+                          onPressed: () => onDeleteVendor(vendor),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -254,7 +280,7 @@ class VendorDetail extends StatelessWidget {
                 right: 0,
                 child: IconButton(
                   icon: const Icon(FontAwesomeIcons.xmark),
-                  onPressed: onPressed,
+                  onPressed: onClose,
                 ),
               ),
             ],
