@@ -8,7 +8,7 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/vendorAdd/controller_vendor_form.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/controller_vendor_form.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
@@ -72,9 +72,6 @@ class VendorForm extends StatelessWidget {
                                   textAlign: TextAlign.start,
                                 ),
                               ),
-                              // const SizedBox(
-                              //   height: 10,
-                              // ),
                               Center(
                                 child: CustomText(
                                   isUpdate

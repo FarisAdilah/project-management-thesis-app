@@ -22,7 +22,6 @@ class VendorFormController extends GetxController {
   final descriptionController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final addressController = TextEditingController();
-  final imageController = TextEditingController();
 
   Rx<PicFirebase> pic = PicFirebase().obs;
 
@@ -48,7 +47,6 @@ class VendorFormController extends GetxController {
       descriptionController.text = vendorToUpdate?.description ?? "";
       phoneNumberController.text = vendorToUpdate?.phoneNumber ?? "";
       addressController.text = vendorToUpdate?.address ?? "";
-      imageController.text = vendorToUpdate?.image ?? "";
 
       PicFirebase picFirebase = PicFirebase();
       picFirebase.name = vendorToUpdate?.pic?.name ?? "";

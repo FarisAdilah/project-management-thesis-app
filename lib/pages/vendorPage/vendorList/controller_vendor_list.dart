@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/vendorAdd/vendor_form.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/vendor_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/vendor_repository.dart';
@@ -120,7 +120,7 @@ class VendorListController extends GetxController with Storage {
             onPressed: () {
               Get.back();
               selectedIndex.value = -1;
-              _deleteUser(vendor);
+              _deleteVendor(vendor);
             },
             child: const CustomText(
               "Delete",
@@ -132,7 +132,7 @@ class VendorListController extends GetxController with Storage {
     );
   }
 
-  _deleteUser(VendorDM vendor) async {
+  _deleteVendor(VendorDM vendor) async {
     isLoading.value = true;
     bool isDeleted = await _vendorRepository.deleteVendor(
       vendor.id ?? "",
