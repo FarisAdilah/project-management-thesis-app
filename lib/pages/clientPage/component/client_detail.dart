@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
 class ClientDetail extends StatelessWidget {
   final ClientDM client;
-  final VoidCallback onPressed;
+  final VoidCallback onClose;
+  final Function(ClientDM) onEditClient;
+  final Function(ClientDM) onDeleteClient;
 
   const ClientDetail({
     super.key,
     required this.client,
-    required this.onPressed,
+    required this.onClose,
+    required this.onEditClient,
+    required this.onDeleteClient,
   });
 
   @override
@@ -245,6 +250,27 @@ class ClientDetail extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomButton(
+                          text: "Edit",
+                          textColor: AssetColor.whiteBackground,
+                          borderRadius: 10,
+                          color: AssetColor.orangeButton,
+                          onPressed: () => onEditClient(client),
+                        ),
+                        const SizedBox(width: 10),
+                        CustomButton(
+                          text: "Delete",
+                          textColor: AssetColor.whiteBackground,
+                          borderRadius: 10,
+                          color: AssetColor.redButton,
+                          onPressed: () => onDeleteClient(client),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -253,7 +279,7 @@ class ClientDetail extends StatelessWidget {
                 right: 0,
                 child: IconButton(
                   icon: const Icon(FontAwesomeIcons.xmark),
-                  onPressed: onPressed,
+                  onPressed: onClose,
                 ),
               ),
             ],

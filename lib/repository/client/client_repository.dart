@@ -153,4 +153,90 @@ class ClientRepository with RepoBase {
 
     return isSuccess;
   }
+
+  Future<bool> updateClient(
+    ClientFirebase client, {
+    File? image,
+    Uint8List? imageWeb,
+  }) async {
+    String url = "";
+    bool isDeleted = false;
+
+    // Upload image to Firebase Storage
+    if (kIsWeb && (imageWeb?.isNotEmpty ?? false)) {
+      String imageName =
+          client.name?.trim().toLowerCase().replaceAll(" ", "_") ?? "";
+
+      isDeleted = await deleteImage("images/$imageName");
+
+      if (isDeleted) {
+        url = await uploadImage(
+          "images/$imageName",
+          imageWeb: imageWeb,
+        );
+      } else {
+        Helpers().showErrorSnackBar("Something went wrong");
+        return false;
+      }
+    } else if (image?.path.isNotEmpty ?? false) {
+      XFile imageToUpload = XFile(image?.path ?? "");
+
+      String ref = await getImageRefFromUrl(client.image ?? "");
+      isDeleted = await deleteImage("images/$ref");
+
+      if (isDeleted) {
+        url = await uploadImage(
+          "images",
+          image: imageToUpload,
+        );
+      } else {
+        Helpers().showErrorSnackBar("Something went wrong");
+        return false;
+      }
+    } else {
+      url = client.image ?? "";
+    }
+
+    // Set Image Url
+    if (url.isNotEmpty) {
+      client.image = url;
+    } else {
+      Helpers().showErrorSnackBar("Failed to upload image");
+    }
+
+    bool isSuccess = await updateData(
+      CollectionType.clients.name,
+      client.id ?? "",
+      client.toFirestore(),
+    );
+
+    if (isSuccess) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> deleteClient(String id, String imageUrl) async {
+    String url = await getImageRefFromUrl(imageUrl);
+
+    bool isDeleteImage;
+    if (url.isNotEmpty) {
+      isDeleteImage = await deleteImage("images/$url");
+    } else {
+      Helpers().showErrorSnackBar("Something went wrong");
+      return false;
+    }
+
+    bool isDeleted = false;
+    if (isDeleteImage) {
+      isDeleted = await deleteData(CollectionType.clients.name, id);
+    }
+
+    if (isDeleted) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

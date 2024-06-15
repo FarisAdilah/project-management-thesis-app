@@ -101,8 +101,14 @@ class ClientList extends StatelessWidget {
                   client: controller.selectedIndex.value != -1
                       ? controller.clients[controller.selectedIndex.value]
                       : ClientDM(),
-                  onPressed: () {
+                  onClose: () {
                     controller.setSelectedClient(-1);
+                  },
+                  onEditClient: (client) {
+                    controller.showEditForm(client);
+                  },
+                  onDeleteClient: (client) {
+                    controller.onDeleteClient(client);
                   },
                 ),
               ),

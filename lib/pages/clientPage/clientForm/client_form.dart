@@ -8,16 +8,26 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/clientPage/clientAdd/controller_client_add.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientForm/controller_client_form.dart';
+import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class ClientAdd extends StatelessWidget {
-  const ClientAdd({super.key});
+class ClientForm extends StatelessWidget {
+  final bool isUpdate;
+  final ClientDM? client;
+
+  const ClientForm({
+    super.key,
+    this.isUpdate = false,
+    this.client,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ClientAddController());
+    final controller = Get.put(ClientFormController(
+      clientToUpdate: client,
+    ));
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -52,20 +62,21 @@ class ClientAdd extends StatelessWidget {
                           () => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Center(
+                              Center(
                                 child: CustomText(
-                                  "Client Registration",
+                                  isUpdate
+                                      ? "Update Client"
+                                      : "Client Registration",
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
                                   textAlign: TextAlign.start,
                                 ),
                               ),
-                              // const SizedBox(
-                              //   height: 10,
-                              // ),
-                              const Center(
+                              Center(
                                 child: CustomText(
-                                  "Register your client data",
+                                  isUpdate
+                                      ? "Update your client data"
+                                      : "Register your client data",
                                   fontSize: 16,
                                   textAlign: TextAlign.start,
                                 ),
@@ -131,20 +142,29 @@ class ClientAdd extends StatelessWidget {
                                     ? 15
                                     : 0,
                               ),
-                              controller.pickedImage.value.path.isNotEmpty ||
-                                      controller.pickedImageWeb.value.isNotEmpty
-                                  ? kIsWeb
-                                      ? Image.memory(
-                                          controller.pickedImageWeb.value,
-                                          fit: BoxFit.cover,
-                                          height: 100,
-                                        )
-                                      : Image.file(
-                                          controller.pickedImage.value,
-                                          fit: BoxFit.cover,
-                                          height: 100,
-                                        )
-                                  : const SizedBox(),
+                              controller.clientToUpdate?.image?.isNotEmpty ??
+                                      false
+                                  ? Image.network(
+                                      controller.clientToUpdate!.image!,
+                                      fit: BoxFit.cover,
+                                      height: 100,
+                                    )
+                                  : controller.pickedImage.value.path
+                                              .isNotEmpty ||
+                                          controller
+                                              .pickedImageWeb.value.isNotEmpty
+                                      ? kIsWeb
+                                          ? Image.memory(
+                                              controller.pickedImageWeb.value,
+                                              fit: BoxFit.cover,
+                                              height: 100,
+                                            )
+                                          : Image.file(
+                                              controller.pickedImage.value,
+                                              fit: BoxFit.cover,
+                                              height: 100,
+                                            )
+                                      : const SizedBox(),
                               const SizedBox(height: 15),
                               InkWell(
                                 onTap: () {
@@ -172,7 +192,10 @@ class ClientAdd extends StatelessWidget {
                                         controller.pickedImage.value.path
                                                     .isNotEmpty ||
                                                 controller.pickedImageWeb.value
-                                                    .isNotEmpty
+                                                    .isNotEmpty ||
+                                                (controller.clientToUpdate
+                                                        ?.image?.isNotEmpty ??
+                                                    false)
                                             ? "Reupload Image"
                                             : "Upload Image",
                                         fontWeight: FontWeight.bold,
@@ -266,10 +289,16 @@ class ClientAdd extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: CustomButton(
                                   onPressed: () {
-                                    controller.createClient();
+                                    if (isUpdate) {
+                                      controller.updateClient();
+                                    } else {
+                                      controller.createClient();
+                                    }
                                   },
                                   color: AssetColor.greenButton,
-                                  text: "Create New Client",
+                                  text: isUpdate
+                                      ? "Update Client"
+                                      : "Create New Client",
                                   textColor: AssetColor.whitePrimary,
                                   borderRadius: 10,
                                 ),
