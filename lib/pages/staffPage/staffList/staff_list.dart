@@ -99,11 +99,19 @@ class StaffList extends StatelessWidget {
                         itemBuilder: (context, index) {
                           UserDM user = controller.users[index];
 
-                          return StaffItemContent(
-                            user: user,
-                            currentUser: controller.currentUser ?? UserDM(),
-                            onUpdate: () => controller.onUpdateUser(),
-                            onDelete: () => controller.onDeleteUser(user),
+                          return Obx(
+                            () => StaffItemContent(
+                              user: user,
+                              currentUser: controller.currentUser ?? UserDM(),
+                              onUpdate: () => controller.onUpdateUser(),
+                              onDelete: () => controller.onDeleteUser(user),
+                              onHover: (value) =>
+                                  controller.setHoverValue(value, index),
+                              onTap: () => controller.showUserDetail(user),
+                              isHover: controller.selectedIndexStaff.value ==
+                                      index &&
+                                  controller.isHoverStaff.value,
+                            ),
                           );
                         },
                       ),
