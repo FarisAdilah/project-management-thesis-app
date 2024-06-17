@@ -52,7 +52,6 @@ class ProjectFirebase {
   }
 
   Map<String, dynamic> toFirestore() => {
-        'id': id,
         'name': name,
         'description': description,
         'status': status,

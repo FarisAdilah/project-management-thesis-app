@@ -12,6 +12,7 @@ class SelectVendor extends StatelessWidget {
   final VendorDM? initialVendor;
   final Function(VendorDM) onVendorSelected;
   final bool? isProject;
+  final List<VendorDM>? selectedVendor;
 
   const SelectVendor({
     super.key,
@@ -19,6 +20,7 @@ class SelectVendor extends StatelessWidget {
     this.projectId,
     this.initialVendor,
     this.isProject = false,
+    this.selectedVendor,
   });
 
   @override
@@ -26,6 +28,7 @@ class SelectVendor extends StatelessWidget {
     final controller = Get.put(SelectVendorController(
       projectId: projectId ?? "",
       initialVendor: initialVendor,
+      initSelectedVendor: selectedVendor,
     ));
 
     return Container(
@@ -45,7 +48,7 @@ class SelectVendor extends StatelessWidget {
           Row(
             children: [
               const CustomText(
-                "Select Client",
+                "Select Vendor",
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
@@ -79,7 +82,7 @@ class SelectVendor extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: "Search Client",
+                      hintText: "Search Vendor...",
                       border: InputBorder.none,
                     ),
                   ),

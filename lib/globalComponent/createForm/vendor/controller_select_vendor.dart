@@ -13,10 +13,12 @@ class SelectVendorController extends GetxController {
 
   VendorDM? initialVendor;
   final String projectId;
+  final List<VendorDM>? initSelectedVendor;
 
   SelectVendorController({
     this.initialVendor,
     required this.projectId,
+    this.initSelectedVendor,
   });
 
   @override
@@ -30,8 +32,17 @@ class SelectVendorController extends GetxController {
     vendors.value = await _vendorRepo.getAllVendor();
     isLoading.value = false;
 
-    selectedVendor.value =
-        vendors.firstWhere((element) => element.id == selectedVendor.value.id);
+    if (initSelectedVendor?.isNotEmpty ?? false) {
+      vendors.value = vendors.where((element) {
+        return initSelectedVendor!.any((element2) => element2.id != element.id);
+      }).toList();
+    } else {
+      selectedVendor.value = initialVendor ?? VendorDM();
+    }
+
+    selectedVendor.value = vendors.firstWhereOrNull(
+            (element) => element.id == selectedVendor.value.id) ??
+        VendorDM();
   }
 
   setVendorSelected(VendorDM vendor) {

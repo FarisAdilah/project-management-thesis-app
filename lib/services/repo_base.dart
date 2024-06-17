@@ -13,16 +13,16 @@ mixin RepoBase {
   static FirebaseStorage get _storage => FirebaseStorage.instance;
 
   // Base Repo for Repository Data Operation
-  Future<bool> createData(
+  Future<String> createData(
     String collection,
     Map<String, dynamic> data, {
     bool showPopup = false,
     String successMessage = "Your data has been created successfully!",
     String failedMessage = "Failed to create data",
   }) async {
-    bool isCreated = false;
-    await _db.collection(collection).add(data).whenComplete(() {
-      isCreated = true;
+    String id = "";
+    await _db.collection(collection).add(data).then((value) {
+      id = value.id;
       if (showPopup) {
         Helpers().showSuccessSnackBar(successMessage);
       }
@@ -32,7 +32,7 @@ mixin RepoBase {
           )
         : ());
 
-    return isCreated;
+    return id;
   }
 
   Future<bool> updateData(

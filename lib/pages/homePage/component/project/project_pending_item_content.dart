@@ -3,6 +3,7 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class PendingItemContent extends StatelessWidget {
   final ProjectDM pendingProject;
@@ -47,6 +48,7 @@ class PendingItemContent extends StatelessWidget {
             color: AssetColor.blackPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            overflow: TextOverflow.ellipsis,
           ),
           const Divider(
             color: AssetColor.grey,
@@ -78,7 +80,9 @@ class PendingItemContent extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     CustomText(
-                      pendingProject.startDate ?? "start date",
+                      Helpers().convertDateStringFormat(
+                        pendingProject.startDate ?? "start date",
+                      ),
                       color: AssetColor.blackPrimary,
                     ),
                   ],
@@ -95,7 +99,9 @@ class PendingItemContent extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     CustomText(
-                      pendingProject.endDate ?? "start date",
+                      Helpers().convertDateStringFormat(
+                        pendingProject.endDate ?? "start date",
+                      ),
                       color: AssetColor.blackPrimary,
                     ),
                   ],

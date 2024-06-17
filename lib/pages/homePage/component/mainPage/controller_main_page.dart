@@ -132,7 +132,7 @@ class MainPageController extends GetxController with Storage {
   }
 
   createProject() {
-    Get.to(() => const AddProject());
+    Get.to(() => const ProjectForm());
   }
 
   setHoverValue(bool value, int index) {

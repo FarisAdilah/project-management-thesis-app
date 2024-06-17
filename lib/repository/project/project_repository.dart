@@ -90,4 +90,11 @@ class ProjectRepository with RepoBase {
 
     return projectDM;
   }
+
+  Future<String> createProject(ProjectFirebase project) async {
+    return await createData(
+      CollectionType.projects.name,
+      project.toFirestore(),
+    );
+  }
 }

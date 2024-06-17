@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/pic/dataModel/pic_dm.dart';
@@ -146,10 +147,14 @@ class VendorRepository with RepoBase {
       Helpers().showErrorSnackBar("Failed to upload image");
     }
 
-    bool isSuccess =
+    String vendorId =
         await createData(CollectionType.vendors.name, vendor.toFirestore());
 
-    return isSuccess;
+    if (vendorId.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<bool> updateVendor(
@@ -236,5 +241,15 @@ class VendorRepository with RepoBase {
     } else {
       return false;
     }
+  }
+
+  Future<bool> addVendorProjectId(String id, String projectId) {
+    return updateData(
+      CollectionType.vendors.name,
+      id,
+      {
+        "projectId": FieldValue.arrayUnion([projectId])
+      },
+    );
   }
 }

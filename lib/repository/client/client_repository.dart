@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
@@ -148,8 +149,10 @@ class ClientRepository with RepoBase {
       Helpers().showErrorSnackBar("Failed to upload image");
     }
 
-    bool isSuccess =
+    String clientId =
         await createData(CollectionType.clients.name, client.toFirestore());
+
+    bool isSuccess = clientId.isNotEmpty;
 
     return isSuccess;
   }
@@ -238,5 +241,15 @@ class ClientRepository with RepoBase {
     } else {
       return false;
     }
+  }
+
+  Future<bool> addClientProjectId(String? id, String projectId) {
+    return updateData(
+      CollectionType.clients.name,
+      id ?? "",
+      {
+        "projectId": FieldValue.arrayUnion([projectId])
+      },
+    );
   }
 }

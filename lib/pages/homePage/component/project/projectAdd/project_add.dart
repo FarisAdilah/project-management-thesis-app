@@ -10,8 +10,8 @@ import 'package:project_management_thesis_app/pages/homePage/component/project/p
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class AddProject extends StatelessWidget {
-  const AddProject({super.key});
+class ProjectForm extends StatelessWidget {
+  const ProjectForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +112,167 @@ class AddProject extends StatelessWidget {
                             const SizedBox(
                               height: 15,
                             ),
-                            CustomInput(
-                              title: "Client",
-                              controller: controller.clientController,
-                              onTap: () => controller.selectClient(),
-                              hintText: "select client",
-                              isPopupInput: true,
-                              suffixIcon: FontAwesomeIcons.caretDown,
+                            const CustomText(
+                              "Client",
+                              color: AssetColor.blackPrimary,
+                              fontSize: 16,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            controller.chosenClient.value.id == null
+                                ? CustomButton(
+                                    onPressed: () => controller.selectClient(),
+                                    text: "Select Client",
+                                    color: AssetColor.blueSecondaryAccent,
+                                    textColor: AssetColor.whiteBackground,
+                                    borderRadius: 8,
+                                  )
+                                : Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AssetColor.bluePrimaryAccent,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color:
+                                                AssetColor.blueSecondaryAccent,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            CustomText(
+                                              controller.chosenClient.value
+                                                      .name ??
+                                                  "",
+                                              fontSize: 18,
+                                            ),
+                                            const SizedBox(width: 20),
+                                            InkWell(
+                                              onTap: () {
+                                                controller.removeClient();
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  border: Border.all(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                child: const Icon(
+                                                  FontAwesomeIcons.xmark,
+                                                  color: Colors.red,
+                                                  size: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            const CustomText(
+                              "Vendor List",
+                              color: AssetColor.blackPrimary,
+                              fontSize: 16,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            controller.selectedVendor.isEmpty
+                                ? const CustomText(
+                                    "No vendor selected",
+                                    color: AssetColor.grey,
+                                    fontSize: 16,
+                                  )
+                                : Column(
+                                    children: controller.selectedVendor
+                                        .map(
+                                          (vendor) => Row(
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                  bottom: 5,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 5,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: AssetColor
+                                                      .bluePrimaryAccent,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                    color: AssetColor
+                                                        .blueSecondaryAccent,
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    CustomText(
+                                                      vendor.name ?? "",
+                                                      fontSize: 18,
+                                                    ),
+                                                    const SizedBox(width: 20),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        controller.removeVendor(
+                                                            vendor);
+                                                      },
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(50),
+                                                          border: Border.all(
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
+                                                        child: const Icon(
+                                                          FontAwesomeIcons
+                                                              .xmark,
+                                                          color: Colors.red,
+                                                          size: 10,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            CustomButton(
+                              onPressed: () => controller.selectVendor(),
+                              text: "Add Vendor",
+                              color: AssetColor.blueSecondaryAccent,
+                              textColor: AssetColor.whiteBackground,
+                              borderRadius: 8,
                             ),
                             const SizedBox(
                               height: 30,
@@ -126,7 +280,7 @@ class AddProject extends StatelessWidget {
                             Center(
                               child: CustomButton(
                                 onPressed: () => {
-                                  Get.back(),
+                                  controller.createProject(),
                                 },
                                 text: "Create New Project",
                                 color: AssetColor.orangeButton,
