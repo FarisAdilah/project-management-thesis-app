@@ -83,7 +83,7 @@ class VendorList extends StatelessWidget {
 
                         return VendorItemContent(
                           vendor: vendor,
-                          onPressed: () => controller.setSelectedVendor(index),
+                          onPressed: () => controller.showVendorDetail(vendor),
                         );
                       },
                     ),
@@ -91,23 +91,12 @@ class VendorList extends StatelessWidget {
                 ],
               ),
             ),
-            Obx(
-              () => Visibility(
-                visible: controller.selectedIndex.value != -1,
-                child: VendorDetail(
-                  vendor: controller.selectedIndex.value != -1
-                      ? controller.vendors[controller.selectedIndex.value]
-                      : VendorDM(),
-                  onClose: () => controller.setSelectedVendor(-1),
-                  onEditVendor: (vendor) {
-                    controller.showEditForm(vendor);
-                  },
-                  onDeleteVendor: (vendor) {
-                    controller.onDeleteVendor(vendor);
-                  },
-                ),
-              ),
-            ),
+            // Obx(
+            //   () => Visibility(
+            //     visible: controller.selectedIndex.value != -1,
+            //     child:
+            //   ),
+            // ),
             controller.isLoading.value ? const Loading() : const SizedBox(),
           ],
         ),

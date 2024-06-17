@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/component/vendor_detail.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/vendor_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
@@ -41,10 +42,10 @@ class VendorListController extends GetxController with Storage {
     isLoading.value = false;
   }
 
-  setSelectedVendor(int index) {
-    selectedIndex.value = index;
-    Helpers.writeLog("selectedVendor: $selectedIndex");
-  }
+  // setSelectedVendor(int index) {
+  //   selectedIndex.value = index;
+  //   Helpers.writeLog("selectedVendor: $selectedIndex");
+  // }
 
   showCreateForm() {
     Get.to(() => const VendorForm())?.whenComplete(() => _getVendorList());
@@ -144,5 +145,24 @@ class VendorListController extends GetxController with Storage {
     } else {
       Helpers().showErrorSnackBar("Failed to delete vendor");
     }
+  }
+
+  showVendorDetail(VendorDM vendor) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AssetColor.greyBackground,
+        contentPadding: const EdgeInsets.all(0),
+        content: VendorDetail(
+          vendor: vendor,
+          onClose: () => Get.back(),
+          onEditVendor: (vendor) {
+            showEditForm(vendor);
+          },
+          onDeleteVendor: (vendor) {
+            onDeleteVendor(vendor);
+          },
+        ),
+      ),
+    );
   }
 }
