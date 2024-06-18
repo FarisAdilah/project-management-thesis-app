@@ -3,10 +3,8 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/component/vendor_detail.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/component/vendor_item_content.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorList/controller_vendor_list.dart';
-import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 
@@ -91,12 +89,6 @@ class VendorList extends StatelessWidget {
                 ],
               ),
             ),
-            // Obx(
-            //   () => Visibility(
-            //     visible: controller.selectedIndex.value != -1,
-            //     child:
-            //   ),
-            // ),
             controller.isLoading.value ? const Loading() : const SizedBox(),
           ],
         ),

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/component/controller_vendor_detail.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorDetail/controller_vendor_detail.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
@@ -31,7 +31,8 @@ class VendorDetail extends StatelessWidget {
       () => Stack(
         children: [
           Container(
-            width: MediaQuery.sizeOf(context).width * 0.6,
+            height: MediaQuery.sizeOf(context).height * 0.6,
+            width: MediaQuery.sizeOf(context).width * 0.5,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AssetColor.whiteBackground,
@@ -166,19 +167,21 @@ class VendorDetail extends StatelessWidget {
                           textAlign: TextAlign.justify,
                         ),
                         const SizedBox(height: 20),
-                        controller.projects.isNotEmpty
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const CustomText(
-                                    "Projects",
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Obx(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                              "Projects",
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            const SizedBox(height: 10),
+                            controller.projects.isEmpty
+                                ? const CustomText(
+                                    "This Vendor has no project related yet.",
+                                  )
+                                : Obx(
                                     () => SizedBox(
-                                      // width: 200,
                                       height: 40,
                                       child: ListView.builder(
                                         shrinkWrap: true,
@@ -189,7 +192,6 @@ class VendorDetail extends StatelessWidget {
                                               controller.projects[index];
 
                                           return Container(
-                                            // width: 200,
                                             margin: const EdgeInsets.only(
                                                 right: 10),
                                             padding: const EdgeInsets.symmetric(
@@ -210,10 +212,9 @@ class VendorDetail extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 20),
-                                ],
-                              )
-                            : const SizedBox(),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
                         const CustomText(
                           "Person In Charge",
                           fontSize: 20,
@@ -341,7 +342,8 @@ class VendorDetail extends StatelessWidget {
           ),
           controller.isLoading.value
               ? Loading(
-                  width: MediaQuery.sizeOf(context).width * 0.6,
+                  height: MediaQuery.sizeOf(context).height * 0.6,
+                  width: MediaQuery.sizeOf(context).width * 0.5,
                 )
               : const SizedBox(),
         ],

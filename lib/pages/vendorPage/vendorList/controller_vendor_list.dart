@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/component/vendor_detail.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorDetail/vendor_detail.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/vendor_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
@@ -41,11 +41,6 @@ class VendorListController extends GetxController with Storage {
     }
     isLoading.value = false;
   }
-
-  // setSelectedVendor(int index) {
-  //   selectedIndex.value = index;
-  //   Helpers.writeLog("selectedVendor: $selectedIndex");
-  // }
 
   showCreateForm() {
     Get.to(() => const VendorForm())?.whenComplete(() => _getVendorList());
