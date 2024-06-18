@@ -10,6 +10,7 @@ class ProjectFirebase {
   String? clientId;
   List<String>? vendorId;
   List<String>? userId;
+  String? pmId;
 
   ProjectFirebase();
 
@@ -27,7 +28,8 @@ class ProjectFirebase {
       ..endDate = data['endDate']
       ..clientId = data['clientId']
       ..vendorId = List.from(data['vendorId'])
-      ..userId = List.from(data['userId']);
+      ..userId = List.from(data['userId'])
+      ..pmId = data['pmId'];
 
     return project;
   }
@@ -46,7 +48,8 @@ class ProjectFirebase {
       ..endDate = data['endDate']
       ..clientId = data['clientId']
       ..vendorId = List.from(data['vendorId'])
-      ..userId = List.from(data['userId']);
+      ..userId = List.from(data['userId'])
+      ..pmId = data['pmId'];
 
     return project;
   }
@@ -60,5 +63,6 @@ class ProjectFirebase {
         'clientId': clientId,
         'vendorId': vendorId,
         'userId': userId,
+        'pmId': pmId,
       };
 }

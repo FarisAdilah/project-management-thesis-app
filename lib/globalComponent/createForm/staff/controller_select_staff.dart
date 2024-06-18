@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/user/user_repository.dart';
-import 'package:project_management_thesis_app/utils/constant.dart';
 
 class SelectStaffController extends GetxController {
   final UserRepository _userRepo = UserRepository.instance;
@@ -15,9 +14,12 @@ class SelectStaffController extends GetxController {
   UserDM? selectedStaff;
   List<UserDM> staffList;
 
+  String userRole;
+
   SelectStaffController({
     this.selectedStaff,
     required this.staffList,
+    this.userRole = "staff",
   });
 
   @override
@@ -29,7 +31,7 @@ class SelectStaffController extends GetxController {
   getStaffs() async {
     isLoading.value = true;
     var list = await _userRepo.getMupltipleUserByRole(
-      UserType.staff.name,
+      userRole,
     );
 
     if (list.isNotEmpty) {

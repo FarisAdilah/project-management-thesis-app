@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pending_project.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectAdd/project_add.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/project_detail.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/project_pending_detail.dart';
@@ -74,12 +75,42 @@ class MainPageController extends GetxController with Storage {
           clients.firstWhere((element) => element.id == project.clientId).name;
     }
 
-    pendingProjects.value = projects
-        .where((element) => element.status == ProjectStatusType.pending.name)
-        .toList();
+    if (currentUser.value.role == UserType.supervisor.name) {
+      pendingProjects.value = projects
+          .where((element) => element.status == ProjectStatusType.pending.name)
+          .toList();
+    } else if (currentUser.value.role == UserType.admin.name) {
+      pendingProjects.value = projects
+          .where((element) => element.status == ProjectStatusType.rejected.name)
+          .toList();
+    }
+  }
+
+  getPendingWidget() {
+    if (currentUser.value.role == UserType.supervisor.name &&
+        pendingProjects.isNotEmpty) {
+      return PendingProject(
+        pendingProjects: pendingProjects,
+        showPendingDetail: (project) {
+          showPendingDetail(project);
+        },
+      );
+    } else if (currentUser.value.role == UserType.admin.name &&
+        pendingProjects.isNotEmpty) {
+      return PendingProject(
+        pendingProjects: pendingProjects,
+        showPendingDetail: (project) {
+          showPendingDetail(project);
+        },
+        isAdmin: true,
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 
   showPendingDetail(ProjectDM project) {
+    Helpers.writeLog("project: ${jsonEncode(project)}");
     List<VendorDM> projectVendor = vendors
         .where((element) => project.vendorId!.contains(element.id))
         .toList();
@@ -87,22 +118,26 @@ class MainPageController extends GetxController with Storage {
     ClientDM projectClient =
         clients.firstWhere((element) => element.id == project.clientId);
 
+    Helpers.writeLog("projectClient: ${jsonEncode(users)}");
+    UserDM? projectManager = users.firstWhereOrNull(
+      (element) => element.id == project.pmId,
+    );
+
+    bool isAdmin = currentUser.value.role == UserType.admin.name;
+
+    Helpers.writeLog("projectClient: ${jsonEncode(projectClient)}");
     Helpers.writeLog("projectVendor: ${jsonEncode(projectVendor)}");
+    Helpers.writeLog("projectManager: ${jsonEncode(projectManager)}");
 
     Get.dialog(
       AlertDialog(
-        backgroundColor: AssetColor.greyBackground,
-        title: const CustomText(
-          "Project Detail",
-          fontSize: 28,
-          color: AssetColor.blackPrimary,
-          fontWeight: FontWeight.bold,
-          textAlign: TextAlign.center,
-        ),
+        backgroundColor: AssetColor.whiteBackground,
         content: PendingProjectDetail(
           project: project,
           client: projectClient,
           vendors: projectVendor,
+          projectManager: projectManager ?? UserDM(),
+          isAdmin: isAdmin,
         ),
         actionsAlignment: MainAxisAlignment.center,
         actionsPadding: const EdgeInsets.symmetric(
@@ -111,18 +146,73 @@ class MainPageController extends GetxController with Storage {
         ),
         actions: [
           CustomButton(
-            onPressed: () => Get.back(),
-            text: "Decline",
+            onPressed: () {
+              if (isAdmin) {
+                Get.dialog(
+                  AlertDialog(
+                    title: const CustomText("Delete Project"),
+                    content: const CustomText(
+                      "Are you sure you want to delete this project?",
+                    ),
+                    actions: [
+                      CustomButton(
+                        onPressed: () {
+                          deleteProject(project.id ?? "");
+                          Get.back();
+                        },
+                        text: "Yes",
+                        color: AssetColor.redButton,
+                        textColor: AssetColor.whiteBackground,
+                        borderRadius: 8,
+                      ),
+                      CustomButton(
+                        onPressed: () => Get.back(),
+                        text: "No",
+                        color: AssetColor.orangeButton,
+                        textColor: AssetColor.whiteBackground,
+                        borderRadius: 8,
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                updateProjectStatus(
+                  project.id ?? "",
+                  ProjectStatusType.rejected.name,
+                );
+              }
+            },
+            text: isAdmin ? "Delete" : "Decline",
             color: AssetColor.redButton,
             textColor: AssetColor.whiteBackground,
             borderRadius: 8,
           ),
           CustomButton(
             onPressed: () => {
-              // TODO: Update Aprrove Operation
+              if (isAdmin)
+                {
+                  Get.back(),
+                  Get.to(
+                    () => ProjectForm(
+                      project: project,
+                      isEdit: true,
+                    ),
+                  )?.then(
+                    (isUpdated) {
+                      if (isUpdated) _getAllProjects();
+                    },
+                  )
+                }
+              else
+                {
+                  updateProjectStatus(
+                    project.id ?? "",
+                    ProjectStatusType.ongoing.name,
+                  ),
+                }
             },
-            text: "Approve",
-            color: AssetColor.greenButton,
+            text: isAdmin ? "Edit" : "Approve",
+            color: isAdmin ? AssetColor.orangeButton : AssetColor.greenButton,
             textColor: AssetColor.whiteBackground,
             borderRadius: 8,
           ),
@@ -132,7 +222,42 @@ class MainPageController extends GetxController with Storage {
   }
 
   createProject() {
-    Get.to(() => const ProjectForm());
+    Get.to(() => const ProjectForm())?.whenComplete(
+      () {
+        _getAllProjects();
+      },
+    );
+  }
+
+  updateProjectStatus(String id, String status) async {
+    bool isUpdated = await _projectRepo.updateProjectStatus(
+      id,
+      status,
+    );
+
+    if (isUpdated) {
+      Get.back();
+      Helpers.writeLog("Project has been updated");
+      _getAllProjects();
+    } else {
+      Helpers.writeLog("Failed to update project");
+    }
+  }
+
+  deleteProject(String id) async {
+    isLoading.value = true;
+
+    bool isDeleted = await _projectRepo.deleteProject(id);
+
+    if (isDeleted) {
+      Get.back();
+      Helpers.writeLog("Project has been deleted");
+      _getAllProjects();
+    } else {
+      Helpers.writeLog("Failed to delete project");
+    }
+
+    isLoading.value = false;
   }
 
   setHoverValue(bool value, int index) {

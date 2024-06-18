@@ -36,6 +36,7 @@ class CustomInput extends StatelessWidget {
                 title ?? "Input",
                 color: AssetColor.blackPrimary,
                 fontSize: 16,
+                fontWeight: FontWeight.bold,
               )
             : Container(),
         isPopupInput

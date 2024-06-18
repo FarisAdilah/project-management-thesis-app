@@ -14,6 +14,7 @@ class ProjectDM {
   List<String>? vendorId;
   List<String>? userId;
   String? clientName;
+  String? pmId;
 
   ProjectDM();
 

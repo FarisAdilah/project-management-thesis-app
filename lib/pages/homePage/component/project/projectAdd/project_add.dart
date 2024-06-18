@@ -7,15 +7,26 @@ import 'package:project_management_thesis_app/globalComponent/inputCustom/custom
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectAdd/controller_project_add.dart';
+import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
 class ProjectForm extends StatelessWidget {
-  const ProjectForm({super.key});
+  final bool isEdit;
+  final ProjectDM? project;
+
+  const ProjectForm({
+    super.key,
+    this.isEdit = false,
+    this.project,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AddProjectController());
+    final controller = Get.put(AddProjectController(
+      isEdit: isEdit,
+      project: project,
+    ));
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -49,16 +60,20 @@ class ProjectForm extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Center(
+                            Center(
                               child: Column(
                                 children: [
                                   CustomText(
-                                    "Project Registration",
+                                    isEdit
+                                        ? "Project Revision"
+                                        : "Project Registration",
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   CustomText(
-                                    "register your project data",
+                                    isEdit
+                                        ? "Revise your project data"
+                                        : "register your project data",
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -116,6 +131,7 @@ class ProjectForm extends StatelessWidget {
                               "Client",
                               color: AssetColor.blackPrimary,
                               fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                             const SizedBox(
                               height: 10,
@@ -186,6 +202,7 @@ class ProjectForm extends StatelessWidget {
                               "Vendor List",
                               color: AssetColor.blackPrimary,
                               fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                             const SizedBox(
                               height: 15,
@@ -275,14 +292,91 @@ class ProjectForm extends StatelessWidget {
                               borderRadius: 8,
                             ),
                             const SizedBox(
+                              height: 15,
+                            ),
+                            const CustomText(
+                              "Project Manager",
+                              color: AssetColor.blackPrimary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            controller.chosenProjectManager.value.id == null
+                                ? CustomButton(
+                                    onPressed: () =>
+                                        controller.selectProjectManager(),
+                                    text: "Select Project Manager",
+                                    color: AssetColor.blueSecondaryAccent,
+                                    textColor: AssetColor.whiteBackground,
+                                    borderRadius: 8,
+                                  )
+                                : Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AssetColor.bluePrimaryAccent,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color:
+                                                AssetColor.blueSecondaryAccent,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            CustomText(
+                                              controller.chosenProjectManager
+                                                      .value.name ??
+                                                  "",
+                                              fontSize: 18,
+                                            ),
+                                            const SizedBox(width: 20),
+                                            InkWell(
+                                              onTap: () {
+                                                controller
+                                                    .removeProjectManager();
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  border: Border.all(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                child: const Icon(
+                                                  FontAwesomeIcons.xmark,
+                                                  color: Colors.red,
+                                                  size: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                            const SizedBox(
                               height: 30,
                             ),
                             Center(
                               child: CustomButton(
                                 onPressed: () => {
-                                  controller.createProject(),
+                                  isEdit
+                                      ? controller.reviseProject()
+                                      : controller.createProject(),
                                 },
-                                text: "Create New Project",
+                                text: isEdit
+                                    ? "Revise Project"
+                                    : "Create New Project",
                                 color: AssetColor.orangeButton,
                                 textColor: AssetColor.whiteBackground,
                                 borderRadius: 8,

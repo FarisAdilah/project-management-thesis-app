@@ -8,11 +8,13 @@ import 'package:project_management_thesis_app/utils/helpers.dart';
 class PendingItemContent extends StatelessWidget {
   final ProjectDM pendingProject;
   final VoidCallback onPressed;
+  final bool isAdmin;
 
   const PendingItemContent({
     super.key,
     required this.pendingProject,
     required this.onPressed,
+    this.isAdmin = false,
   });
 
   @override
@@ -28,7 +30,7 @@ class PendingItemContent extends StatelessWidget {
         color: AssetColor.whiteBackground,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
-          color: AssetColor.orange,
+          color: isAdmin ? AssetColor.redButton : AssetColor.orange,
           width: 1,
         ),
         boxShadow: [

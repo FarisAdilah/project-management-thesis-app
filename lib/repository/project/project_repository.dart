@@ -28,6 +28,7 @@ class ProjectRepository with RepoBase {
       projectDM.userId = element.userId;
       projectDM.clientId = element.clientId;
       projectDM.vendorId = element.vendorId;
+      projectDM.pmId = element.pmId;
 
       projectDMList.add(projectDM);
     }
@@ -66,6 +67,7 @@ class ProjectRepository with RepoBase {
       projectDM.userId = element.userId;
       projectDM.clientId = element.clientId;
       projectDM.vendorId = element.vendorId;
+      projectDM.pmId = element.pmId;
 
       projectDMList.add(projectDM);
     }
@@ -87,6 +89,7 @@ class ProjectRepository with RepoBase {
     projectDM.userId = project.userId;
     projectDM.clientId = project.clientId;
     projectDM.vendorId = project.vendorId;
+    projectDM.pmId = project.pmId;
 
     return projectDM;
   }
@@ -96,5 +99,25 @@ class ProjectRepository with RepoBase {
       CollectionType.projects.name,
       project.toFirestore(),
     );
+  }
+
+  Future<bool> updateProject(ProjectFirebase project) async {
+    return await updateData(
+      CollectionType.projects.name,
+      project.id ?? "",
+      project.toFirestore(),
+    );
+  }
+
+  Future<bool> updateProjectStatus(String id, String status) async {
+    return await updateData(
+      CollectionType.projects.name,
+      id,
+      {"status": status},
+    );
+  }
+
+  Future<bool> deleteProject(String id) async {
+    return await deleteData(CollectionType.projects.name, id);
   }
 }

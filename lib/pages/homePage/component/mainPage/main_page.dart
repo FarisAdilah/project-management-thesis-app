@@ -7,7 +7,6 @@ import 'package:project_management_thesis_app/globalComponent/card/count_card.da
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/controller_main_page.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/project_pending_item_content.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
@@ -142,46 +141,7 @@ class MainHomePage extends StatelessWidget {
                     const SizedBox(
                       height: 50,
                     ),
-                    controller.currentUser.value.role ==
-                            UserType.supervisor.name
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const CustomText(
-                                "Pending Aprroval Project",
-                                color: AssetColor.blueTertiaryAccent,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                height: 325,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: controller.pendingProjects.length,
-                                  itemBuilder: (context, index) {
-                                    ProjectDM pendingProject =
-                                        controller.pendingProjects[index];
-
-                                    return PendingItemContent(
-                                      pendingProject: pendingProject,
-                                      onPressed: () {
-                                        controller
-                                            .showPendingDetail(pendingProject);
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          )
-                        : const SizedBox(),
+                    controller.getPendingWidget(),
                     const CustomText(
                       "List Project",
                       color: AssetColor.blueTertiaryAccent,
@@ -361,14 +321,18 @@ Widget _buildCell(
 
 Widget _buildStatus(String status) {
   Color statusColor;
-  String title;
-  if (status == ProjectStatusType.pending.name ||
-      status == ProjectStatusType.closing.name) {
-    statusColor = AssetColor.redButton;
-    title = "Pending";
-  } else if (status == ProjectStatusType.ongoing.name) {
+  String title = "";
+  if (status == ProjectStatusType.pending.name) {
     statusColor = AssetColor.orange;
+    title = "Pending";
+  } else if (status == ProjectStatusType.rejected.name) {
+    statusColor = AssetColor.redButton;
+    title = "Rejected";
+  } else if (status == ProjectStatusType.ongoing.name) {
+    statusColor = AssetColor.blueSecondaryAccent;
     title = "Ongoing";
+  } else if (status == ProjectStatusType.closing.name) {
+    statusColor = AssetColor.orange;
   } else {
     statusColor = AssetColor.green;
     title = "Completed";

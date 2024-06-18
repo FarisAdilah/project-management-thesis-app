@@ -9,21 +9,30 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 
 class SelectStaff extends StatelessWidget {
   final UserDM? initialStaff;
-  final List<UserDM> staffList;
+  final List<UserDM> selectedStaffList;
   final Function(UserDM) onStaffSelected;
+  final String? userRole;
+  final String? title;
+  final String? searchHint;
+  final String? textButton;
 
   const SelectStaff({
     super.key,
     this.initialStaff,
-    required this.staffList,
+    required this.selectedStaffList,
     required this.onStaffSelected,
+    this.userRole,
+    this.title,
+    this.searchHint,
+    this.textButton,
   });
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SelectStaffController(
-      staffList: staffList,
+      staffList: selectedStaffList,
       selectedStaff: initialStaff,
+      userRole: userRole ?? "staff",
     ));
 
     return Container(
@@ -42,8 +51,8 @@ class SelectStaff extends StatelessWidget {
         children: [
           Row(
             children: [
-              const CustomText(
-                "Select Staff",
+              CustomText(
+                title ?? "Select Staff",
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
@@ -74,8 +83,8 @@ class SelectStaff extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: "Search staff",
+                    decoration: InputDecoration(
+                      hintText: searchHint ?? "Search staff",
                       border: InputBorder.none,
                     ),
                     onChanged: (value) {
@@ -183,7 +192,7 @@ class SelectStaff extends StatelessWidget {
           Obx(
             () => Center(
               child: CustomButton(
-                text: "Choose Staff",
+                text: textButton ?? "Choose Staff",
                 isEnabled: controller.currentSelection.value.id?.isNotEmpty,
                 color: AssetColor.orangeButton,
                 disableColor: AssetColor.orangeButton.withOpacity(0.5),

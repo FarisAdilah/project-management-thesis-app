@@ -30,7 +30,7 @@ class ProjectStaffController extends GetxController {
       AlertDialog(
         backgroundColor: AssetColor.whiteBackground,
         content: SelectStaff(
-          staffList: staffList,
+          selectedStaffList: staffList,
           onStaffSelected: (staff) {
             onStaffSelected(staff);
           },

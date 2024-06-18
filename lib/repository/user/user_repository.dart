@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
@@ -266,5 +267,15 @@ class UserRepository with RepoBase {
     user.projectId = userFirebase.projectId;
 
     return user;
+  }
+
+  Future<bool> addUserProjectId(String userId, String projectId) async {
+    return updateData(
+      CollectionType.users.name,
+      userId,
+      {
+        "projectId": FieldValue.arrayUnion([projectId])
+      },
+    );
   }
 }
