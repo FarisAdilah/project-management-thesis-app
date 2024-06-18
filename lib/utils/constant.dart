@@ -40,6 +40,7 @@ enum TaskFieldType {
 
 enum ProjectStatusType {
   pending,
+  rejected,
   ongoing,
   closing,
   completed,
