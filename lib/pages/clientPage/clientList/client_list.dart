@@ -4,9 +4,7 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/clientPage/clientList/controller_client_list.dart';
-import 'package:project_management_thesis_app/pages/clientPage/component/client_detail.dart';
 import 'package:project_management_thesis_app/pages/clientPage/component/client_item_content.dart';
-import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 
@@ -85,32 +83,13 @@ class ClientList extends StatelessWidget {
                         return ClientItemContent(
                           client: client,
                           onPressed: () {
-                            controller.setSelectedClient(index);
+                            controller.showClientDetail(client);
                           },
                         );
                       },
                     ),
                   ),
                 ],
-              ),
-            ),
-            Obx(
-              () => Visibility(
-                visible: controller.selectedIndex.value != -1,
-                child: ClientDetail(
-                  client: controller.selectedIndex.value != -1
-                      ? controller.clients[controller.selectedIndex.value]
-                      : ClientDM(),
-                  onClose: () {
-                    controller.setSelectedClient(-1);
-                  },
-                  onEditClient: (client) {
-                    controller.showEditForm(client);
-                  },
-                  onDeleteClient: (client) {
-                    controller.onDeleteClient(client);
-                  },
-                ),
               ),
             ),
             controller.isLoading.value ? const Loading() : const SizedBox(),

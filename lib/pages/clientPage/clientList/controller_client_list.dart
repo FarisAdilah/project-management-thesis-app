@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/clientPage/clientForm/client_form.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientDetail/client_detail.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
@@ -38,11 +39,6 @@ class ClientListController extends GetxController with Storage {
     }
 
     isLoading.value = false;
-  }
-
-  setSelectedClient(int index) {
-    selectedIndex.value = index;
-    Helpers.writeLog("selectedClient: $selectedIndex");
   }
 
   showCreateForm() {
@@ -145,5 +141,24 @@ class ClientListController extends GetxController with Storage {
     } else {
       Helpers().showErrorSnackBar("Failed to delete client");
     }
+  }
+
+  showClientDetail(ClientDM client) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AssetColor.greyBackground,
+        contentPadding: const EdgeInsets.all(0),
+        content: ClientDetail(
+          client: client,
+          onClose: () => Get.back(),
+          onEditClient: (client) {
+            showEditForm(client);
+          },
+          onDeleteClient: (client) {
+            onDeleteClient(client);
+          },
+        ),
+      ),
+    );
   }
 }
