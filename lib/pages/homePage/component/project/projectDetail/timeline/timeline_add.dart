@@ -11,12 +11,19 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
 class AddTimeline extends StatelessWidget {
-  const AddTimeline({super.key});
+  final String projectId;
+
+  const AddTimeline({
+    super.key,
+    required this.projectId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AddTimelineController());
-    // TODO: finish add timeline layout
+    final controller = Get.put(AddTimelineController(
+      projectId: projectId,
+    ));
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

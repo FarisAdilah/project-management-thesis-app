@@ -72,4 +72,13 @@ class TimelineRepository with RepoBase {
 
     return timelineDM;
   }
+
+  Future<String> createTimeline(TimelineFirebase param) async {
+    String timelineId = await createData(
+      CollectionType.timelines.name,
+      param.toFirestore(),
+    );
+
+    return timelineId;
+  }
 }

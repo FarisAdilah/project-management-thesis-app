@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/repository/timeline/firebaseModel/timeline_firebase.dart';
+import 'package:project_management_thesis_app/repository/timeline/timeline_repository.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class AddTimelineController extends GetxController {
+  final _timelineRepo = TimelineRepository.instance;
+
   RxBool isLoading = false.obs;
 
   DateTime? startDate;
@@ -11,6 +15,12 @@ class AddTimelineController extends GetxController {
   TextEditingController nameController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
+
+  final String projectId;
+
+  AddTimelineController({
+    required this.projectId,
+  });
 
   selectDatePicker(
     BuildContext context,
@@ -34,11 +44,23 @@ class AddTimelineController extends GetxController {
     }
   }
 
-  createTimeline() {
+  createTimeline() async {
     isLoading.value = true;
 
-    // TODO: create timeline
-    Get.back();
+    TimelineFirebase param = TimelineFirebase();
+    param.endDate = endDate.toString();
+    param.name = nameController.text;
+    param.startDate = startDate.toString();
+    param.projectId = projectId;
+
+    String timelineId = await _timelineRepo.createTimeline(param);
+
+    if (timelineId.isNotEmpty) {
+      Get.back(result: true);
+    } else {
+      Get.back();
+      Helpers().showErrorSnackBar("Failed to create new Timeline");
+    }
 
     isLoading.value = false;
   }

@@ -9,6 +9,7 @@ import 'package:project_management_thesis_app/repository/scheduleTask/dataModel/
 import 'package:project_management_thesis_app/repository/timeline/dataModel/timeline_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class ProjectDetail extends StatelessWidget {
@@ -351,12 +352,49 @@ class ProjectDetail extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      CustomText(
-                                        timeline.name ?? "Timeline Name",
-                                        fontSize: 24,
-                                        color: AssetColor.blackPrimary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      controller.currentUser?.role ==
+                                              UserType.projectManager.name
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                CustomText(
+                                                  timeline.name ??
+                                                      "Timeline Name",
+                                                  fontSize: 24,
+                                                  color:
+                                                      AssetColor.blackPrimary,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                const SizedBox(width: 20),
+                                                IconButton(
+                                                  icon: const Icon(
+                                                    FontAwesomeIcons
+                                                        .penToSquare,
+                                                    color:
+                                                        AssetColor.orangeButton,
+                                                  ),
+                                                  onPressed: () {
+                                                    controller.editTimeline();
+                                                  },
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(
+                                                    FontAwesomeIcons.trash,
+                                                    color: AssetColor.redButton,
+                                                  ),
+                                                  onPressed: () {
+                                                    controller.deleteTimeline();
+                                                  },
+                                                ),
+                                              ],
+                                            )
+                                          : CustomText(
+                                              timeline.name ?? "Timeline Name",
+                                              fontSize: 24,
+                                              color: AssetColor.blackPrimary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       const SizedBox(height: 20),
                                       Row(
                                         children: [

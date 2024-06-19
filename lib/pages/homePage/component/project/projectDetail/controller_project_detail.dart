@@ -167,7 +167,17 @@ class ProjectDetailController extends GetxController
 
   setTimeline(int index) async {
     if (index == tabTimelineList.length - 1) {
-      Get.to(() => const AddTimeline());
+      Get.to(
+        () => AddTimeline(
+          projectId: projectId,
+        ),
+      )?.then(
+        (isCreated) async {
+          if (isCreated) {
+            await getProjectTimeline();
+          }
+        },
+      );
       tabTimelineController.animateTo(0);
     } else {
       tabTimelineController.index = index;
@@ -339,4 +349,8 @@ class ProjectDetailController extends GetxController
     selectedInfoIndex.value = value;
     tabInfoController.animateTo(value);
   }
+
+  void editTimeline() {}
+
+  void deleteTimeline() {}
 }
