@@ -6,22 +6,29 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/controller_timeline_add.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/controller_timeline_form.dart';
+import 'package:project_management_thesis_app/repository/timeline/dataModel/timeline_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class AddTimeline extends StatelessWidget {
+class TimelineForm extends StatelessWidget {
   final String projectId;
+  final bool isEdit;
+  final TimelineDM? timeline;
 
-  const AddTimeline({
+  const TimelineForm({
     super.key,
     required this.projectId,
+    this.isEdit = false,
+    this.timeline,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AddTimelineController(
+    final controller = Get.put(TimelineFormController(
       projectId: projectId,
+      isEdit: isEdit,
+      timeline: timeline,
     ));
 
     return Scaffold(
@@ -55,16 +62,20 @@ class AddTimeline extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Center(
+                          Center(
                             child: Column(
                               children: [
                                 CustomText(
-                                  "Timeline Registration",
+                                  isEdit
+                                      ? "Timeline Update"
+                                      : "Timeline Registration",
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 CustomText(
-                                  "register new timeline project",
+                                  isEdit
+                                      ? "Update your project timeline"
+                                      : "register new timeline project",
                                   fontSize: 16,
                                 ),
                               ],
@@ -102,9 +113,15 @@ class AddTimeline extends StatelessWidget {
                           Center(
                             child: CustomButton(
                               onPressed: () {
-                                controller.createTimeline();
+                                if (isEdit) {
+                                  controller.updateTimeline();
+                                } else {
+                                  controller.createTimeline();
+                                }
                               },
-                              text: "Create New Timeline",
+                              text: isEdit
+                                  ? "Update Timeline"
+                                  : "Create New Timeline",
                               color: AssetColor.greenButton,
                               textColor: AssetColor.whiteBackground,
                               borderRadius: 10,

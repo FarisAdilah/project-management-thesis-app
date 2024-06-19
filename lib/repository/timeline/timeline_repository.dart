@@ -81,4 +81,16 @@ class TimelineRepository with RepoBase {
 
     return timelineId;
   }
+
+  Future<bool> updateTimeline(TimelineFirebase param) async {
+    return await updateData(
+      CollectionType.timelines.name,
+      param.id ?? "",
+      param.toFirestore(),
+    );
+  }
+
+  Future<bool> deleteTimeline(String id) async {
+    return await deleteData(CollectionType.timelines.name, id);
+  }
 }

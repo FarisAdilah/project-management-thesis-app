@@ -7,7 +7,7 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_client_vendor.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_payment.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_staff.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timeline_add.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timeline_form.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
@@ -168,7 +168,7 @@ class ProjectDetailController extends GetxController
   setTimeline(int index) async {
     if (index == tabTimelineList.length - 1) {
       Get.to(
-        () => AddTimeline(
+        () => TimelineForm(
           projectId: projectId,
         ),
       )?.then(
@@ -350,7 +350,59 @@ class ProjectDetailController extends GetxController
     tabInfoController.animateTo(value);
   }
 
-  void editTimeline() {}
+  editTimeline() {
+    Get.to(
+      () => TimelineForm(
+        projectId: projectId,
+        isEdit: true,
+        timeline: selectedTimeline.value,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited) {
+          await getProjectTimeline();
+          Helpers().showSuccessSnackBar("Timeline successfully updated");
+        } else {
+          Helpers().showErrorSnackBar("Update timeline failed");
+        }
+      },
+    );
+  }
 
-  void deleteTimeline() {}
+  deleteTimeline() {
+    isLoading.value = true;
+
+    Get.dialog(
+      AlertDialog(
+        title: const CustomText("Delete Timeline"),
+        content: CustomText(
+            "Are you sure you want to delete ${selectedTimeline.value.name} timeline?"),
+        actions: [
+          CustomButton(
+            onPressed: () {
+              Get.back();
+            },
+            text: "Cancel",
+          ),
+          CustomButton(
+            onPressed: () async {
+              Get.back();
+              bool isDeleted = await _timelineRepo
+                  .deleteTimeline(selectedTimeline.value.id ?? "");
+
+              if (isDeleted) {
+                tabTimelineList.remove(selectedTimeline.value.name);
+                await getProjectTimeline();
+                Helpers().showSuccessSnackBar("Timeline deleted successfully");
+              } else {
+                Helpers().showErrorSnackBar("Delete timeline failed");
+              }
+            },
+            text: "Delete",
+            color: AssetColor.redButton,
+          ),
+        ],
+      ),
+    );
+  }
 }
