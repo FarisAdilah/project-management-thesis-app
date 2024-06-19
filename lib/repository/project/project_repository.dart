@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/project/firebaseModel/project_firebase.dart';
 import 'package:project_management_thesis_app/services/repo_base.dart';
@@ -106,6 +107,26 @@ class ProjectRepository with RepoBase {
       CollectionType.projects.name,
       project.id ?? "",
       project.toFirestore(),
+    );
+  }
+
+  Future<bool> addProjectStaff(String projectId, String userId) async {
+    return await updateData(
+      CollectionType.projects.name,
+      projectId,
+      {
+        "userId": FieldValue.arrayUnion([userId])
+      },
+    );
+  }
+
+  Future<bool> removeProjectStaff(String projectId, String userId) async {
+    return await updateData(
+      CollectionType.projects.name,
+      projectId,
+      {
+        "userId": FieldValue.arrayRemove([userId])
+      },
     );
   }
 

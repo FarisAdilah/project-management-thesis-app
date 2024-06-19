@@ -46,12 +46,13 @@ class SelectStaffController extends GetxController {
 
     isLoading.value = false;
 
-    currentSelection.value =
-        staffs.firstWhere((element) => element.name == selectedStaff?.name);
+    currentSelection.value = staffs.firstWhereOrNull(
+            (element) => element.name == selectedStaff?.name) ??
+        UserDM();
   }
 
-  setStaffSelected(UserDM name) {
-    currentSelection.value = name;
+  setStaffSelected(UserDM user) {
+    currentSelection.value = user;
   }
 
   searchStaff(String name) {

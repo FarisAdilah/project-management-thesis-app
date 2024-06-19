@@ -38,9 +38,4 @@ class ProjectStaffController extends GetxController {
       ),
     );
   }
-
-  removeStaff() {
-    // TODO: logic to remove staff from project
-    Helpers().showErrorSnackBar("remove staff (not implemented yet)");
-  }
 }

@@ -278,4 +278,14 @@ class UserRepository with RepoBase {
       },
     );
   }
+
+  Future<bool> removeUserProjectId(String userId, String projectId) async {
+    return updateData(
+      CollectionType.users.name,
+      userId,
+      {
+        "projectId": FieldValue.arrayRemove([projectId])
+      },
+    );
+  }
 }

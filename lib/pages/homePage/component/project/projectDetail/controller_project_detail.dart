@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
+import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_client_vendor.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_payment.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_staff.dart';
@@ -23,9 +25,10 @@ import 'package:project_management_thesis_app/repository/vendor/vendor_repositor
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
+import 'package:project_management_thesis_app/utils/storage.dart';
 
 class ProjectDetailController extends GetxController
-    with GetTickerProviderStateMixin {
+    with GetTickerProviderStateMixin, Storage {
   final _projectRepo = ProjectRepository.instance;
   final _timelineRepo = TimelineRepository.instance;
   final _userRepo = UserRepository.instance;
@@ -35,8 +38,11 @@ class ProjectDetailController extends GetxController
   final _paymentRepo = PaymentRepository.instance;
   final String projectId;
 
+  UserDM? currentUser;
+
   RxBool isLoading = false.obs;
   Rx<ProjectDM> project = ProjectDM().obs;
+  Rx<UserDM> projectPM = UserDM().obs;
   RxList<TimelineDM> projectTimeline = <TimelineDM>[].obs;
   Rx<ClientDM> projectClient = ClientDM().obs;
   RxList<VendorDM> projectVendor = <VendorDM>[].obs;
@@ -50,7 +56,7 @@ class ProjectDetailController extends GetxController
 
   late TabController tabInfoController;
   late TabController tabTimelineController;
-  RxList<String> tabTimelineList = <String>["Timeline 1,", "Timeline 2"].obs;
+  RxList<String> tabTimelineList = <String>["add"].obs;
   RxList<String> tabInfoList =
       <String>["Staff List", "Client & Vendor List", "Payment"].obs;
   RxInt selectedInfoIndex = (0).obs;
@@ -68,6 +74,7 @@ class ProjectDetailController extends GetxController
       vsync: this,
       initialIndex: 0,
     );
+    currentUser = await getUserData();
     await getProjectData();
     await getProjectTimeline();
     await getProjectStaff();
@@ -117,10 +124,17 @@ class ProjectDetailController extends GetxController
 
     var staff = await _userRepo.getMultipleUserByProject(projectId);
     if (staff.isNotEmpty) {
-      projectStaff.value = staff;
+      projectStaff.value =
+          staff.where((element) => element.id != project.value.pmId).toList();
+    }
+
+    var projectManager = await _userRepo.getUserById(project.value.pmId ?? "");
+    if (projectManager.id?.isNotEmpty ?? false) {
+      projectPM.value = projectManager;
     }
 
     Helpers.writeLog("projectStaff: ${jsonEncode(projectStaff)}");
+    Helpers.writeLog("projectPM: ${jsonEncode(projectPM)}");
 
     isLoading.value = false;
   }
@@ -229,15 +243,42 @@ class ProjectDetailController extends GetxController
   @override
   void dispose() {
     tabTimelineController.dispose();
+    tabInfoController.dispose();
     super.dispose();
   }
 
   Widget getInfoWidget() {
     if (selectedInfoIndex.value == 0) {
       return StaffProject(
+        role: currentUser?.role ?? UserType.staff.name,
         staffList: projectStaff,
         onStaffSelected: (staff) {
-          // TODO: ADD STAFF TO PROJECT
+          _addStaffToProject(staff.id ?? "");
+        },
+        onStaffRemoved: (staff) {
+          Get.dialog(
+            AlertDialog(
+              title: const CustomText("Remove Staff"),
+              content: CustomText(
+                  "Are you sure you want to remove ${staff.name} from this project?"),
+              actions: [
+                CustomButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  text: "Cancel",
+                ),
+                CustomButton(
+                  onPressed: () {
+                    Get.back();
+                    _removeStaffFromProject(staff.id ?? "");
+                  },
+                  text: "Remove",
+                  color: AssetColor.redButton,
+                ),
+              ],
+            ),
+          );
         },
       );
     } else if (selectedInfoIndex.value == 1) {
@@ -255,6 +296,42 @@ class ProjectDetailController extends GetxController
       );
     } else {
       return Container();
+    }
+  }
+
+  _addStaffToProject(String userId) async {
+    isLoading.value = true;
+
+    bool isAdded = await _userRepo.addUserProjectId(userId, projectId);
+
+    if (isAdded) {
+      bool isUpdated = await _projectRepo.addProjectStaff(projectId, userId);
+
+      if (isUpdated) {
+        await getProjectData();
+        await getProjectStaff();
+        Helpers().showSuccessSnackBar("Staff added successfully");
+      } else {
+        Helpers().showErrorSnackBar("Add staff failed");
+      }
+    }
+  }
+
+  _removeStaffFromProject(String userId) async {
+    isLoading.value = true;
+
+    bool isRemoved = await _userRepo.removeUserProjectId(userId, projectId);
+
+    if (isRemoved) {
+      bool isUpdated = await _projectRepo.removeProjectStaff(projectId, userId);
+
+      if (isUpdated) {
+        await getProjectData();
+        await getProjectStaff();
+        Helpers().showSuccessSnackBar("Staff removed successfully");
+      } else {
+        Helpers().showErrorSnackBar("Remove staff failed");
+      }
     }
   }
 

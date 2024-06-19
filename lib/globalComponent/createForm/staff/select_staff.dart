@@ -192,7 +192,7 @@ class SelectStaff extends StatelessWidget {
           Obx(
             () => Center(
               child: CustomButton(
-                text: textButton ?? "Choose Staff",
+                text: textButton ?? "Select Staff",
                 isEnabled: controller.currentSelection.value.id?.isNotEmpty,
                 color: AssetColor.orangeButton,
                 disableColor: AssetColor.orangeButton.withOpacity(0.5),

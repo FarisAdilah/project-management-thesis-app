@@ -94,44 +94,6 @@ class ProjectDetail extends StatelessWidget {
                               const SizedBox(height: 20),
                               Row(
                                 children: [
-                                  const CustomText(
-                                    "Status: ",
-                                    fontSize: 20,
-                                    color: AssetColor.blackPrimary,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: controller
-                                          .getStatusColor(
-                                            project.status ?? "",
-                                          )
-                                          .withOpacity(0.3),
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                        color: controller.getStatusColor(
-                                          project.status ?? "",
-                                        ),
-                                      ),
-                                    ),
-                                    child: CustomText(
-                                      project.status?.capitalizeFirst ??
-                                          "Status",
-                                      fontSize: 20,
-                                      color: controller.getStatusColor(
-                                        project.status ?? "",
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                children: [
                                   Column(
                                     children: [
                                       const CustomText(
@@ -195,6 +157,64 @@ class ProjectDetail extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                              const SizedBox(height: 20),
+                              Row(
+                                children: [
+                                  const CustomText(
+                                    "Project Manager: ",
+                                    fontSize: 20,
+                                    color: AssetColor.blackPrimary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  CustomText(
+                                    controller.projectPM.value.name ??
+                                        "Project Manager Name",
+                                    fontSize: 20,
+                                    color: AssetColor.blackPrimary,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                              Row(
+                                children: [
+                                  const CustomText(
+                                    "Status: ",
+                                    fontSize: 20,
+                                    color: AssetColor.blackPrimary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: controller
+                                          .getStatusColor(
+                                            project.status ?? "",
+                                          )
+                                          .withOpacity(0.3),
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                        color: controller.getStatusColor(
+                                          project.status ?? "",
+                                        ),
+                                      ),
+                                    ),
+                                    child: CustomText(
+                                      project.status?.capitalizeFirst ??
+                                          "Status",
+                                      fontSize: 20,
+                                      color: controller.getStatusColor(
+                                        project.status ?? "",
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
                             ],
                           );
                         },
@@ -285,6 +305,28 @@ class ProjectDetail extends StatelessWidget {
                               children: controller.tabTimelineList
                                   .map((String title) {
                                 Helpers.writeLog("title: $title");
+
+                                if (controller.tabTimelineList.length == 1 &&
+                                    title == "add") {
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 25,
+                                      vertical: 25,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AssetColor.whiteBackground,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Center(
+                                      child: CustomText(
+                                        "There's no Timeline yet",
+                                        fontSize: 24,
+                                        color: AssetColor.blackPrimary
+                                            .withOpacity(0.5),
+                                      ),
+                                    ),
+                                  );
+                                }
 
                                 TimelineDM timeline =
                                     controller.selectedTimeline.value;
