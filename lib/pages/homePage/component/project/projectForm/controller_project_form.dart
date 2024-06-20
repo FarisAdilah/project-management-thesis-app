@@ -16,7 +16,7 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class AddProjectController extends GetxController {
+class ProjectFormController extends GetxController {
   final _projectRepo = ProjectRepository.instance;
   final _clientRepo = ClientRepository.instance;
   final _vendorRepo = VendorRepository.instance;
@@ -40,7 +40,7 @@ class AddProjectController extends GetxController {
   final bool isEdit;
   final ProjectDM? project;
 
-  AddProjectController({
+  ProjectFormController({
     this.isEdit = false,
     this.project,
   });

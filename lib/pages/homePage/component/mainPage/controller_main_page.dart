@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pending_project.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectAdd/project_add.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectForm/project_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/project_detail.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/project_pending_detail.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';

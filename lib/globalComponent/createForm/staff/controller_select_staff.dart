@@ -14,12 +14,14 @@ class SelectStaffController extends GetxController {
   UserDM? selectedStaff;
   List<UserDM> staffList;
 
-  String userRole;
+  final String userRole;
+  final bool isAlreadyExist;
 
   SelectStaffController({
     this.selectedStaff,
     required this.staffList,
     this.userRole = "staff",
+    this.isAlreadyExist = true,
   });
 
   @override
@@ -36,12 +38,20 @@ class SelectStaffController extends GetxController {
 
     if (list.isNotEmpty) {
       staffs.value = list;
-      staffsToShow.value = staffs.where((staff) {
-        return !staffList.any(
-          (existingStaff) => existingStaff.name == staff.name,
-        );
-      }).toList();
-      staffs.value = staffsToShow.toList();
+      if (isAlreadyExist) {
+        staffsToShow.value = staffs.where((staff) {
+          return !staffList.any(
+            (existingStaff) => existingStaff.name == staff.name,
+          );
+        }).toList();
+        staffs.value = staffsToShow.toList();
+      } else {
+        staffsToShow.value = staffs.where((staff) {
+          return staffList.any(
+            (existingStaff) => existingStaff.name == staff.name,
+          );
+        }).toList();
+      }
     }
 
     isLoading.value = false;
