@@ -104,4 +104,23 @@ class Helpers {
       int.parse(amount),
     );
   }
+
+  String getTaskStatus(String status) {
+    if (status.isEmpty) {
+      return "Status";
+    }
+
+    String taskStatus = "";
+    if (status == TaskStatusType.notStarted.name) {
+      taskStatus = "Not Started";
+    } else if (status == TaskStatusType.onProgress.name) {
+      taskStatus = "On Progress";
+    } else if (status == TaskStatusType.completed.name) {
+      taskStatus = "Completed";
+    } else if (status == TaskStatusType.overdue.name) {
+      taskStatus = "Overdue";
+    }
+
+    return taskStatus;
+  }
 }

@@ -52,6 +52,13 @@ enum PaymentStatusType {
   rejected,
 }
 
+enum TaskStatusType {
+  notStarted,
+  onProgress,
+  completed,
+  overdue,
+}
+
 class Constant {
   static const bool showLog = true;
   static const String logIdentifier = "PenTools-log";

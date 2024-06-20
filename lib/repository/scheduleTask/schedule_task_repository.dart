@@ -26,6 +26,7 @@ class ScheduleTaskRepository with RepoBase {
       task.endDate = element.endDate;
       task.timelineId = element.timelineId;
       task.staffId = element.staffId;
+      task.status = element.status;
 
       taskDM.add(task);
     }
@@ -60,6 +61,7 @@ class ScheduleTaskRepository with RepoBase {
       task.endDate = element.endDate;
       task.timelineId = element.timelineId;
       task.staffId = element.staffId;
+      task.status = element.status;
 
       taskDM.add(task);
     }
@@ -77,7 +79,15 @@ class ScheduleTaskRepository with RepoBase {
     taskDM.endDate = task.endDate;
     taskDM.timelineId = task.timelineId;
     taskDM.staffId = task.staffId;
+    taskDM.status = task.status;
 
     return taskDM;
+  }
+
+  Future<String> createTask(ScheduleTaskFirebase task) async {
+    return await createData(
+      CollectionType.scheduleTasks.name,
+      task.toFirestore(),
+    );
   }
 }

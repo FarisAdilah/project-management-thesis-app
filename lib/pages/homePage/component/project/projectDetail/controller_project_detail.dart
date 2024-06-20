@@ -7,7 +7,8 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_client_vendor.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_payment.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_staff.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timeline_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/task_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/timeline_form.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
@@ -100,6 +101,8 @@ class ProjectDetailController extends GetxController
     isLoading.value = true;
 
     var timeline = await _timelineRepo.getMultipleTimeline(projectId);
+    timeline.sort((a, b) => a.startDate!.compareTo(b.startDate!));
+
     if (timeline.isNotEmpty) {
       projectTimeline.value = timeline;
 
@@ -195,17 +198,13 @@ class ProjectDetailController extends GetxController
     );
     if (taskData.isNotEmpty) {
       task.value = taskData;
+    } else {
+      task.value = [];
     }
 
     Helpers.writeLog("task: ${jsonEncode(task)}");
 
     isLoading.value = false;
-  }
-
-  UserDM getStaffofTask(staffId) {
-    var staff =
-        projectStaff.firstWhereOrNull((element) => element.id == staffId);
-    return staff ?? UserDM();
   }
 
   getProjectPayment() async {
@@ -403,6 +402,26 @@ class ProjectDetailController extends GetxController
           ),
         ],
       ),
+    );
+
+    isLoading.value = false;
+  }
+
+  addTask() {
+    Get.to(
+      () => TaskForm(
+        timelineId: selectedTimeline.value.id ?? "",
+        staffList: projectStaff,
+      ),
+    )?.then(
+      (isCreated) async {
+        if (isCreated) {
+          await getTimelineTask(selectedTimeline.value.id ?? "");
+          Helpers().showSuccessSnackBar("Task created successfully");
+        } else {
+          Helpers().showErrorSnackBar("Create task failed");
+        }
+      },
     );
   }
 }

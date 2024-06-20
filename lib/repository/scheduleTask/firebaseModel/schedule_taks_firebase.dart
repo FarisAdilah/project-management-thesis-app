@@ -7,6 +7,7 @@ class ScheduleTaskFirebase {
   String? endDate;
   String? staffId;
   String? timelineId;
+  String? status;
 
   ScheduleTaskFirebase();
 
@@ -21,7 +22,8 @@ class ScheduleTaskFirebase {
       ..startDate = data['startDate']
       ..endDate = data['endDate']
       ..staffId = data['staffId']
-      ..timelineId = data['timelineId'];
+      ..timelineId = data['timelineId']
+      ..status = data['status'];
 
     return scheduleTask;
   }
@@ -37,17 +39,18 @@ class ScheduleTaskFirebase {
       ..startDate = data['startDate']
       ..endDate = data['endDate']
       ..staffId = data['staffId']
-      ..timelineId = data['timelineId'];
+      ..timelineId = data['timelineId']
+      ..status = data['status'];
 
     return scheduleTask;
   }
 
   Map<String, dynamic> toFirestore() => {
-        'id': id,
         'name': name,
         'startDate': startDate,
         'endDate': endDate,
         'staffId': staffId,
         'timelineId': timelineId,
+        'status': status,
       };
 }

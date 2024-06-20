@@ -10,6 +10,7 @@ class ScheduleTaskDM {
   String? endDate;
   String? timelineId;
   String? staffId;
+  String? status;
 
   ScheduleTaskDM();
 
