@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/project/project_repository.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 
 class StaffDetailController extends GetxController {
   final _projectRepo = ProjectRepository.instance;
@@ -20,11 +21,19 @@ class StaffDetailController extends GetxController {
     isLoading.value = true;
 
     if (user.projectId?.isNotEmpty ?? false) {
-      for (var projectId in user.projectId ?? []) {
-        var data = await _projectRepo.getProjectById(projectId);
-        if (data != null) {
-          projects.add(data);
-        }
+      var data = await _projectRepo.getMultipleProjects(
+        user.id ?? "",
+        ProjectFieldType.userId,
+      );
+      if (data.isNotEmpty) {
+        projects.value = data;
+      }
+      var pmProject = await _projectRepo.getMultipleProjects(
+        user.id ?? "",
+        ProjectFieldType.pmId,
+      );
+      if (pmProject.isNotEmpty) {
+        projects.addAll(pmProject);
       }
     }
 
