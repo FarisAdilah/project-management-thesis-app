@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/project/project_repository.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class VendorDetailController extends GetxController {
@@ -21,11 +24,13 @@ class VendorDetailController extends GetxController {
     isLoading.value = true;
 
     if (vendor.projectId?.isNotEmpty ?? false) {
-      for (var projectId in vendor.projectId ?? []) {
-        var data = await _projectRepo.getProjectById(projectId);
-        if (data != null) {
-          projects.add(data);
-        }
+      var projectData = await _projectRepo.getMultipleProjects(
+        vendor.id ?? "",
+        ProjectFieldType.vendorId,
+      );
+      Helpers.writeLog("projectData: ${jsonEncode(projectData)}");
+      if (projectData.isNotEmpty) {
+        projects.value = projectData;
       }
     }
 
