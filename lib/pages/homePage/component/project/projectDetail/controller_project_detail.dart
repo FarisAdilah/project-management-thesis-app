@@ -347,7 +347,13 @@ class ProjectDetailController extends GetxController
         vendors: projectVendor,
         currentUser: currentUser ?? UserDM(),
         onCreatePayment: () {
-          addNewPayment();
+          _addNewPayment();
+        },
+        onEditPayment: (payment) {
+          _updatePayment(payment);
+        },
+        onDeletePayment: (payment) {
+          _deletePayment(payment);
         },
       );
     } else {
@@ -417,7 +423,7 @@ class ProjectDetailController extends GetxController
     }
   }
 
-  addNewPayment() {
+  _addNewPayment() {
     Get.to(
       () => AddPayment(
         projectId: projectId,
@@ -431,6 +437,62 @@ class ProjectDetailController extends GetxController
         }
       },
     );
+  }
+
+  _updatePayment(PaymentDM payment) {
+    Get.to(
+      () => AddPayment(
+        projectId: projectId,
+        vendorList: projectVendor,
+        isEdit: true,
+        payment: payment,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited != null && isEdited) {
+          await getProjectPayment();
+          Helpers().showSuccessSnackBar("Payment updated successfully");
+        }
+      },
+    );
+  }
+
+  _deletePayment(PaymentDM payment) {
+    isLoading.value = true;
+
+    Get.dialog(
+      AlertDialog(
+        title: const CustomText("Delete Payment"),
+        content: CustomText(
+            "Are you sure you want to delete ${payment.paymentName} payment?"),
+        actions: [
+          CustomButton(
+            onPressed: () {
+              Get.back();
+            },
+            text: "Cancel",
+          ),
+          CustomButton(
+            onPressed: () async {
+              Get.back();
+              bool isDeleted =
+                  await _paymentRepo.deletePayment(payment.id ?? "");
+
+              if (isDeleted) {
+                await getProjectPayment();
+                Helpers().showSuccessSnackBar("Payment deleted successfully");
+              } else {
+                Helpers().showErrorSnackBar("Delete payment failed");
+              }
+            },
+            text: "Delete",
+            color: AssetColor.redButton,
+          ),
+        ],
+      ),
+    );
+
+    isLoading.value = false;
   }
 
   void updateInfoController(int value) {

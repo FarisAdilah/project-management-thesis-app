@@ -7,6 +7,7 @@ import 'package:project_management_thesis_app/globalComponent/inputCustom/custom
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/controller_payment_add.dart';
+import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
@@ -15,17 +16,24 @@ import 'package:project_management_thesis_app/utils/helpers.dart';
 class AddPayment extends StatelessWidget {
   final String projectId;
   final List<VendorDM> vendorList;
+  final bool isEdit;
+  final PaymentDM? payment;
 
   const AddPayment({
     super.key,
     required this.projectId,
     required this.vendorList,
+    this.isEdit = false,
+    this.payment,
   });
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AddPaymentController(
       projectId: projectId,
+      availableVendor: vendorList,
+      isEdit: isEdit,
+      payment: payment,
     ));
 
     return Scaffold(
@@ -60,16 +68,20 @@ class AddPayment extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Center(
+                            Center(
                               child: Column(
                                 children: [
                                   CustomText(
-                                    "Payment Registration",
+                                    isEdit
+                                        ? "Payment Update"
+                                        : "Payment Registration",
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   CustomText(
-                                    "register new project payment",
+                                    isEdit
+                                        ? "Update project payment"
+                                        : "register new project payment",
                                     fontSize: 16,
                                   ),
                                 ],
@@ -124,9 +136,15 @@ class AddPayment extends StatelessWidget {
                             Center(
                               child: CustomButton(
                                 onPressed: () {
-                                  controller.createPayment();
+                                  if (isEdit) {
+                                    controller.updatePayment();
+                                  } else {
+                                    controller.createPayment();
+                                  }
                                 },
-                                text: "Create New Payment",
+                                text: isEdit
+                                    ? "Update Payment"
+                                    : "Create New Payment",
                                 color: AssetColor.greenButton,
                                 textColor: AssetColor.whiteBackground,
                                 borderRadius: 10,

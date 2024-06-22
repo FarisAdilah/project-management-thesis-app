@@ -90,4 +90,16 @@ class PaymentRepository with RepoBase {
       payment.toFirestore(),
     );
   }
+
+  Future<bool> updatePayment(PaymentFirebase payment) async {
+    return await updateData(
+      CollectionType.payments.name,
+      payment.id ?? "",
+      payment.toFirestore(),
+    );
+  }
+
+  Future<bool> deletePayment(String id) async {
+    return await deleteData(CollectionType.payments.name, id);
+  }
 }

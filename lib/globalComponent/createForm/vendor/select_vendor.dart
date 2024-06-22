@@ -13,6 +13,7 @@ class SelectVendor extends StatelessWidget {
   final Function(VendorDM) onVendorSelected;
   final bool? isProject;
   final List<VendorDM>? selectedVendor;
+  final List<VendorDM>? availableVendor;
 
   const SelectVendor({
     super.key,
@@ -21,6 +22,7 @@ class SelectVendor extends StatelessWidget {
     this.initialVendor,
     this.isProject = false,
     this.selectedVendor,
+    this.availableVendor,
   });
 
   @override
@@ -29,6 +31,7 @@ class SelectVendor extends StatelessWidget {
       projectId: projectId ?? "",
       initialVendor: initialVendor,
       initSelectedVendor: selectedVendor,
+      availableVendor: availableVendor,
     ));
 
     return Container(

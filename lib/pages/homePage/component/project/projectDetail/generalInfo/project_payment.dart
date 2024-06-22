@@ -17,6 +17,8 @@ class PaymentProject extends StatelessWidget {
   final ClientDM client;
   final List<VendorDM> vendors;
   final VoidCallback onCreatePayment;
+  final Function(PaymentDM) onEditPayment;
+  final Function(PaymentDM) onDeletePayment;
   final UserDM currentUser;
 
   const PaymentProject({
@@ -26,6 +28,8 @@ class PaymentProject extends StatelessWidget {
     required this.client,
     required this.vendors,
     required this.currentUser,
+    required this.onEditPayment,
+    required this.onDeletePayment,
   });
 
   @override
@@ -107,52 +111,56 @@ class PaymentProject extends StatelessWidget {
                     return Row(
                       children: [
                         IconButton(
-                          icon: const Icon(
-                            FontAwesomeIcons.penToSquare,
-                            applyTextScaling: true,
-                            color: AssetColor.whiteBackground,
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                              AssetColor.orangeButton,
+                            icon: const Icon(
+                              FontAwesomeIcons.penToSquare,
+                              applyTextScaling: true,
+                              color: AssetColor.whiteBackground,
                             ),
-                            padding: const WidgetStatePropertyAll(
-                              EdgeInsets.all(10),
-                            ),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.all(
+                                AssetColor.orangeButton,
+                              ),
+                              padding: const WidgetStatePropertyAll(
+                                EdgeInsets.all(10),
+                              ),
+                              shape: WidgetStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                             ),
-                          ),
-                          onPressed: () {
-                            // TODO: Implement Edit Payment
-                          },
-                        ),
+                            onPressed: () {
+                              onEditPayment(
+                                controller.selectedPayment.value,
+                              );
+                              controller.setSelectedPayment(PaymentDM());
+                            }),
                         const SizedBox(width: 10),
                         IconButton(
-                          icon: const Icon(
-                            FontAwesomeIcons.trashCan,
-                            applyTextScaling: true,
-                            color: AssetColor.whiteBackground,
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(
-                              AssetColor.redButton,
+                            icon: const Icon(
+                              FontAwesomeIcons.trashCan,
+                              applyTextScaling: true,
+                              color: AssetColor.whiteBackground,
                             ),
-                            padding: const WidgetStatePropertyAll(
-                              EdgeInsets.all(10),
-                            ),
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.all(
+                                AssetColor.redButton,
+                              ),
+                              padding: const WidgetStatePropertyAll(
+                                EdgeInsets.all(10),
+                              ),
+                              shape: WidgetStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
                             ),
-                          ),
-                          onPressed: () {
-                            // TODO: Implement Delete Payment
-                          },
-                        ),
+                            onPressed: () {
+                              onDeletePayment(
+                                controller.selectedPayment.value,
+                              );
+                              controller.setSelectedPayment(PaymentDM());
+                            }),
                       ],
                     );
                   } else {

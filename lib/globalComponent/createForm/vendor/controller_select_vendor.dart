@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/vendor_repository.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class SelectVendorController extends GetxController {
   final _vendorRepo = VendorRepository.instance;
@@ -14,11 +15,13 @@ class SelectVendorController extends GetxController {
   VendorDM? initialVendor;
   final String projectId;
   final List<VendorDM>? initSelectedVendor;
+  final List<VendorDM>? availableVendor;
 
   SelectVendorController({
     this.initialVendor,
     required this.projectId,
     this.initSelectedVendor,
+    this.availableVendor,
   });
 
   @override
@@ -28,21 +31,30 @@ class SelectVendorController extends GetxController {
   }
 
   getVendors() async {
+    if (availableVendor != null && (availableVendor?.isNotEmpty ?? false)) {
+      vendors.value = availableVendor ?? [];
+      selectedVendor.value = initialVendor ?? VendorDM();
+      return;
+    }
+
     isLoading.value = true;
     vendors.value = await _vendorRepo.getAllVendor();
     isLoading.value = false;
 
-    if (initSelectedVendor?.isNotEmpty ?? false) {
+    Helpers.writeLog("initvendor: ${initSelectedVendor?.length}");
+
+    if (initSelectedVendor != null &&
+        (initSelectedVendor?.isNotEmpty ?? false)) {
       vendors.value = vendors.where((element) {
-        return initSelectedVendor!.any((element2) => element2.id != element.id);
+        return initSelectedVendor!
+            .where((element2) => element2.id == element.id)
+            .isEmpty;
       }).toList();
+
+      Helpers.writeLog("vendor: ${vendors.length}");
     } else {
       selectedVendor.value = initialVendor ?? VendorDM();
     }
-
-    selectedVendor.value = vendors.firstWhereOrNull(
-            (element) => element.id == selectedVendor.value.id) ??
-        VendorDM();
   }
 
   setVendorSelected(VendorDM vendor) {
