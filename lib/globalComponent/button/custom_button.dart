@@ -11,6 +11,7 @@ class CustomButton extends StatelessWidget {
   final bool? isEnabled;
   final double? borderRadius;
   final List<BoxShadow>? boxShadow;
+  final double? textSize;
 
   const CustomButton({
     super.key,
@@ -22,6 +23,7 @@ class CustomButton extends StatelessWidget {
     this.isEnabled,
     this.borderRadius,
     this.boxShadow,
+    this.textSize,
   });
 
   @override
@@ -45,6 +47,7 @@ class CustomButton extends StatelessWidget {
           color: textColor ?? AssetColor.whitePrimary,
           fontWeight: FontWeight.bold,
           textAlign: TextAlign.center,
+          fontSize: textSize ?? 14,
         ),
       ),
     );
