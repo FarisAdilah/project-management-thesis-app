@@ -36,6 +36,26 @@ class TaskFormController extends GetxController {
     this.task,
   });
 
+  @override
+  void onInit() {
+    super.onInit();
+
+    if (isEdit) {
+      nameController.text = task!.name ?? "";
+      startDate = DateTime.tryParse(task!.startDate ?? "");
+      startDateController.text =
+          Helpers().convertDateStringFormat(task!.startDate ?? "");
+      endDate = DateTime.tryParse(task!.endDate ?? "");
+      endDateController.text =
+          Helpers().convertDateStringFormat(task!.endDate ?? "");
+      chosenStaff.value = projectStaff.firstWhere(
+        (element) => element.id == task!.staffId,
+        orElse: () => UserDM(),
+      );
+      staffController.text = chosenStaff.value.name ?? "";
+    }
+  }
+
   selectDatePicker(
     BuildContext context,
     TextEditingController dateController,
@@ -83,6 +103,26 @@ class TaskFormController extends GetxController {
 
   updateTask() async {
     // TODO: Update Schedule Task Integration
+    isLoading.value = true;
+
+    ScheduleTaskFirebase param = ScheduleTaskFirebase();
+    param.id = task!.id;
+    param.endDate = endDate.toString();
+    param.name = nameController.text;
+    param.staffId = chosenStaff.value.id;
+    param.startDate = startDate.toString();
+    param.timelineId = timelineId;
+    param.status = task!.status;
+
+    bool isUpdated = await _taskRepo.updateTask(param);
+
+    if (isUpdated) {
+      Get.back(result: true);
+    } else {
+      Helpers().showErrorSnackBar(
+        "Failed to update task, please try again",
+      );
+    }
   }
 
   createTask() async {
@@ -101,7 +141,9 @@ class TaskFormController extends GetxController {
     if (taskId.isNotEmpty) {
       Get.back(result: true);
     } else {
-      Get.back();
+      Helpers().showErrorSnackBar(
+        "Failed to create task, please try again",
+      );
     }
 
     isLoading.value = false;

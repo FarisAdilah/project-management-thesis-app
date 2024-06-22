@@ -7,15 +7,19 @@ import 'package:project_management_thesis_app/globalComponent/inputCustom/custom
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/controller_payment_add.dart';
+import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class AddPayment extends StatelessWidget {
   final String projectId;
+  final List<VendorDM> vendorList;
 
   const AddPayment({
     super.key,
     required this.projectId,
+    required this.vendorList,
   });
 
   @override
@@ -99,6 +103,10 @@ class AddPayment extends StatelessWidget {
                               controller: controller.amountController,
                               title: "Payment Amount",
                               hintText: "input payment amount",
+                              onTyping: (amount) {
+                                Helpers.writeLog("Amount: $amount");
+                                controller.formatAmount(amount);
+                              },
                             ),
                             const SizedBox(height: 20),
                             CustomInput(
@@ -118,7 +126,7 @@ class AddPayment extends StatelessWidget {
                                 onPressed: () {
                                   controller.createPayment();
                                 },
-                                text: "Create New Timeline",
+                                text: "Create New Payment",
                                 color: AssetColor.greenButton,
                                 textColor: AssetColor.whiteBackground,
                                 borderRadius: 10,

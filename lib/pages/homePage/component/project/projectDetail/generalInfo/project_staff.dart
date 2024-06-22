@@ -85,109 +85,102 @@ class StaffProject extends StatelessWidget {
                     ),
                   ),
                 )
-              : Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
+              : GridView.builder(
+                  itemCount: staffList.length,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 7,
                   ),
-                  child: GridView.builder(
-                    itemCount: staffList.length,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 7,
-                    ),
-                    itemBuilder: (context, index) {
-                      final staff = staffList[index];
+                  itemBuilder: (context, index) {
+                    final staff = staffList[index];
 
-                      return Obx(
-                        () => InkWell(
-                          onTap: () {
-                            controller.selectStaff(index);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AssetColor.whiteBackground,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AssetColor.black.withOpacity(0.1),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                              border: Border.all(
-                                color:
-                                    controller.selectedStaffIndex.value == index
-                                        ? AssetColor.blueSecondaryAccent
-                                        : AssetColor.whiteBackground,
-                                width: 1,
+                    return Obx(
+                      () => InkWell(
+                        onTap: () {
+                          controller.selectStaff(index);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AssetColor.whiteBackground,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AssetColor.black.withOpacity(0.1),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                ProfilePicture(
-                                  user: staff,
-                                ),
-                                const SizedBox(width: 20),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomText(
-                                      staff.name ?? "Staff Name",
-                                      fontSize: 16,
-                                    ),
-                                    CustomText(
-                                      staff.email ?? "Staff Email",
-                                      fontSize: 14,
-                                      color: AssetColor.grey,
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                    color: AssetColor.whiteBackground,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: AssetColor.blueSecondaryAccent,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Container(
-                                      height: 10,
-                                      width: 10,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: controller
-                                                    .selectedStaffIndex.value ==
-                                                index
-                                            ? AssetColor.blueSecondaryAccent
-                                            : AssetColor.whiteBackground,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            ],
+                            border: Border.all(
+                              color:
+                                  controller.selectedStaffIndex.value == index
+                                      ? AssetColor.blueSecondaryAccent
+                                      : AssetColor.whiteBackground,
+                              width: 1,
                             ),
                           ),
+                          child: Row(
+                            children: [
+                              ProfilePicture(
+                                user: staff,
+                              ),
+                              const SizedBox(width: 20),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomText(
+                                    staff.name ?? "Staff Name",
+                                    fontSize: 20,
+                                  ),
+                                  CustomText(
+                                    staff.email ?? "Staff Email",
+                                    fontSize: 18,
+                                    color: AssetColor.grey,
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              Container(
+                                height: 20,
+                                width: 20,
+                                decoration: BoxDecoration(
+                                  color: AssetColor.whiteBackground,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AssetColor.blueSecondaryAccent,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    height: 10,
+                                    width: 10,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          controller.selectedStaffIndex.value ==
+                                                  index
+                                              ? AssetColor.blueSecondaryAccent
+                                              : AssetColor.whiteBackground,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
           Obx(
             () => Visibility(

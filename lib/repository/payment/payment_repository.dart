@@ -26,6 +26,7 @@ class PaymentRepository with RepoBase {
       paymentDM.deadline = payment.deadline;
       paymentDM.projectId = payment.projectId;
       paymentDM.status = payment.status;
+      paymentDM.file = payment.file;
 
       paymentListDM.add(paymentDM);
     }
@@ -57,6 +58,7 @@ class PaymentRepository with RepoBase {
       paymentDM.deadline = payment.deadline;
       paymentDM.projectId = payment.projectId;
       paymentDM.status = payment.status;
+      paymentDM.file = payment.file;
 
       paymentListDM.add(paymentDM);
     }
@@ -77,7 +79,15 @@ class PaymentRepository with RepoBase {
     paymentDM.deadline = payment.deadline;
     paymentDM.projectId = payment.projectId;
     paymentDM.status = payment.status;
+    paymentDM.file = payment.file;
 
     return paymentDM;
+  }
+
+  Future<String> createPayment(PaymentFirebase payment) async {
+    return await createData(
+      CollectionType.payments.name,
+      payment.toFirestore(),
+    );
   }
 }

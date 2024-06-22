@@ -12,6 +12,7 @@ class CustomInput extends StatelessWidget {
   final VoidCallback? onTap;
   final bool readOnly;
   final bool enabled;
+  final Function(String)? onTyping;
 
   const CustomInput({
     super.key,
@@ -24,6 +25,7 @@ class CustomInput extends StatelessWidget {
     this.onTap,
     this.readOnly = false,
     this.enabled = true,
+    this.onTyping,
   });
 
   @override
@@ -77,6 +79,7 @@ class CustomInput extends StatelessWidget {
                 keyboardType: inputType,
                 readOnly: readOnly,
                 enabled: enabled,
+                onChanged: (value) => onTyping!(value) ?? () {},
               ),
       ],
     );

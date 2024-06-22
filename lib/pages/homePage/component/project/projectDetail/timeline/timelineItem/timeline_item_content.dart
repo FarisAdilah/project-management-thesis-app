@@ -19,6 +19,10 @@ class TimelineItemContent extends StatelessWidget {
   final VoidCallback deleteTimeline;
   final VoidCallback addTask;
   final List<UserDM> projectStaff;
+  final ScheduleTaskDM? selectedTask;
+  final Function(ScheduleTaskDM) onSelectTask;
+  final Function(ScheduleTaskDM) onEditTask;
+  final Function(ScheduleTaskDM) onDeleteTask;
 
   const TimelineItemContent({
     super.key,
@@ -29,6 +33,10 @@ class TimelineItemContent extends StatelessWidget {
     required this.deleteTimeline,
     required this.addTask,
     required this.projectStaff,
+    this.selectedTask,
+    required this.onSelectTask,
+    required this.onEditTask,
+    required this.onDeleteTask,
   });
 
   @override
@@ -188,30 +196,38 @@ class TimelineItemContent extends StatelessWidget {
               : Expanded(
                   child: Column(
                     children: [
-                      Obx(
-                        () {
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(0),
-                            itemCount: projectStaff.length,
-                            itemBuilder: (context, index) {
-                              UserDM staff = projectStaff[index];
+                      SizedBox(
+                        height: 450,
+                        child: Obx(
+                          () {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              padding: const EdgeInsets.all(0),
+                              itemCount: projectStaff.length,
+                              itemBuilder: (context, index) {
+                                UserDM staff = projectStaff[index];
 
-                              List<ScheduleTaskDM> taskList = task
-                                  .where((task) => task.staffId == staff.id)
-                                  .toList();
+                                List<ScheduleTaskDM> taskList = task
+                                    .where((task) => task.staffId == staff.id)
+                                    .toList();
 
-                              if (taskList.isEmpty) {
-                                return const SizedBox();
-                              } else {
-                                return TaskItemContent(
-                                  taskList: taskList,
-                                  staff: staff,
-                                );
-                              }
-                            },
-                          );
-                        },
+                                if (taskList.isEmpty) {
+                                  return const SizedBox();
+                                } else {
+                                  return TaskItemContent(
+                                    taskList: taskList,
+                                    staff: staff,
+                                    selectedTask: selectedTask,
+                                    onSelectTask: (task) => onSelectTask(task),
+                                    onEditTask: (task) => onEditTask(task),
+                                    onDeleteTask: (task) => onDeleteTask(task),
+                                  );
+                                }
+                              },
+                            );
+                          },
+                        ),
                       ),
                       const Spacer(),
                       Center(

@@ -31,6 +31,7 @@ enum ProjectFieldType {
   userId,
   clientId,
   vendorId,
+  pmId,
 }
 
 enum TaskFieldType {

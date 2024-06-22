@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/controller_project_detail.dart';
@@ -340,12 +341,65 @@ class ProjectDetail extends StatelessWidget {
                                       controller.deleteTimeline(),
                                   addTask: () => controller.addTask(),
                                   projectStaff: controller.projectStaff,
+                                  selectedTask: controller.selectedTask.value,
+                                  onSelectTask: (task) =>
+                                      controller.setSelectedTask(task),
+                                  onEditTask: (task) =>
+                                      controller.editTask(task),
+                                  onDeleteTask: (task) =>
+                                      controller.deleteTask(task),
                                 );
                               }).toList(),
                             ),
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 50),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: 15,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AssetColor.orange,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: AssetColor.whiteBackground,
+                        ),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.circleInfo,
+                            color: AssetColor.whiteBackground,
+                            applyTextScaling: true,
+                          ),
+                          SizedBox(width: 10),
+                          CustomText(
+                            "The project can be closed when all tasks and payments are completed",
+                            fontSize: 20,
+                            color: AssetColor.whiteBackground,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: CustomButton(
+                        isEnabled: controller.isButtonCloseEnabled.value,
+                        text: "Close Project",
+                        onPressed: controller.isButtonCloseEnabled.value
+                            ? () {
+                                // TODO: Implement Project Closing
+                                // controller.closeProject();
+                              }
+                            : null,
+                        color: AssetColor.redButton,
+                        disableColor: AssetColor.redButton.withOpacity(0.5),
+                        borderRadius: 15,
+                        textSize: 20,
+                      ),
                     ),
                   ],
                 ),

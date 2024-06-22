@@ -90,4 +90,16 @@ class ScheduleTaskRepository with RepoBase {
       task.toFirestore(),
     );
   }
+
+  Future<bool> updateTask(ScheduleTaskFirebase task) async {
+    return await updateData(
+      CollectionType.scheduleTasks.name,
+      task.id ?? "",
+      task.toFirestore(),
+    );
+  }
+
+  Future<bool> deleteTask(String id) async {
+    return await deleteData(CollectionType.scheduleTasks.name, id);
+  }
 }

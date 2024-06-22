@@ -7,6 +7,7 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_client_vendor.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_payment.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_staff.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/payment_add.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/task_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/timeline_form.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
@@ -52,6 +53,8 @@ class ProjectDetailController extends GetxController
 
   Rx<TimelineDM> selectedTimeline = TimelineDM().obs;
   RxList<ScheduleTaskDM> task = <ScheduleTaskDM>[].obs;
+  Rx<ScheduleTaskDM> selectedTask = ScheduleTaskDM().obs;
+  RxBool isButtonCloseEnabled = false.obs;
 
   ProjectDetailController({required this.projectId});
 
@@ -176,7 +179,7 @@ class ProjectDetailController extends GetxController
         ),
       )?.then(
         (isCreated) async {
-          if (isCreated) {
+          if (isCreated != null && isCreated) {
             await getProjectTimeline();
           }
         },
@@ -203,6 +206,70 @@ class ProjectDetailController extends GetxController
     }
 
     Helpers.writeLog("task: ${jsonEncode(task)}");
+
+    isLoading.value = false;
+  }
+
+  setSelectedTask(ScheduleTaskDM task) {
+    if (task.id == selectedTask.value.id) {
+      selectedTask.value = ScheduleTaskDM();
+    } else {
+      selectedTask.value = task;
+    }
+  }
+
+  editTask(ScheduleTaskDM task) {
+    Get.to(
+      () => TaskForm(
+        timelineId: selectedTimeline.value.id ?? "",
+        isEdit: true,
+        task: task,
+        staffList: projectStaff,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited != null && isEdited) {
+          selectedTask.value = ScheduleTaskDM();
+          await getTimelineTask(selectedTimeline.value.id ?? "");
+          Helpers().showSuccessSnackBar("Task successfully updated");
+        }
+      },
+    );
+  }
+
+  deleteTask(ScheduleTaskDM task) {
+    isLoading.value = true;
+
+    Get.dialog(
+      AlertDialog(
+        title: const CustomText("Delete Task"),
+        content:
+            CustomText("Are you sure you want to delete ${task.name} task?"),
+        actions: [
+          CustomButton(
+            onPressed: () {
+              Get.back();
+            },
+            text: "Cancel",
+          ),
+          CustomButton(
+            onPressed: () async {
+              Get.back();
+              bool isDeleted = await _taskRepo.deleteTask(task.id ?? "");
+
+              if (isDeleted) {
+                await getTimelineTask(selectedTimeline.value.id ?? "");
+                Helpers().showSuccessSnackBar("Task deleted successfully");
+              } else {
+                Helpers().showErrorSnackBar("Delete task failed");
+              }
+            },
+            text: "Delete",
+            color: AssetColor.redButton,
+          ),
+        ],
+      ),
+    );
 
     isLoading.value = false;
   }
@@ -265,29 +332,7 @@ class ProjectDetailController extends GetxController
           _addStaffToProject(staff.id ?? "");
         },
         onStaffRemoved: (staff) {
-          Get.dialog(
-            AlertDialog(
-              title: const CustomText("Remove Staff"),
-              content: CustomText(
-                  "Are you sure you want to remove ${staff.name} from this project?"),
-              actions: [
-                CustomButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  text: "Cancel",
-                ),
-                CustomButton(
-                  onPressed: () {
-                    Get.back();
-                    _removeStaffFromProject(staff.id ?? "");
-                  },
-                  text: "Remove",
-                  color: AssetColor.redButton,
-                ),
-              ],
-            ),
-          );
+          _onRemoveStaff(staff);
         },
       );
     } else if (selectedInfoIndex.value == 1) {
@@ -297,10 +342,12 @@ class ProjectDetailController extends GetxController
       );
     } else if (selectedInfoIndex.value == 2) {
       return PaymentProject(
-        projectId: projectId,
         payments: projectPayment,
-        onCreatePayment: (newPayment) {
-          // TODO: Create New Payment Integration
+        client: projectClient.value,
+        vendors: projectVendor,
+        currentUser: currentUser ?? UserDM(),
+        onCreatePayment: () {
+          addNewPayment();
         },
       );
     } else {
@@ -326,6 +373,32 @@ class ProjectDetailController extends GetxController
     }
   }
 
+  _onRemoveStaff(UserDM staff) {
+    Get.dialog(
+      AlertDialog(
+        title: const CustomText("Remove Staff"),
+        content: CustomText(
+            "Are you sure you want to remove ${staff.name} from this project?"),
+        actions: [
+          CustomButton(
+            onPressed: () {
+              Get.back();
+            },
+            text: "Cancel",
+          ),
+          CustomButton(
+            onPressed: () {
+              Get.back();
+              _removeStaffFromProject(staff.id ?? "");
+            },
+            text: "Remove",
+            color: AssetColor.redButton,
+          ),
+        ],
+      ),
+    );
+  }
+
   _removeStaffFromProject(String userId) async {
     isLoading.value = true;
 
@@ -344,6 +417,22 @@ class ProjectDetailController extends GetxController
     }
   }
 
+  addNewPayment() {
+    Get.to(
+      () => AddPayment(
+        projectId: projectId,
+        vendorList: projectVendor,
+      ),
+    )?.then(
+      (isCreated) async {
+        if (isCreated != null && isCreated) {
+          await getProjectPayment();
+          Helpers().showSuccessSnackBar("Payment created successfully");
+        }
+      },
+    );
+  }
+
   void updateInfoController(int value) {
     selectedInfoIndex.value = value;
     tabInfoController.animateTo(value);
@@ -358,11 +447,9 @@ class ProjectDetailController extends GetxController
       ),
     )?.then(
       (isEdited) async {
-        if (isEdited) {
+        if (isEdited != null && isEdited) {
           await getProjectTimeline();
           Helpers().showSuccessSnackBar("Timeline successfully updated");
-        } else {
-          Helpers().showErrorSnackBar("Update timeline failed");
         }
       },
     );
