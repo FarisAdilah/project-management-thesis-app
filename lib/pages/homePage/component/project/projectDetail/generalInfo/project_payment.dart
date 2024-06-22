@@ -32,7 +32,7 @@ class PaymentProject extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(ProjectPaymentController());
 
-    Helpers.writeLog("PaymentProject: ${payments.length}");
+    Helpers.writeLog("currentUser: ${currentUser.toJson()}");
 
     return Container(
       width: double.infinity,
@@ -62,7 +62,7 @@ class PaymentProject extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
               const SizedBox(width: 20),
-              currentUser.role == UserType.admin.name
+              currentUser.role == UserType.projectManager.name
                   ? CustomButton(
                       text: "Add Payment",
                       borderRadius: 8,
