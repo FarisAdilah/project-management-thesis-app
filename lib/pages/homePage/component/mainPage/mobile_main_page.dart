@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
-import 'package:project_management_thesis_app/globalComponent/card/count_card.dart';
+import 'package:project_management_thesis_app/globalComponent/card/mobile_count_card.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/controller_main_page.dart';
@@ -12,10 +12,8 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class MainHomePage extends StatelessWidget {
-  const MainHomePage({
-    super.key,
-  });
+class MobileMainPage extends StatelessWidget {
+  const MobileMainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,56 +32,53 @@ class MainHomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Header (Welcom, Search Bar, Profile Picture)
-                    Row(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Obx(
-                                () => CustomText(
-                                  "Welcome, ${controller.currentUser.value.name ?? ''}!",
-                                  fontSize: 30,
-                                  color: AssetColor.blueSecondaryAccent,
-                                  fontWeight: FontWeight.bold,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Obx(
+                                  () => CustomText(
+                                    "Welcome, ${controller.currentUser.value.name ?? ''}!",
+                                    fontSize: 24,
+                                    color: AssetColor.blueSecondaryAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              const CustomText(
-                                "Let's manage your project here",
-                                fontSize: 20,
-                                color: AssetColor.blueTertiaryAccent,
-                              )
-                            ],
-                          ),
-                        ),
-                        const Expanded(
-                          flex: 2,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: SearchBar(
-                              backgroundColor: WidgetStatePropertyAll(
-                                  AssetColor.whiteBackground),
-                              surfaceTintColor: WidgetStatePropertyAll(
-                                  AssetColor.whiteBackground),
-                              padding: WidgetStatePropertyAll(
-                                EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                              ),
-                              hintText: "Search your project here...",
+                                const CustomText(
+                                  "Let's manage your project here",
+                                  fontSize: 20,
+                                  color: AssetColor.blueTertiaryAccent,
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Obx(
+                            Obx(
                               () => ProfilePicture(
                                 user: controller.currentUser.value,
                               ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        const SearchBar(
+                          leading: Icon(
+                            FontAwesomeIcons.magnifyingGlass,
+                            color: AssetColor.blueTertiaryAccent,
                           ),
+                          backgroundColor: WidgetStatePropertyAll(
+                              AssetColor.whiteBackground),
+                          surfaceTintColor: WidgetStatePropertyAll(
+                              AssetColor.whiteBackground),
+                          padding: WidgetStatePropertyAll(
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          ),
+                          hintText: "Search your project here...",
                         ),
                       ],
                     ),
@@ -94,47 +89,59 @@ class MainHomePage extends StatelessWidget {
                     const CustomText(
                       "General Summary",
                       color: AssetColor.blueTertiaryAccent,
-                      fontSize: 30,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Obx(
-                      () => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      () => Column(
                         children: [
-                          Expanded(
-                            child: CountCard(
-                              title: "Total Staff",
-                              countItem: controller.users.length,
-                              icon: FontAwesomeIcons.users,
-                              margin: const EdgeInsets.only(right: 20),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                child: MobileCountCard(
+                                  title: "Staff",
+                                  countItem: controller.users.length,
+                                  icon: FontAwesomeIcons.users,
+                                  margin: const EdgeInsets.only(bottom: 20),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: MobileCountCard(
+                                  countItem: controller.projects.length,
+                                  title: "Project",
+                                  icon: FontAwesomeIcons.solidFolderOpen,
+                                  margin: const EdgeInsets.only(bottom: 20),
+                                ),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: CountCard(
-                              countItem: controller.projects.length,
-                              title: "Total Project",
-                              icon: FontAwesomeIcons.solidFolderOpen,
-                              margin: const EdgeInsets.only(right: 20),
-                            ),
-                          ),
-                          Expanded(
-                            child: CountCard(
-                              countItem: controller.vendors.length,
-                              title: "Total Vendor",
-                              icon: FontAwesomeIcons.userGear,
-                              margin: const EdgeInsets.only(right: 20),
-                            ),
-                          ),
-                          Expanded(
-                            child: CountCard(
-                              countItem: controller.clients.length,
-                              title: "Total Client",
-                              icon: FontAwesomeIcons.userTie,
-                            ),
-                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                child: MobileCountCard(
+                                  countItem: controller.vendors.length,
+                                  title: "Vendor",
+                                  icon: FontAwesomeIcons.userGear,
+                                  margin: const EdgeInsets.only(bottom: 20),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: MobileCountCard(
+                                  countItem: controller.clients.length,
+                                  title: "Client",
+                                  icon: FontAwesomeIcons.userTie,
+                                  margin: const EdgeInsets.only(bottom: 20),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -145,7 +152,7 @@ class MainHomePage extends StatelessWidget {
                     const CustomText(
                       "List Project",
                       color: AssetColor.blueTertiaryAccent,
-                      fontSize: 30,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                     const SizedBox(
@@ -173,7 +180,7 @@ class MainHomePage extends StatelessWidget {
                               const CustomText(
                                 "All Projects",
                                 color: AssetColor.blackPrimary,
-                                fontSize: 25,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                               controller.currentUser.value.role ==

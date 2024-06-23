@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/clientPage/clientList/client_list.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/mainPage/main_page.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/mobile_main_page.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/tablet_main_page.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/web_main_page.dart';
 import 'package:project_management_thesis_app/pages/profilePage/profile.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/staff_list.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorList/vendor_list.dart';
 import 'package:project_management_thesis_app/pages/wrapper/controller_wrapper.dart';
@@ -47,7 +50,11 @@ class HomePageController extends GetxController with Storage {
   Widget getSelectedMenuWidget() {
     Helpers.writeLog("selectedMenuId: ${selectedMenuId.value}");
     if (selectedMenuId.value == 1) {
-      return const MainHomePage();
+      return const ResponsiveLayout(
+        mobileScaffold: MobileMainPage(),
+        tabletScaffold: TabletMainPage(),
+        desktopScaffold: WebMainPage(),
+      );
     } else if (selectedMenuId.value == 2) {
       return const StaffList();
     } else if (selectedMenuId.value == 3) {

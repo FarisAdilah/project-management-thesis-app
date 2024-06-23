@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
-class CountCard extends StatelessWidget {
+class MobileCountCard extends StatelessWidget {
   final int countItem;
   final String title;
   final IconData icon;
   final EdgeInsets? margin;
 
-  const CountCard({
+  const MobileCountCard({
     super.key,
     required this.countItem,
     required this.title,
@@ -21,7 +21,7 @@ class CountCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 15,
-        horizontal: 35,
+        horizontal: 15,
       ),
       margin: margin,
       decoration: BoxDecoration(
@@ -36,24 +36,28 @@ class CountCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
             icon,
             size: 40,
             color: AssetColor.blueTertiaryAccent,
           ),
-          const SizedBox(width: 30),
-          Column(
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomText(
                 countItem.toString(),
                 fontSize: 30,
+                textAlign: TextAlign.center,
               ),
+              const SizedBox(width: 10),
               CustomText(
                 title,
                 fontSize: 20,
+                textAlign: TextAlign.center,
               ),
             ],
           ),
