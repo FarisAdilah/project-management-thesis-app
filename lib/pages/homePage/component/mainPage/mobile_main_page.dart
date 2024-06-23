@@ -7,10 +7,10 @@ import 'package:project_management_thesis_app/globalComponent/card/mobile_count_
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/controller_main_page.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/mobile_project_content.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
-import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class MobileMainPage extends StatelessWidget {
   const MobileMainPage({super.key});
@@ -158,114 +158,38 @@ class MobileMainPage extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(25),
-                      decoration: BoxDecoration(
-                        color: AssetColor.whiteBackground,
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AssetColor.grey.withOpacity(0.5),
-                            spreadRadius: 3,
-                            blurRadius: 5,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const CustomText(
-                                "All Projects",
-                                color: AssetColor.blackPrimary,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              controller.currentUser.value.role ==
-                                      UserType.admin.name
-                                  ? const SizedBox(width: 20)
-                                  : const SizedBox(),
-                              controller.currentUser.value.role ==
-                                      UserType.admin.name
-                                  ? CustomButton(
-                                      text: "Add New Project",
-                                      color: AssetColor.greenButton,
-                                      borderRadius: 8,
-                                      onPressed: () {
-                                        controller.createProject();
-                                      },
-                                    )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          _buildRow(
-                            "Project Name",
-                            "Client",
-                            "Start Date",
-                            "End Date",
-                            "Status",
-                            isTitle: true,
-                          ),
-                          Obx(
-                            () => ListView.builder(
-                              itemCount: controller.projects.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                ProjectDM project = controller.projects[index];
+                    controller.currentUser.value.role == UserType.admin.name
+                        ? CustomButton(
+                            text: "Add New Project",
+                            color: AssetColor.greenButton,
+                            borderRadius: 8,
+                            onPressed: () {
+                              controller.createProject();
+                            },
+                          )
+                        : const SizedBox(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Obx(
+                      () => ListView.builder(
+                        itemCount: controller.projects.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          ProjectDM project = controller.projects[index];
 
-                                return InkWell(
-                                  onTap: () => controller.showProjectDetail(
-                                    project.id ?? "",
-                                  ),
-                                  onHover: (value) =>
-                                      controller.setHoverValue(value, index),
-                                  child: Obx(
-                                    () => AnimatedContainer(
-                                        duration:
-                                            const Duration(milliseconds: 200),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        decoration: BoxDecoration(
-                                          color: controller.isHoverListProject
-                                                      .value &&
-                                                  controller
-                                                          .selectedIndexProject
-                                                          .value ==
-                                                      index
-                                              ? AssetColor.greyBackground
-                                              : AssetColor.whiteBackground,
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              color: AssetColor.grey
-                                                  .withOpacity(0.5),
-                                              width: 1,
-                                            ),
-                                          ),
-                                        ),
-                                        child: _buildRow(
-                                          project.name ?? "",
-                                          project.clientName ?? "",
-                                          Helpers().convertDateStringFormat(
-                                            project.startDate ?? "2024-04-04",
-                                          ),
-                                          Helpers().convertDateStringFormat(
-                                            project.endDate ?? "2024-04-04",
-                                          ),
-                                          project.status ?? "",
-                                        )),
-                                  ),
-                                );
-                              },
+                          return InkWell(
+                            onTap: () => controller.showProjectDetail(
+                              project.id ?? "",
                             ),
-                          ),
-                        ],
+                            child: MobileProjectContent(
+                              project: project,
+                            ),
+                          );
+                        },
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

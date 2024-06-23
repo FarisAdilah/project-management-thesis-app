@@ -50,7 +50,7 @@ class MobileCountCard extends StatelessWidget {
             children: [
               CustomText(
                 countItem.toString(),
-                fontSize: 30,
+                fontSize: 24,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(width: 10),
