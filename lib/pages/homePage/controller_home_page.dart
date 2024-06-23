@@ -7,7 +7,9 @@ import 'package:project_management_thesis_app/pages/homePage/component/mainPage/
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/web_main_page.dart';
 import 'package:project_management_thesis_app/pages/profilePage/profile.dart';
 import 'package:project_management_thesis_app/pages/responsive_layout.dart';
-import 'package:project_management_thesis_app/pages/staffPage/staffList/staff_list.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffList/mobile_staff_list.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffList/tablet_staff_list.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffList/web_staff_list.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorList/vendor_list.dart';
 import 'package:project_management_thesis_app/pages/wrapper/controller_wrapper.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
@@ -56,7 +58,11 @@ class HomePageController extends GetxController with Storage {
         desktopScaffold: WebMainPage(),
       );
     } else if (selectedMenuId.value == 2) {
-      return const StaffList();
+      return const ResponsiveLayout(
+        mobileScaffold: MobileStaffList(),
+        tabletScaffold: TabletStaffList(),
+        desktopScaffold: WebStaffList(),
+      );
     } else if (selectedMenuId.value == 3) {
       return const VendorList();
     } else if (selectedMenuId.value == 4) {

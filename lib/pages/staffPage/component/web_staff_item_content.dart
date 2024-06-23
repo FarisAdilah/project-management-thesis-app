@@ -9,7 +9,7 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class StaffItemContent extends StatelessWidget {
+class WebStaffItemContent extends StatelessWidget {
   final UserDM user;
   final UserDM currentUser;
   final VoidCallback onUpdate;
@@ -18,7 +18,7 @@ class StaffItemContent extends StatelessWidget {
   final Function(bool) onHover;
   final VoidCallback onTap;
 
-  const StaffItemContent({
+  const WebStaffItemContent({
     super.key,
     required this.user,
     required this.onUpdate,

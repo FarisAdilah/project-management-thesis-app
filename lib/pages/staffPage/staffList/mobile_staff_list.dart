@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/staffPage/component/staff_item_content.dart';
+import 'package:project_management_thesis_app/pages/staffPage/component/mobile_staff_item_content.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/controller_staff_list.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 
-class StaffList extends StatelessWidget {
-  const StaffList({
+class MobileStaffList extends StatelessWidget {
+  const MobileStaffList({
     super.key,
   });
 
@@ -31,7 +31,7 @@ class StaffList extends StatelessWidget {
                   const CustomText(
                     "User List",
                     color: AssetColor.blackPrimary,
-                    fontSize: 36,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                   const SizedBox(
@@ -43,15 +43,23 @@ class StaffList extends StatelessWidget {
                       int admin = controller.totalAdmin.value;
                       int projectManager = controller.totalProjectManager.value;
                       int staff = controller.totalStaff.value;
-                      return Row(
+                      return Column(
                         children: [
-                          _buildTag(supervisor, "Supervisor"),
-                          const SizedBox(width: 10),
-                          _buildTag(admin, "Admin"),
-                          const SizedBox(width: 10),
-                          _buildTag(projectManager, "Project Manager"),
-                          const SizedBox(width: 10),
-                          _buildTag(staff, "Staff"),
+                          Row(
+                            children: [
+                              _buildTag(supervisor, "Supervisor"),
+                              const SizedBox(width: 10),
+                              _buildTag(admin, "Admin"),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              _buildTag(projectManager, "Project Manager"),
+                              const SizedBox(width: 10),
+                              _buildTag(staff, "Staff"),
+                            ],
+                          )
                         ],
                       );
                     },
@@ -99,19 +107,12 @@ class StaffList extends StatelessWidget {
                         itemBuilder: (context, index) {
                           UserDM user = controller.users[index];
 
-                          return Obx(
-                            () => StaffItemContent(
-                              user: user,
-                              currentUser: controller.currentUser ?? UserDM(),
-                              onUpdate: () => controller.onUpdateUser(),
-                              onDelete: () => controller.onDeleteUser(user),
-                              onHover: (value) =>
-                                  controller.setHoverValue(value, index),
-                              onTap: () => controller.showUserDetail(user),
-                              isHover: controller.selectedIndexStaff.value ==
-                                      index &&
-                                  controller.isHoverStaff.value,
-                            ),
+                          return MobileStaffItemContent(
+                            user: user,
+                            currentUser: controller.currentUser ?? UserDM(),
+                            onUpdate: () => controller.onUpdateUser(),
+                            onDelete: () => controller.onDeleteUser(user),
+                            onTap: () => controller.showUserDetail(user),
                           );
                         },
                       ),
