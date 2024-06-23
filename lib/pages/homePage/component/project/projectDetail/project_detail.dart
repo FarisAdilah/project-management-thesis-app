@@ -14,10 +14,12 @@ import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class ProjectDetail extends StatelessWidget {
   final String projectId;
+  final VoidCallback onProjectClosing;
 
   const ProjectDetail({
     super.key,
     required this.projectId,
+    required this.onProjectClosing,
   });
 
   @override
@@ -390,10 +392,7 @@ class ProjectDetail extends StatelessWidget {
                         isEnabled: controller.isButtonCloseEnabled.value,
                         text: "Close Project",
                         onPressed: controller.isButtonCloseEnabled.value
-                            ? () {
-                                // TODO: Implement Project Closing
-                                // controller.closeProject();
-                              }
+                            ? onProjectClosing
                             : null,
                         color: AssetColor.redButton,
                         disableColor: AssetColor.redButton.withOpacity(0.5),

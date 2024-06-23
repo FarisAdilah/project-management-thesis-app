@@ -269,7 +269,52 @@ class MainPageController extends GetxController with Storage {
     Get.to(
       () => ProjectDetail(
         projectId: projectId,
+        onProjectClosing: () => _onCloseProject(projectId),
       ),
     );
+  }
+
+  _onCloseProject(String projectId) {
+    Get.dialog(
+      AlertDialog(
+        title: const CustomText("Close Project"),
+        content: const CustomText(
+          "Are you sure you want to close this project? This action cannot be undone.",
+        ),
+        actions: [
+          CustomButton(
+            onPressed: () {
+              Get.back();
+            },
+            text: "Cancel",
+          ),
+          CustomButton(
+            onPressed: () {
+              Get.back();
+              _closeProject(projectId);
+            },
+            text: "Close",
+            color: AssetColor.redButton,
+          ),
+        ],
+      ),
+    );
+  }
+
+  _closeProject(String projectId) async {
+    isLoading.value = true;
+
+    bool isClosed = await _projectRepo.updateProjectStatus(
+        projectId, ProjectStatusType.closing.name);
+
+    if (isClosed) {
+      Get.back();
+      await _getAllProjects();
+      Helpers().showSuccessSnackBar("Project closed successfully");
+    } else {
+      Helpers().showErrorSnackBar("Close project failed");
+    }
+
+    isLoading.value = false;
   }
 }

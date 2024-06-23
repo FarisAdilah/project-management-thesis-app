@@ -333,6 +333,7 @@ Widget _buildStatus(String status) {
     title = "Ongoing";
   } else if (status == ProjectStatusType.closing.name) {
     statusColor = AssetColor.orange;
+    title = "Closing";
   } else {
     statusColor = AssetColor.green;
     title = "Completed";
