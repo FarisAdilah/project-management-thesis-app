@@ -7,7 +7,7 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_client_vendor.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_payment.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_staff.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/payment_add.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/task_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/timeline_form.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
@@ -54,7 +54,7 @@ class ProjectDetailController extends GetxController
   Rx<TimelineDM> selectedTimeline = TimelineDM().obs;
   RxList<ScheduleTaskDM> task = <ScheduleTaskDM>[].obs;
   Rx<ScheduleTaskDM> selectedTask = ScheduleTaskDM().obs;
-  RxBool isButtonCloseEnabled = false.obs;
+  RxBool isButtonCloseEnabled = true.obs;
 
   ProjectDetailController({required this.projectId});
 
@@ -425,7 +425,7 @@ class ProjectDetailController extends GetxController
 
   _addNewPayment() {
     Get.to(
-      () => AddPayment(
+      () => PaymentForm(
         projectId: projectId,
         vendorList: projectVendor,
       ),
@@ -441,7 +441,7 @@ class ProjectDetailController extends GetxController
 
   _updatePayment(PaymentDM payment) {
     Get.to(
-      () => AddPayment(
+      () => PaymentForm(
         projectId: projectId,
         vendorList: projectVendor,
         isEdit: true,

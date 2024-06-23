@@ -6,20 +6,20 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/controller_payment_add.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/controller_payment_form.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class AddPayment extends StatelessWidget {
+class PaymentForm extends StatelessWidget {
   final String projectId;
   final List<VendorDM> vendorList;
   final bool isEdit;
   final PaymentDM? payment;
 
-  const AddPayment({
+  const PaymentForm({
     super.key,
     required this.projectId,
     required this.vendorList,
@@ -29,7 +29,7 @@ class AddPayment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AddPaymentController(
+    final controller = Get.put(PaymentFormController(
       projectId: projectId,
       availableVendor: vendorList,
       isEdit: isEdit,

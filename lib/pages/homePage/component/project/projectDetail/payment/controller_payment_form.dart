@@ -13,7 +13,7 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class AddPaymentController extends GetxController {
+class PaymentFormController extends GetxController {
   final _paymentRepo = PaymentRepository.instance;
   final _clientRepo = ClientRepository.instance;
   final _vendorRepo = VendorRepository.instance;
@@ -25,7 +25,7 @@ class AddPaymentController extends GetxController {
   final bool isEdit;
   final PaymentDM? payment;
 
-  AddPaymentController({
+  PaymentFormController({
     required this.projectId,
     required this.availableVendor,
     this.isEdit = false,
