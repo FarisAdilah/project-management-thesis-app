@@ -4,12 +4,12 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 import 'package:project_management_thesis_app/utils/model/menus.dart';
 
-class MenuList extends StatelessWidget {
+class MobileMenuList extends StatelessWidget {
   final List<Menus> menus;
   final Function(Menus) onTapMenu;
   final int selectedMenuId;
 
-  const MenuList({
+  const MobileMenuList({
     super.key,
     required this.menus,
     required this.onTapMenu,
