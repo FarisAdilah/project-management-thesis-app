@@ -9,13 +9,13 @@ import 'package:project_management_thesis_app/repository/client/dataModel/client
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
-class ClientDetail extends StatelessWidget {
+class WebClientDetail extends StatelessWidget {
   final ClientDM client;
   final VoidCallback onClose;
   final Function(ClientDM) onEditClient;
   final Function(ClientDM) onDeleteClient;
 
-  const ClientDetail({
+  const WebClientDetail({
     super.key,
     required this.client,
     required this.onClose,
