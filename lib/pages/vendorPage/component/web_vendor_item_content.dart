@@ -6,11 +6,11 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
-class VendorItemContent extends StatelessWidget {
+class WebVendorItemContent extends StatelessWidget {
   final VendorDM vendor;
   final VoidCallback onPressed;
 
-  const VendorItemContent({
+  const WebVendorItemContent({
     super.key,
     required this.vendor,
     required this.onPressed,

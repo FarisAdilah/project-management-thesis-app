@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/component/vendor_item_content.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/component/web_vendor_item_content.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorList/controller_vendor_list.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 
-class VendorList extends StatelessWidget {
-  const VendorList({super.key});
+class WebVendorList extends StatelessWidget {
+  const WebVendorList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class VendorList extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var vendor = controller.vendors[index];
 
-                        return VendorItemContent(
+                        return WebVendorItemContent(
                           vendor: vendor,
                           onPressed: () => controller.showVendorDetail(vendor),
                         );

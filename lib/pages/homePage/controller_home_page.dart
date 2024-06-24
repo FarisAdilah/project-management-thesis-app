@@ -10,7 +10,9 @@ import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/mobile_staff_list.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/tablet_staff_list.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/web_staff_list.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/vendorList/vendor_list.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorList/mobile_vendor_list.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorList/tablet_vendor_list.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorList/web_vendor_list.dart';
 import 'package:project_management_thesis_app/pages/wrapper/controller_wrapper.dart';
 import 'package:project_management_thesis_app/repository/authentication/authenticaton_repository.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
@@ -64,7 +66,11 @@ class HomePageController extends GetxController with Storage {
         desktopScaffold: WebStaffList(),
       );
     } else if (selectedMenuId.value == 3) {
-      return const VendorList();
+      return const ResponsiveLayout(
+        mobileScaffold: MobileVendorList(),
+        tabletScaffold: TabletVendorList(),
+        desktopScaffold: WebVendorList(),
+      );
     } else if (selectedMenuId.value == 4) {
       return const ClientList();
     } else if (selectedMenuId.value == 5) {
