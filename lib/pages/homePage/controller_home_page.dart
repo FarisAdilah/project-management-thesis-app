@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/clientPage/clientList/client_list.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientList/mobile_client_list.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientList/tablet_client_list.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientList/web_client_list.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/mobile_main_page.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/tablet_main_page.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/web_main_page.dart';
@@ -72,7 +74,11 @@ class HomePageController extends GetxController with Storage {
         desktopScaffold: WebVendorList(),
       );
     } else if (selectedMenuId.value == 4) {
-      return const ClientList();
+      return const ResponsiveLayout(
+        mobileScaffold: MobileClientList(),
+        tabletScaffold: TabletClientList(),
+        desktopScaffold: WebClientList(),
+      );
     } else if (selectedMenuId.value == 5) {
       return const Profile();
     } else {

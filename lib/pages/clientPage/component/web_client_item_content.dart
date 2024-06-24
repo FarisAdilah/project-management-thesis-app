@@ -4,11 +4,11 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
-class ClientItemContent extends StatelessWidget {
+class WebClientItemContent extends StatelessWidget {
   final ClientDM client;
   final VoidCallback onPressed;
 
-  const ClientItemContent({
+  const WebClientItemContent({
     super.key,
     required this.client,
     required this.onPressed,

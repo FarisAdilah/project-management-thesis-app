@@ -4,18 +4,17 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/clientPage/clientList/controller_client_list.dart';
-import 'package:project_management_thesis_app/pages/clientPage/component/client_item_content.dart';
+import 'package:project_management_thesis_app/pages/clientPage/component/web_client_item_content.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 
-class ClientList extends StatelessWidget {
-  const ClientList({super.key});
+class WebClientList extends StatelessWidget {
+  const WebClientList({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ClientListController());
 
-    // IMPLEMENT EDIT & UPDATE UI
     return Scaffold(
       body: Obx(
         () => Stack(
@@ -80,7 +79,7 @@ class ClientList extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var client = controller.clients[index];
 
-                        return ClientItemContent(
+                        return WebClientItemContent(
                           client: client,
                           onPressed: () {
                             controller.showClientDetail(client);
