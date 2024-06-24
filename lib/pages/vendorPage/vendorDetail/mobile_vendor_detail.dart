@@ -60,7 +60,7 @@ class MobileVendorDetail extends StatelessWidget {
                                         )
                                       : const SizedBox(),
                                   vendor.image?.isNotEmpty ?? false
-                                      ? const SizedBox(width: 25)
+                                      ? const SizedBox(height: 10)
                                       : const SizedBox(),
                                   Column(
                                     crossAxisAlignment:
