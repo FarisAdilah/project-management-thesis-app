@@ -7,7 +7,9 @@ import 'package:project_management_thesis_app/pages/clientPage/clientList/web_cl
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/mobile_main_page.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/tablet_main_page.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/web_main_page.dart';
-import 'package:project_management_thesis_app/pages/profilePage/profile.dart';
+import 'package:project_management_thesis_app/pages/profilePage/mobile_profile.dart';
+import 'package:project_management_thesis_app/pages/profilePage/web_profile.dart';
+import 'package:project_management_thesis_app/pages/profilePage/tablet_profile.dart';
 import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/mobile_staff_list.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffList/tablet_staff_list.dart';
@@ -80,7 +82,11 @@ class HomePageController extends GetxController with Storage {
         desktopScaffold: WebClientList(),
       );
     } else if (selectedMenuId.value == 5) {
-      return const Profile();
+      return const ResponsiveLayout(
+        mobileScaffold: MobileProfile(),
+        tabletScaffold: TabletProfile(),
+        desktopScaffold: WebProfile(),
+      );
     } else {
       return const Center(child: CustomText("Ini Halaman Untuk Data Lainnya"));
     }

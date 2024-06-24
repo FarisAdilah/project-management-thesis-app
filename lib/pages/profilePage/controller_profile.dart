@@ -14,6 +14,7 @@ class ProfileController extends GetxController with Storage {
   final roleController = TextEditingController();
 
   Rx<bool> isObscure = true.obs;
+  Rx<bool> isEnabled = false.obs;
 
   @override
   void onInit() async {
@@ -25,10 +26,31 @@ class ProfileController extends GetxController with Storage {
     emailController.text = user.value.email ?? "";
     passwordController.text = user.value.password ?? "";
     phoneController.text = user.value.phoneNumber ?? "";
-    roleController.text = user.value.role ?? "";
+    roleController.text = Helpers().getUserRole(user.value.role ?? "");
   }
 
   toggleObscure() {
     isObscure.value = !isObscure.value;
+  }
+
+  validateInput(String type, String value) {
+    if (value.isEmpty) {
+      isEnabled.value = false;
+      return;
+    }
+
+    if (type == "password") {
+      if (value != user.value.password) {
+        isEnabled.value = true;
+      } else {
+        isEnabled.value = false;
+      }
+    } else {
+      if (value != user.value.phoneNumber) {
+        isEnabled.value = true;
+      } else {
+        isEnabled.value = false;
+      }
+    }
   }
 }

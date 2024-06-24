@@ -11,8 +11,8 @@ import 'package:project_management_thesis_app/pages/profilePage/controller_profi
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+class WebProfile extends StatelessWidget {
+  const WebProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +96,7 @@ class Profile extends StatelessWidget {
                                     "Name",
                                     FontAwesomeIcons.user,
                                     controller: controller.nameController,
+                                    enabled: false,
                                   ),
                                 ),
                                 const SizedBox(
@@ -128,6 +129,12 @@ class Profile extends StatelessWidget {
                                       obscureCallback: () {
                                         controller.toggleObscure();
                                       },
+                                      onChanged: (password) {
+                                        controller.validateInput(
+                                          "password",
+                                          password,
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),
@@ -139,6 +146,12 @@ class Profile extends StatelessWidget {
                                     "Phone Number",
                                     FontAwesomeIcons.phone,
                                     controller: controller.phoneController,
+                                    onChanged: (number) {
+                                      controller.validateInput(
+                                        "phoneNumber",
+                                        number,
+                                      );
+                                    },
                                   ),
                                 ),
                               ],
@@ -153,6 +166,7 @@ class Profile extends StatelessWidget {
                                     "Role",
                                     FontAwesomeIcons.userTag,
                                     controller: controller.roleController,
+                                    enabled: false,
                                   ),
                                 ),
                                 const SizedBox(
@@ -164,9 +178,14 @@ class Profile extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                             ),
-                            CustomButton(
-                              text: "Update Data",
-                              onPressed: () {},
+                            Obx(
+                              () => CustomButton(
+                                text: "Update Data",
+                                isEnabled: controller.isEnabled.value,
+                                disableColor: AssetColor.blueSecondaryAccent
+                                    .withOpacity(0.5),
+                                onPressed: () {},
+                              ),
                             ),
                           ],
                         ),
@@ -207,6 +226,7 @@ Widget _buildInput(
   bool? isPassword,
   bool? enabled,
   VoidCallback? obscureCallback,
+  Function(String)? onChanged,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,6 +246,7 @@ Widget _buildInput(
         isPassword: isPassword,
         enabled: enabled,
         obscureCallback: obscureCallback,
+        onChanged: onChanged != null ? (value) => onChanged(value) : null,
       ),
     ],
   );

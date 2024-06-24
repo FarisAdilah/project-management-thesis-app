@@ -8,6 +8,7 @@ class CustomInputBorder extends StatelessWidget {
   final bool? isPassword;
   final bool? enabled;
   final VoidCallback? obscureCallback;
+  final Function(String)? onChanged;
 
   const CustomInputBorder({
     super.key,
@@ -17,6 +18,7 @@ class CustomInputBorder extends StatelessWidget {
     this.isPassword,
     this.enabled,
     this.obscureCallback,
+    this.onChanged,
   });
 
   @override
@@ -25,6 +27,7 @@ class CustomInputBorder extends StatelessWidget {
       controller: controller,
       obscureText: isPassword ?? false,
       enabled: enabled ?? true,
+      onChanged: onChanged != null ? (value) => onChanged!(value) : null,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(
