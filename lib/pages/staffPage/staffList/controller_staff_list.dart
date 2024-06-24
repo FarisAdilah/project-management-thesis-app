@@ -4,7 +4,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/staffPage/staffDetail/staff_detail.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffDetail/mobile_staff_detail.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffDetail/web_staff_detail.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffForm/staff_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/user/user_repository.dart';
@@ -164,10 +166,24 @@ class StaffListController extends GetxController with Storage {
   }
 
   showUserDetail(UserDM user) {
-    Get.dialog(AlertDialog(
-      backgroundColor: AssetColor.greyBackground,
-      contentPadding: const EdgeInsets.all(0),
-      content: StaffDetail(user: user),
-    ));
+    Get.dialog(
+      ResponsiveLayout(
+        mobileScaffold: AlertDialog(
+          backgroundColor: AssetColor.greyBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: MobileStaffDetail(user: user),
+        ),
+        tabletScaffold: AlertDialog(
+          backgroundColor: AssetColor.greyBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: WebStaffDetail(user: user),
+        ),
+        desktopScaffold: AlertDialog(
+          backgroundColor: AssetColor.greyBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: WebStaffDetail(user: user),
+        ),
+      ),
+    );
   }
 }

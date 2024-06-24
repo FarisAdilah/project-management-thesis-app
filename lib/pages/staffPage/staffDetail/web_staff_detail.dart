@@ -10,10 +10,10 @@ import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class StaffDetail extends StatelessWidget {
+class WebStaffDetail extends StatelessWidget {
   final UserDM user;
 
-  const StaffDetail({
+  const WebStaffDetail({
     super.key,
     required this.user,
   });
