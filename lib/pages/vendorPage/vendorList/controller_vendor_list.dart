@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/vendorDetail/vendor_detail.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorDetail/mobile_vendor_detail.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorDetail/web_vendor_detail.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/vendor_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
@@ -144,18 +146,36 @@ class VendorListController extends GetxController with Storage {
 
   showVendorDetail(VendorDM vendor) {
     Get.dialog(
-      AlertDialog(
-        backgroundColor: AssetColor.greyBackground,
-        contentPadding: const EdgeInsets.all(0),
-        content: VendorDetail(
-          vendor: vendor,
-          onClose: () => Get.back(),
-          onEditVendor: (vendor) {
-            showEditForm(vendor);
-          },
-          onDeleteVendor: (vendor) {
-            onDeleteVendor(vendor);
-          },
+      ResponsiveLayout(
+        mobileScaffold: AlertDialog(
+          backgroundColor: AssetColor.greyBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: MobileVendorDetail(
+            vendor: vendor,
+            onClose: () => Get.back(),
+            onEditVendor: (vendor) => showEditForm(vendor),
+            onDeleteVendor: (vendor) => onDeleteVendor(vendor),
+          ),
+        ),
+        tabletScaffold: AlertDialog(
+          backgroundColor: AssetColor.greyBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: VendorDetail(
+            vendor: vendor,
+            onClose: () => Get.back(),
+            onEditVendor: (vendor) => showEditForm(vendor),
+            onDeleteVendor: (vendor) => onDeleteVendor(vendor),
+          ),
+        ),
+        desktopScaffold: AlertDialog(
+          backgroundColor: AssetColor.greyBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: VendorDetail(
+            vendor: vendor,
+            onClose: () => Get.back(),
+            onEditVendor: (vendor) => showEditForm(vendor),
+            onDeleteVendor: (vendor) => onDeleteVendor(vendor),
+          ),
         ),
       ),
     );
