@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/staff/select_staff.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/staff/web_select_staff.dart';
 import 'package:project_management_thesis_app/repository/scheduleTask/dataModel/schedule_task_dm.dart';
 import 'package:project_management_thesis_app/repository/scheduleTask/firebaseModel/schedule_taks_firebase.dart';
 import 'package:project_management_thesis_app/repository/scheduleTask/schedule_task_repository.dart';
@@ -84,7 +84,7 @@ class TaskFormController extends GetxController {
     Get.dialog(
       AlertDialog(
         backgroundColor: AssetColor.whiteBackground,
-        content: SelectStaff(
+        content: WebSelectStaff(
           initialStaff: chosenStaff.value,
           userRole: UserType.staff.name,
           selectedStaffList: projectStaff,

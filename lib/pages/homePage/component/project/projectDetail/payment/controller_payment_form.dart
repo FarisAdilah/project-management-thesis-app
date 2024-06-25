@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/client/select_client.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/vendor/select_vendor.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/client/web_select_client.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/vendor/web_select_vendor.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
@@ -99,7 +99,7 @@ class PaymentFormController extends GetxController {
     Get.dialog(
       AlertDialog(
         backgroundColor: AssetColor.whiteBackground,
-        content: SelectClient(
+        content: WebSelectClient(
           initialClient: selectedClient.value,
           onClientSelected: (client) {
             selectedClient.value = client;
@@ -114,7 +114,7 @@ class PaymentFormController extends GetxController {
     Get.dialog(
       AlertDialog(
         backgroundColor: AssetColor.whiteBackground,
-        content: SelectVendor(
+        content: WebSelectVendor(
           projectId: projectId,
           onVendorSelected: (vendor) {
             selectedVendor.value = vendor;

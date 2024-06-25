@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/client/select_client.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/staff/select_staff.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/vendor/select_vendor.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/client/mobile_select_client.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/client/web_select_client.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/client/tablet_select_client.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/staff/mobile_select_staff.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/staff/tablet_select_staff.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/staff/web_select_staff.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/vendor/mobile_select_vendor.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/vendor/tablet_select_vendor.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/vendor/web_select_vendor.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
@@ -124,13 +131,36 @@ class ProjectFormController extends GetxController {
 
   selectClient() {
     Get.dialog(
-      AlertDialog(
-        backgroundColor: AssetColor.whiteBackground,
-        content: SelectClient(
-          initialClient: chosenClient.value,
-          onClientSelected: (client) {
-            chosenClient.value = client;
-          },
+      ResponsiveLayout(
+        mobileScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: MobileSelectClient(
+            initialClient: chosenClient.value,
+            onClientSelected: (client) {
+              chosenClient.value = client;
+            },
+          ),
+        ),
+        tabletScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: TabletSelectClient(
+            initialClient: chosenClient.value,
+            onClientSelected: (client) {
+              chosenClient.value = client;
+            },
+          ),
+        ),
+        desktopScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: WebSelectClient(
+            initialClient: chosenClient.value,
+            onClientSelected: (client) {
+              chosenClient.value = client;
+            },
+          ),
         ),
       ),
     );
@@ -142,13 +172,36 @@ class ProjectFormController extends GetxController {
 
   selectVendor() {
     Get.dialog(
-      AlertDialog(
-        backgroundColor: AssetColor.whiteBackground,
-        content: SelectVendor(
-          onVendorSelected: (vendor) {
-            selectedVendor.add(vendor);
-          },
-          selectedVendor: selectedVendor,
+      ResponsiveLayout(
+        mobileScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: MobileSelectVendor(
+            onVendorSelected: (vendor) {
+              selectedVendor.add(vendor);
+            },
+            selectedVendor: selectedVendor,
+          ),
+        ),
+        tabletScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: TabletSelectVendor(
+            onVendorSelected: (vendor) {
+              selectedVendor.add(vendor);
+            },
+            selectedVendor: selectedVendor,
+          ),
+        ),
+        desktopScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: WebSelectVendor(
+            onVendorSelected: (vendor) {
+              selectedVendor.add(vendor);
+            },
+            selectedVendor: selectedVendor,
+          ),
         ),
       ),
     );
@@ -160,18 +213,51 @@ class ProjectFormController extends GetxController {
 
   selectProjectManager() {
     Get.dialog(
-      AlertDialog(
-        backgroundColor: AssetColor.whiteBackground,
-        content: SelectStaff(
-          initialStaff: chosenProjectManager.value,
-          userRole: UserType.projectManager.name,
-          selectedStaffList: const [],
-          onStaffSelected: (projectManager) {
-            chosenProjectManager.value = projectManager;
-          },
-          title: "Select Project Manager",
-          searchHint: "Search Project Manager",
-          textButton: "Select",
+      ResponsiveLayout(
+        mobileScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: MobileSelectStaff(
+            initialStaff: chosenProjectManager.value,
+            userRole: UserType.projectManager.name,
+            selectedStaffList: const [],
+            onStaffSelected: (projectManager) {
+              chosenProjectManager.value = projectManager;
+            },
+            title: "Select Project Manager",
+            searchHint: "Search Project Manager",
+            textButton: "Select",
+          ),
+        ),
+        tabletScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: TabletSelectStaff(
+            initialStaff: chosenProjectManager.value,
+            userRole: UserType.projectManager.name,
+            selectedStaffList: const [],
+            onStaffSelected: (projectManager) {
+              chosenProjectManager.value = projectManager;
+            },
+            title: "Select Project Manager",
+            searchHint: "Search Project Manager",
+            textButton: "Select",
+          ),
+        ),
+        desktopScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: WebSelectStaff(
+            initialStaff: chosenProjectManager.value,
+            userRole: UserType.projectManager.name,
+            selectedStaffList: const [],
+            onStaffSelected: (projectManager) {
+              chosenProjectManager.value = projectManager;
+            },
+            title: "Select Project Manager",
+            searchHint: "Search Project Manager",
+            textButton: "Select",
+          ),
         ),
       ),
     );

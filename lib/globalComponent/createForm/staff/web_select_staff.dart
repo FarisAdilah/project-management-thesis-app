@@ -8,7 +8,7 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
-class SelectStaff extends StatelessWidget {
+class WebSelectStaff extends StatelessWidget {
   final UserDM? initialStaff;
   final List<UserDM> selectedStaffList;
   final Function(UserDM) onStaffSelected;
@@ -18,7 +18,7 @@ class SelectStaff extends StatelessWidget {
   final String? textButton;
   final bool isAlreadyExist;
 
-  const SelectStaff({
+  const WebSelectStaff({
     super.key,
     this.initialStaff,
     required this.selectedStaffList,

@@ -11,11 +11,11 @@ import 'package:project_management_thesis_app/repository/project/dataModel/proje
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class ProjectForm extends StatelessWidget {
+class WebProjectForm extends StatelessWidget {
   final bool isEdit;
   final ProjectDM? project;
 
-  const ProjectForm({
+  const WebProjectForm({
     super.key,
     this.isEdit = false,
     this.project,
@@ -396,6 +396,7 @@ class ProjectForm extends StatelessWidget {
                       child: Image.asset(
                         AssetImages.backgroundCreateProject,
                         fit: BoxFit.cover,
+                        height: double.infinity,
                         alignment: Alignment.bottomCenter,
                       ),
                     ),

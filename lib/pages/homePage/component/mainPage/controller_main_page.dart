@@ -5,9 +5,12 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pending_project.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectForm/project_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectForm/mobile_project_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectForm/tablet_project_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectForm/web_project_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/project_detail.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/project_pending_detail.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
@@ -193,7 +196,7 @@ class MainPageController extends GetxController with Storage {
                 {
                   Get.back(),
                   Get.to(
-                    () => ProjectForm(
+                    () => WebProjectForm(
                       project: project,
                       isEdit: true,
                     ),
@@ -222,7 +225,13 @@ class MainPageController extends GetxController with Storage {
   }
 
   createProject() {
-    Get.to(() => const ProjectForm())?.whenComplete(
+    Get.to(
+      () => const ResponsiveLayout(
+        mobileScaffold: MobileProjectForm(),
+        tabletScaffold: TabletProjectForm(),
+        desktopScaffold: WebProjectForm(),
+      ),
+    )?.whenComplete(
       () {
         _getAllProjects();
       },

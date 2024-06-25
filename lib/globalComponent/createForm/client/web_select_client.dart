@@ -2,36 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/vendor/controller_select_vendor.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/client/controller_select_client.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
+import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
-class SelectVendor extends StatelessWidget {
-  final String? projectId;
-  final VendorDM? initialVendor;
-  final Function(VendorDM) onVendorSelected;
-  final bool? isProject;
-  final List<VendorDM>? selectedVendor;
-  final List<VendorDM>? availableVendor;
+class WebSelectClient extends StatelessWidget {
+  final ClientDM? initialClient;
+  final Function(ClientDM) onClientSelected;
 
-  const SelectVendor({
+  const WebSelectClient({
     super.key,
-    required this.onVendorSelected,
-    this.projectId,
-    this.initialVendor,
-    this.isProject = false,
-    this.selectedVendor,
-    this.availableVendor,
+    this.initialClient,
+    required this.onClientSelected,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SelectVendorController(
-      projectId: projectId ?? "",
-      initialVendor: initialVendor,
-      initSelectedVendor: selectedVendor,
-      availableVendor: availableVendor,
+    final controller = Get.put(SelectClientController(
+      selectedClient: initialClient,
     ));
 
     return Container(
@@ -51,7 +40,7 @@ class SelectVendor extends StatelessWidget {
           Row(
             children: [
               const CustomText(
-                "Select Vendor",
+                "Select Client",
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
@@ -85,7 +74,7 @@ class SelectVendor extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: "Search Vendor...",
+                      hintText: "Search Client",
                       border: InputBorder.none,
                     ),
                   ),
@@ -99,12 +88,12 @@ class SelectVendor extends StatelessWidget {
           Obx(
             () => Expanded(
               child: ListView.builder(
-                itemCount: controller.vendors.length,
+                itemCount: controller.clients.length,
                 itemBuilder: (context, index) {
-                  VendorDM vendor = controller.vendors[index];
+                  ClientDM client = controller.clients[index];
 
                   return InkWell(
-                    onTap: () => controller.setVendorSelected(vendor),
+                    onTap: () => controller.setClientSelected(index),
                     child: Obx(
                       () => Container(
                         margin: const EdgeInsets.symmetric(
@@ -118,20 +107,19 @@ class SelectVendor extends StatelessWidget {
                           color: AssetColor.whiteBackground,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color:
-                                controller.selectedVendor.value.id == vendor.id
-                                    ? AssetColor.orangeButton
-                                    : AssetColor.greyBackground,
+                            color: controller.selectedIndex.value == index
+                                ? AssetColor.orangeButton
+                                : AssetColor.greyBackground,
                           ),
                         ),
                         child: ListTile(
                           title: CustomText(
-                            vendor.name ?? "",
+                            client.name ?? "",
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                           subtitle: CustomText(
-                            vendor.email ?? "",
+                            client.email ?? "",
                             fontSize: 16,
                           ),
                           trailing: Container(
@@ -141,8 +129,7 @@ class SelectVendor extends StatelessWidget {
                               color: AssetColor.whiteBackground,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: controller.selectedVendor.value.id ==
-                                        vendor.id
+                                color: controller.selectedIndex.value == index
                                     ? AssetColor.orangeButton
                                     : AssetColor.grey,
                                 width: 2,
@@ -154,8 +141,7 @@ class SelectVendor extends StatelessWidget {
                                 height: 10,
                                 width: 10,
                                 decoration: BoxDecoration(
-                                  color: controller.selectedVendor.value.id ==
-                                          vendor.id
+                                  color: controller.selectedIndex.value == index
                                       ? AssetColor.orangeButton
                                       : AssetColor.whiteBackground,
                                   shape: BoxShape.circle,
@@ -176,11 +162,11 @@ class SelectVendor extends StatelessWidget {
           ),
           Center(
             child: CustomButton(
-              text: "Choose Vendor",
+              text: "Choose Client",
               color: AssetColor.orangeButton,
               onPressed: () {
-                onVendorSelected(
-                  controller.selectedVendor.value,
+                onClientSelected(
+                  controller.clients[controller.selectedIndex.value],
                 );
                 Get.back();
               },

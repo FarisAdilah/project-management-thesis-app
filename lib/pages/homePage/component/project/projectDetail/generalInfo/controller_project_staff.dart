@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/staff/select_staff.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/staff/web_select_staff.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
@@ -29,7 +29,7 @@ class ProjectStaffController extends GetxController {
     Get.dialog(
       AlertDialog(
         backgroundColor: AssetColor.whiteBackground,
-        content: SelectStaff(
+        content: WebSelectStaff(
           selectedStaffList: staffList,
           onStaffSelected: (staff) {
             onStaffSelected(staff);
