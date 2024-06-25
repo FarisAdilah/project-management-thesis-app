@@ -3,7 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:project_management_thesis_app/globalComponent/createForm/pic/add_pic.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/pic/mobile_add_pic.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/pic/tablet_add_pic.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/pic/web_add_pic.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/client/firebaseModel/client_firebase.dart';
@@ -83,16 +86,33 @@ class ClientFormController extends GetxController {
 
   addPic() {
     Get.dialog(
-      Dialog(
-        insetPadding: const EdgeInsets.symmetric(
-          vertical: 150,
-          horizontal: 300,
+      ResponsiveLayout(
+        mobileScaffold: AlertDialog(
+          contentPadding: const EdgeInsets.all(0),
+          content: MobileAddPic(
+            onAddPic: (value) {
+              pic.value = value;
+              Helpers.writeLog("pic: ${pic.value.name}");
+            },
+          ),
         ),
-        child: AddPic(
-          onAddPic: (value) {
-            pic.value = value;
-            Helpers.writeLog("pic: ${pic.value.name}");
-          },
+        tabletScaffold: AlertDialog(
+          contentPadding: const EdgeInsets.all(0),
+          content: TabletAddPic(
+            onAddPic: (value) {
+              pic.value = value;
+              Helpers.writeLog("pic: ${pic.value.name}");
+            },
+          ),
+        ),
+        desktopScaffold: AlertDialog(
+          contentPadding: const EdgeInsets.all(0),
+          content: WebAddPic(
+            onAddPic: (value) {
+              pic.value = value;
+              Helpers.writeLog("pic: ${pic.value.name}");
+            },
+          ),
         ),
       ),
     );
