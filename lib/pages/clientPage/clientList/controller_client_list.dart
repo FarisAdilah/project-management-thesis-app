@@ -59,9 +59,19 @@ class ClientListController extends GetxController with Storage {
 
   showEditForm(ClientDM client) {
     Get.to(
-      () => WebClientForm(
-        client: client,
-        isUpdate: true,
+      () => ResponsiveLayout(
+        mobileScaffold: MobileClientForm(
+          client: client,
+          isUpdate: true,
+        ),
+        tabletScaffold: TabletClientForm(
+          client: client,
+          isUpdate: true,
+        ),
+        desktopScaffold: WebClientForm(
+          client: client,
+          isUpdate: true,
+        ),
       ),
     )?.whenComplete(() {
       selectedIndex.value = -1;

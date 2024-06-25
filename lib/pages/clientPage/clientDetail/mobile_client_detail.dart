@@ -308,14 +308,14 @@ class MobileClientDetail extends StatelessWidget {
                             : const SizedBox(),
                         controller.currentUser?.role == UserType.admin.name
                             ? Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   CustomButton(
                                     text: "Edit",
                                     textColor: AssetColor.whiteBackground,
                                     borderRadius: 10,
                                     color: AssetColor.orangeButton,
-                                    onPressed: () => onDeleteClient(client),
+                                    onPressed: () => onEditClient(client),
                                   ),
                                   const SizedBox(width: 10),
                                   CustomButton(

@@ -60,9 +60,19 @@ class VendorListController extends GetxController with Storage {
 
   showEditForm(VendorDM vendor) {
     Get.to(
-      () => WebVendorForm(
-        vendor: vendor,
-        isUpdate: true,
+      () => ResponsiveLayout(
+        mobileScaffold: MobileVendorForm(
+          vendor: vendor,
+          isUpdate: true,
+        ),
+        tabletScaffold: TabletVendorForm(
+          vendor: vendor,
+          isUpdate: true,
+        ),
+        desktopScaffold: WebVendorForm(
+          vendor: vendor,
+          isUpdate: true,
+        ),
       ),
     )?.whenComplete(() {
       selectedIndex.value = -1;

@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/staffPage/staffForm/web_staff_form.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffForm/mobile_staff_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
@@ -168,7 +168,7 @@ class MobileStaffItemContent extends StatelessWidget {
                               ),
                               onPressed: () {
                                 Get.to(
-                                  () => WebStaffForm(
+                                  () => MobileStaffForm(
                                     userDM: user,
                                     isUpdate: true,
                                   ),

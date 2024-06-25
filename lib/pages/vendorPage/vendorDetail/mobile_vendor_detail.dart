@@ -307,7 +307,7 @@ class MobileVendorDetail extends StatelessWidget {
                             : const SizedBox(),
                         controller.currentUser?.role == UserType.admin.name
                             ? Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   CustomButton(
                                     text: "Edit",
