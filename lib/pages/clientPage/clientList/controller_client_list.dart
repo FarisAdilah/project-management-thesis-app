@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/clientPage/clientDetail/mobile_client_detail.dart';
-import 'package:project_management_thesis_app/pages/clientPage/clientForm/client_form.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientForm/mobile_client_form.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientForm/tablet_client_form.dart';
+import 'package:project_management_thesis_app/pages/clientPage/clientForm/web_client_form.dart';
 import 'package:project_management_thesis_app/pages/clientPage/clientDetail/web_client_detail.dart';
 import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
@@ -44,12 +46,20 @@ class ClientListController extends GetxController with Storage {
   }
 
   showCreateForm() {
-    Get.to(() => const ClientForm())?.whenComplete(() => _getClientList());
+    Get.to(
+      () => const ResponsiveLayout(
+        mobileScaffold: MobileClientForm(),
+        tabletScaffold: TabletClientForm(),
+        desktopScaffold: WebClientForm(),
+      ),
+    )?.whenComplete(
+      () => _getClientList(),
+    );
   }
 
   showEditForm(ClientDM client) {
     Get.to(
-      () => ClientForm(
+      () => WebClientForm(
         client: client,
         isUpdate: true,
       ),

@@ -13,11 +13,11 @@ import 'package:project_management_thesis_app/repository/client/dataModel/client
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class ClientForm extends StatelessWidget {
+class TabletClientForm extends StatelessWidget {
   final bool isUpdate;
   final ClientDM? client;
 
-  const ClientForm({
+  const TabletClientForm({
     super.key,
     this.isUpdate = false,
     this.client,
@@ -318,6 +318,7 @@ class ClientForm extends StatelessWidget {
                       child: Image.asset(
                         AssetImages.backgroundCreateExternal,
                         fit: BoxFit.cover,
+                        height: double.infinity,
                         alignment: Alignment.bottomCenter,
                       ),
                     ),

@@ -6,7 +6,9 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorDetail/mobile_vendor_detail.dart';
 import 'package:project_management_thesis_app/pages/vendorPage/vendorDetail/web_vendor_detail.dart';
-import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/vendor_form.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/mobile_vendor_form.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/tablet_vendor_form.dart';
+import 'package:project_management_thesis_app/pages/vendorPage/vendorForm/web_vendor_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/vendor_repository.dart';
@@ -45,12 +47,20 @@ class VendorListController extends GetxController with Storage {
   }
 
   showCreateForm() {
-    Get.to(() => const VendorForm())?.whenComplete(() => _getVendorList());
+    Get.to(
+      () => const ResponsiveLayout(
+        mobileScaffold: MobileVendorForm(),
+        tabletScaffold: TabletVendorForm(),
+        desktopScaffold: WebVendorForm(),
+      ),
+    )?.whenComplete(
+      () => _getVendorList(),
+    );
   }
 
   showEditForm(VendorDM vendor) {
     Get.to(
-      () => VendorForm(
+      () => WebVendorForm(
         vendor: vendor,
         isUpdate: true,
       ),

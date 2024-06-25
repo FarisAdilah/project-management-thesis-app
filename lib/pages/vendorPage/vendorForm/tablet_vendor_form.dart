@@ -13,11 +13,11 @@ import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class VendorForm extends StatelessWidget {
+class TabletVendorForm extends StatelessWidget {
   final bool isUpdate;
   final VendorDM? vendor;
 
-  const VendorForm({
+  const TabletVendorForm({
     super.key,
     this.isUpdate = false,
     this.vendor,
@@ -44,6 +44,7 @@ class VendorForm extends StatelessWidget {
             const GradationBackground(),
             Container(
               margin: const EdgeInsets.all(100),
+              height: double.infinity,
               width: double.infinity,
               child: Row(
                 children: [
@@ -318,6 +319,7 @@ class VendorForm extends StatelessWidget {
                       child: Image.asset(
                         AssetImages.backgroundCreateExternal,
                         fit: BoxFit.cover,
+                        height: double.infinity,
                         alignment: Alignment.bottomCenter,
                       ),
                     ),
