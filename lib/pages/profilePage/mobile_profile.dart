@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input_border.dart';
+import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/profilePage/controller_profile.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
@@ -18,168 +19,171 @@ class MobileProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(ProfileController());
 
-    return Stack(
-      children: [
-        Container(
-          height: MediaQuery.sizeOf(context).height,
-          width: MediaQuery.sizeOf(context).width,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(AssetImages.backgroundProfile),
-              fit: BoxFit.cover,
+    return Obx(
+      () => Stack(
+        children: [
+          Container(
+            height: MediaQuery.sizeOf(context).height,
+            width: MediaQuery.sizeOf(context).width,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AssetImages.backgroundProfile),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.symmetric(
-              vertical: MediaQuery.sizeOf(context).height * 0.1,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.sizeOf(context).width * 0.05,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        AssetImages.iconProfileResume,
-                        scale: 2,
-                      ),
-                      const SizedBox(width: 8),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CustomText(
-                            "See your profile here",
-                            color: AssetColor.whiteBackground,
-                          ),
-                          Obx(
-                            () => CustomText(
-                              "id: ${controller.user.value.id ?? ""}",
+          SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                vertical: MediaQuery.sizeOf(context).height * 0.1,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.sizeOf(context).width * 0.05,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          AssetImages.iconProfileResume,
+                          scale: 2,
+                        ),
+                        const SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                              "See your profile here",
                               color: AssetColor.whiteBackground,
-                              fontWeight: FontWeight.bold,
+                            ),
+                            Obx(
+                              () => CustomText(
+                                "id: ${controller.user.value.id ?? ""}",
+                                color: AssetColor.whiteBackground,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 50,
+                      vertical: 25,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AssetColor.whiteBackground,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 125,
+                          width: 125,
+                          child: Obx(
+                            () => ProfilePicture(
+                              user: controller.user.value,
+                              backgroundColor: AssetColor.blueSecondaryAccent,
+                              initialNameSize: 30,
                             ),
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 50,
-                    vertical: 25,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AssetColor.whiteBackground,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 125,
-                        width: 125,
-                        child: Obx(
-                          () => ProfilePicture(
-                            user: controller.user.value,
-                            backgroundColor: AssetColor.blueSecondaryAccent,
-                            initialNameSize: 30,
+                        ),
+                        _buildInput(
+                          "Name",
+                          FontAwesomeIcons.user,
+                          controller: controller.nameController,
+                          enabled: false,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildInput(
+                          "Email",
+                          FontAwesomeIcons.envelope,
+                          controller: controller.emailController,
+                          enabled: false,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Obx(
+                          () => _buildInput(
+                            "Password",
+                            controller.isObscure.value
+                                ? FontAwesomeIcons.eyeSlash
+                                : FontAwesomeIcons.eye,
+                            controller: controller.passwordController,
+                            isPassword: controller.isObscure.value,
+                            obscureCallback: () {
+                              controller.toggleObscure();
+                            },
+                            onChanged: (password) {
+                              controller.validateInput(
+                                "password",
+                                password,
+                              );
+                            },
                           ),
                         ),
-                      ),
-                      _buildInput(
-                        "Name",
-                        FontAwesomeIcons.user,
-                        controller: controller.nameController,
-                        enabled: false,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      _buildInput(
-                        "Email",
-                        FontAwesomeIcons.envelope,
-                        controller: controller.emailController,
-                        enabled: false,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Obx(
-                        () => _buildInput(
-                          "Password",
-                          controller.isObscure.value
-                              ? FontAwesomeIcons.eyeSlash
-                              : FontAwesomeIcons.eye,
-                          controller: controller.passwordController,
-                          isPassword: controller.isObscure.value,
-                          obscureCallback: () {
-                            controller.toggleObscure();
-                          },
-                          onChanged: (password) {
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildInput(
+                          "Phone Number",
+                          FontAwesomeIcons.phone,
+                          controller: controller.phoneController,
+                          onChanged: (number) {
                             controller.validateInput(
-                              "password",
-                              password,
+                              "phoneNumber",
+                              number,
                             );
                           },
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      _buildInput(
-                        "Phone Number",
-                        FontAwesomeIcons.phone,
-                        controller: controller.phoneController,
-                        onChanged: (number) {
-                          controller.validateInput(
-                            "phoneNumber",
-                            number,
-                          );
-                        },
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      _buildInput(
-                        "Role",
-                        FontAwesomeIcons.userTag,
-                        controller: controller.roleController,
-                        enabled: false,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Obx(
-                          () => CustomButton(
-                            text: "Update Data",
-                            isEnabled: controller.isEnabled.value,
-                            disableColor:
-                                AssetColor.blueSecondaryAccent.withOpacity(0.5),
-                            borderRadius: 8,
-                            onPressed: () {},
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildInput(
+                          "Role",
+                          FontAwesomeIcons.userTag,
+                          controller: controller.roleController,
+                          enabled: false,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Obx(
+                            () => CustomButton(
+                              text: "Update Data",
+                              isEnabled: controller.isEnabled.value,
+                              disableColor: AssetColor.blueSecondaryAccent
+                                  .withOpacity(0.5),
+                              borderRadius: 8,
+                              onPressed: () => controller.updateUserData(),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+          controller.isLoading.value ? const Loading() : const SizedBox(),
+        ],
+      ),
     );
   }
 }
