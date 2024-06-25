@@ -68,8 +68,8 @@ class MobileSelectVendor extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 10,
+              horizontal: 10,
+              vertical: 5,
             ),
             decoration: BoxDecoration(
               color: AssetColor.greyBackground,
