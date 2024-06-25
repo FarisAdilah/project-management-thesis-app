@@ -14,11 +14,11 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class StaffForm extends StatelessWidget {
+class TabletStaffForm extends StatelessWidget {
   final UserDM? userDM;
   final bool isUpdate;
 
-  const StaffForm({
+  const TabletStaffForm({
     super.key,
     this.userDM,
     this.isUpdate = false,
@@ -226,13 +226,33 @@ class StaffForm extends StatelessWidget {
                                             applyTextScaling: true,
                                           ),
                                           SizedBox(width: 10),
-                                          CustomText(
-                                            "Your user password will be generated automatically by format: ",
+                                          Expanded(
+                                            child: Text.rich(
+                                              TextSpan(
+                                                text:
+                                                    "Your user password will be generated automatically by format: ",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color:
+                                                      AssetColor.blackPrimary,
+                                                  fontFamily: ("Jost"),
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: "<First Name>#123",
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: AssetColor
+                                                          .blackPrimary,
+                                                      fontFamily: ("Jost"),
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                          CustomText(
-                                            "<First Name>#123",
-                                            fontWeight: FontWeight.bold,
-                                          )
                                         ],
                                       ),
                                     )
@@ -273,6 +293,7 @@ class StaffForm extends StatelessWidget {
                       child: Image.asset(
                         AssetImages.backgroundCreateUser,
                         fit: BoxFit.cover,
+                        height: double.infinity,
                         alignment: Alignment.bottomCenter,
                       ),
                     ),

@@ -7,7 +7,9 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffDetail/mobile_staff_detail.dart';
 import 'package:project_management_thesis_app/pages/staffPage/staffDetail/web_staff_detail.dart';
-import 'package:project_management_thesis_app/pages/staffPage/staffForm/staff_form.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffForm/mobile_staff_form.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffForm/tablet_staff_form.dart';
+import 'package:project_management_thesis_app/pages/staffPage/staffForm/web_staff_form.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/repository/user/user_repository.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
@@ -72,7 +74,15 @@ class StaffListController extends GetxController with Storage {
   }
 
   showCreateForm(BuildContext context) {
-    Get.to(() => const StaffForm())?.whenComplete(() => _getUsersData());
+    Get.to(
+      () => const ResponsiveLayout(
+        mobileScaffold: MobileStaffForm(),
+        tabletScaffold: TabletStaffForm(),
+        desktopScaffold: WebStaffForm(),
+      ),
+    )?.whenComplete(
+      () => _getUsersData(),
+    );
   }
 
   onUpdateUser() {
