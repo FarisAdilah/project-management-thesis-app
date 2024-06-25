@@ -8,6 +8,7 @@ import 'package:project_management_thesis_app/pages/vendorPage/vendorDetail/cont
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 
 class MobileVendorDetail extends StatelessWidget {
   final VendorDM vendor;
@@ -301,27 +302,31 @@ class MobileVendorDetail extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomButton(
-                              text: "Edit",
-                              textColor: AssetColor.whiteBackground,
-                              borderRadius: 10,
-                              color: AssetColor.orangeButton,
-                              onPressed: () => onEditVendor(vendor),
-                            ),
-                            const SizedBox(width: 10),
-                            CustomButton(
-                              text: "Delete",
-                              textColor: AssetColor.whiteBackground,
-                              borderRadius: 10,
-                              color: AssetColor.redButton,
-                              onPressed: () => onDeleteVendor(vendor),
-                            ),
-                          ],
-                        ),
+                        controller.currentUser?.role == UserType.admin.name
+                            ? const SizedBox(height: 10)
+                            : const SizedBox(),
+                        controller.currentUser?.role == UserType.admin.name
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  CustomButton(
+                                    text: "Edit",
+                                    textColor: AssetColor.whiteBackground,
+                                    borderRadius: 10,
+                                    color: AssetColor.orangeButton,
+                                    onPressed: () => onEditVendor(vendor),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  CustomButton(
+                                    text: "Delete",
+                                    textColor: AssetColor.whiteBackground,
+                                    borderRadius: 10,
+                                    color: AssetColor.redButton,
+                                    onPressed: () => onDeleteVendor(vendor),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                   ),

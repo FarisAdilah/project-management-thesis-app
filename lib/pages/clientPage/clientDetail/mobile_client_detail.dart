@@ -8,6 +8,7 @@ import 'package:project_management_thesis_app/pages/clientPage/clientDetail/cont
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 
 class MobileClientDetail extends StatelessWidget {
   final ClientDM client;
@@ -302,27 +303,31 @@ class MobileClientDetail extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomButton(
-                              text: "Edit",
-                              textColor: AssetColor.whiteBackground,
-                              borderRadius: 10,
-                              color: AssetColor.orangeButton,
-                              onPressed: () => onEditClient(client),
-                            ),
-                            const SizedBox(width: 10),
-                            CustomButton(
-                              text: "Delete",
-                              textColor: AssetColor.whiteBackground,
-                              borderRadius: 10,
-                              color: AssetColor.redButton,
-                              onPressed: () => onDeleteClient(client),
-                            ),
-                          ],
-                        ),
+                        controller.currentUser?.role == UserType.admin.name
+                            ? const SizedBox(height: 10)
+                            : const SizedBox(),
+                        controller.currentUser?.role == UserType.admin.name
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  CustomButton(
+                                    text: "Edit",
+                                    textColor: AssetColor.whiteBackground,
+                                    borderRadius: 10,
+                                    color: AssetColor.orangeButton,
+                                    onPressed: () => onDeleteClient(client),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  CustomButton(
+                                    text: "Delete",
+                                    textColor: AssetColor.whiteBackground,
+                                    borderRadius: 10,
+                                    color: AssetColor.redButton,
+                                    onPressed: () => onDeleteClient(client),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                   ),
