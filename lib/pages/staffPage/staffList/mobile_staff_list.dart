@@ -22,87 +22,89 @@ class MobileStaffList extends StatelessWidget {
       body: Obx(
         () => Stack(
           children: [
-            Container(
-              color: AssetColor.greyBackground,
-              padding: const EdgeInsets.all(25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CustomText(
-                    "User List",
-                    color: AssetColor.blackPrimary,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Obx(
-                    () {
-                      int supervisor = controller.totalSupervisor.value;
-                      int admin = controller.totalAdmin.value;
-                      int projectManager = controller.totalProjectManager.value;
-                      int staff = controller.totalStaff.value;
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              _buildTag(supervisor, "Supervisor"),
-                              const SizedBox(width: 10),
-                              _buildTag(admin, "Admin"),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              _buildTag(projectManager, "Project Manager"),
-                              const SizedBox(width: 10),
-                              _buildTag(staff, "Staff"),
-                            ],
-                          )
-                        ],
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const Divider(
-                    color: AssetColor.grey,
-                    thickness: 1,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  controller.currentUser?.role == UserType.supervisor.name
-                      ? Column(
+            SingleChildScrollView(
+              child: Container(
+                color: AssetColor.greyBackground,
+                padding: const EdgeInsets.all(25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const CustomText(
+                      "User List",
+                      color: AssetColor.blackPrimary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Obx(
+                      () {
+                        int supervisor = controller.totalSupervisor.value;
+                        int admin = controller.totalAdmin.value;
+                        int projectManager =
+                            controller.totalProjectManager.value;
+                        int staff = controller.totalStaff.value;
+                        return Column(
                           children: [
-                            CustomButton(
-                              onPressed: () =>
-                                  controller.showCreateForm(context),
-                              text: "Add New User",
-                              color: AssetColor.greenButton,
-                              borderRadius: 8,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AssetColor.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 5),
-                                ),
+                            Row(
+                              children: [
+                                _buildTag(supervisor, "Supervisor"),
+                                const SizedBox(width: 10),
+                                _buildTag(admin, "Admin"),
                               ],
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                _buildTag(projectManager, "Project Manager"),
+                                const SizedBox(width: 10),
+                                _buildTag(staff, "Staff"),
+                              ],
+                            )
                           ],
-                        )
-                      : const SizedBox(),
-                  Expanded(
-                    child: Obx(
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Divider(
+                      color: AssetColor.grey,
+                      thickness: 1,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    controller.currentUser?.role == UserType.supervisor.name
+                        ? Column(
+                            children: [
+                              CustomButton(
+                                onPressed: () =>
+                                    controller.showCreateForm(context),
+                                text: "Add New User",
+                                color: AssetColor.greenButton,
+                                borderRadius: 8,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AssetColor.black.withOpacity(0.2),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 5),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                    Obx(
                       () => ListView.builder(
                         itemCount: controller.users.length,
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
                           UserDM user = controller.users[index];
@@ -117,8 +119,8 @@ class MobileStaffList extends StatelessWidget {
                         },
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             controller.isLoading.value ? const Loading() : const SizedBox()
