@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/controller_project_payment.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectPayment/controller_project_payment.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
@@ -12,7 +12,7 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class PaymentProject extends StatelessWidget {
+class TabletPaymentProject extends StatelessWidget {
   final List<PaymentDM> payments;
   final ClientDM client;
   final List<VendorDM> vendors;
@@ -21,7 +21,7 @@ class PaymentProject extends StatelessWidget {
   final Function(PaymentDM) onDeletePayment;
   final UserDM currentUser;
 
-  const PaymentProject({
+  const TabletPaymentProject({
     super.key,
     required this.payments,
     required this.onCreatePayment,

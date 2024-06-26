@@ -168,9 +168,11 @@ class MobileMainPage extends StatelessWidget {
                             },
                           )
                         : const SizedBox(),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    controller.currentUser.value.role == UserType.admin.name
+                        ? const SizedBox(
+                            height: 20,
+                          )
+                        : const SizedBox(),
                     Obx(
                       () => ListView.builder(
                         itemCount: controller.projects.length,
@@ -200,94 +202,4 @@ class MobileMainPage extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _buildRow(
-  String name,
-  String client,
-  String startDate,
-  String endDate,
-  String status, {
-  bool? isTitle,
-}) {
-  return Row(
-    children: [
-      Expanded(
-        flex: 2,
-        child: _buildCell(name, isTitle: isTitle),
-      ),
-      Expanded(
-        flex: 2,
-        child: _buildCell(client, isTitle: isTitle),
-      ),
-      Expanded(
-        flex: 1,
-        child: _buildCell(startDate, isTitle: isTitle),
-      ),
-      Expanded(
-        flex: 1,
-        child: _buildCell(endDate, isTitle: isTitle),
-      ),
-      Expanded(
-        flex: 1,
-        child: _buildCell(status, isTitle: isTitle, isStatus: true),
-      ),
-    ],
-  );
-}
-
-Widget _buildCell(
-  String title, {
-  bool? isTitle,
-  bool? isStatus,
-}) {
-  return (isStatus ?? false) && !(isTitle ?? false)
-      ? _buildStatus(title)
-      : CustomText(
-          title,
-          color: isTitle ?? false ? AssetColor.grey : AssetColor.blackPrimary,
-          fontSize: 20,
-        );
-}
-
-Widget _buildStatus(String status) {
-  Color statusColor;
-  String title = "";
-  if (status == ProjectStatusType.pending.name) {
-    statusColor = AssetColor.orange;
-    title = "Pending";
-  } else if (status == ProjectStatusType.rejected.name) {
-    statusColor = AssetColor.redButton;
-    title = "Rejected";
-  } else if (status == ProjectStatusType.ongoing.name) {
-    statusColor = AssetColor.blueSecondaryAccent;
-    title = "Ongoing";
-  } else if (status == ProjectStatusType.closing.name) {
-    statusColor = AssetColor.orange;
-    title = "Closing";
-  } else {
-    statusColor = AssetColor.green;
-    title = "Completed";
-  }
-
-  return Row(
-    children: [
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: statusColor.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: statusColor,
-            width: 1,
-          ),
-        ),
-        child: CustomText(
-          title,
-          color: statusColor,
-          fontSize: 20,
-        ),
-      ),
-    ],
-  );
 }

@@ -7,7 +7,7 @@ import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class TaskItemContent extends StatelessWidget {
+class MobileTaskItemContent extends StatelessWidget {
   final List<ScheduleTaskDM> taskList;
   final UserDM staff;
   final ScheduleTaskDM? selectedTask;
@@ -15,7 +15,7 @@ class TaskItemContent extends StatelessWidget {
   final Function(ScheduleTaskDM) onEditTask;
   final Function(ScheduleTaskDM) onDeleteTask;
 
-  const TaskItemContent({
+  const MobileTaskItemContent({
     super.key,
     required this.taskList,
     required this.staff,
@@ -35,7 +35,7 @@ class TaskItemContent extends StatelessWidget {
           Row(
             children: [
               SizedBox(
-                width: 50,
+                width: 30,
                 child: ProfilePicture(
                   user: staff,
                 ),
@@ -43,21 +43,23 @@ class TaskItemContent extends StatelessWidget {
               const SizedBox(width: 15),
               CustomText(
                 staff.name ?? "Staff Name",
-                fontSize: 20,
+                fontSize: 16,
                 color: AssetColor.blackPrimary,
                 fontWeight: FontWeight.bold,
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           ListView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(0),
             itemCount: taskList.length,
             itemBuilder: (context, index) {
               ScheduleTaskDM task = taskList[index];
 
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
                     onTap: () => onSelectTask(task),
@@ -85,80 +87,84 @@ class TaskItemContent extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomText(
-                                  "Task Name",
-                                  fontSize: 16,
-                                  color: AssetColor.grey,
-                                ),
-                                CustomText(
-                                  task.name ?? "Task Name",
-                                  fontSize: 16,
-                                  color: AssetColor.blackPrimary,
-                                ),
-                              ],
-                            ),
+                          CustomText(
+                            task.name ?? "Task Name",
+                            fontSize: 14,
+                            color: AssetColor.blackPrimary,
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomText(
-                                  "Start Date",
-                                  fontSize: 16,
-                                  color: AssetColor.grey,
-                                ),
-                                CustomText(
-                                  Helpers().convertDateStringFormat(
-                                    task.startDate ?? "Task Name",
-                                  ),
-                                  fontSize: 16,
-                                  color: AssetColor.blackPrimary,
-                                ),
-                              ],
-                            ),
+                          CustomText(
+                            task.id ?? "Task ID",
+                            fontSize: 12,
+                            color: AssetColor.grey,
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomText(
-                                  "End Date",
-                                  fontSize: 16,
-                                  color: AssetColor.grey,
-                                ),
-                                CustomText(
-                                  Helpers().convertDateStringFormat(
-                                    task.endDate ?? "Task Name",
-                                  ),
-                                  fontSize: 16,
-                                  color: AssetColor.blackPrimary,
-                                ),
-                              ],
-                            ),
+                          const Divider(
+                            color: AssetColor.grey,
+                            thickness: 1,
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomText(
-                                  "Status",
-                                  fontSize: 16,
-                                  color: AssetColor.grey,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const CustomText(
+                                      "Start Date",
+                                      fontSize: 14,
+                                      color: AssetColor.grey,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    CustomText(
+                                      Helpers().convertDateStringFormat(
+                                        task.startDate ?? "Task Name",
+                                      ),
+                                      fontSize: 14,
+                                      color: AssetColor.blackPrimary,
+                                    ),
+                                  ],
                                 ),
-                                CustomText(
-                                  Helpers().getTaskStatus(task.status ?? ""),
-                                  fontSize: 16,
-                                  color: AssetColor.blackPrimary,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const CustomText(
+                                      "End Date",
+                                      fontSize: 14,
+                                      color: AssetColor.grey,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    CustomText(
+                                      Helpers().convertDateStringFormat(
+                                        task.endDate ?? "Task Name",
+                                      ),
+                                      fontSize: 14,
+                                      color: AssetColor.blackPrimary,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const CustomText(
+                                "Status",
+                                fontSize: 14,
+                                color: AssetColor.grey,
+                              ),
+                              const SizedBox(height: 5),
+                              CustomText(
+                                Helpers().getTaskStatus(task.status ?? ""),
+                                fontSize: 14,
+                                color: AssetColor.blackPrimary,
+                              ),
+                            ],
                           ),
                         ],
                       ),

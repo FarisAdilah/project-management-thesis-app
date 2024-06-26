@@ -5,11 +5,11 @@ import 'package:project_management_thesis_app/repository/client/dataModel/client
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
-class ClientVendorProject extends StatelessWidget {
+class TabletClientVendorProject extends StatelessWidget {
   final ClientDM client;
   final List<VendorDM> vendors;
 
-  const ClientVendorProject({
+  const TabletClientVendorProject({
     super.key,
     required this.client,
     required this.vendors,

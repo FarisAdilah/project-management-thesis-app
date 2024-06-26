@@ -5,18 +5,18 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/controller_project_detail.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineItem/timeline_item_content.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineItem/tablet_timeline_item_content.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/timeline/dataModel/timeline_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class ProjectDetail extends StatelessWidget {
+class TabletProjectDetail extends StatelessWidget {
   final String projectId;
   final VoidCallback onProjectClosing;
 
-  const ProjectDetail({
+  const TabletProjectDetail({
     super.key,
     required this.projectId,
     required this.onProjectClosing,
@@ -199,7 +199,7 @@ class ProjectDetail extends StatelessWidget {
                                             project.status ?? "",
                                           )
                                           .withOpacity(0.3),
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(5),
                                       border: Border.all(
                                         color: controller.getStatusColor(
                                           project.status ?? "",
@@ -333,7 +333,7 @@ class ProjectDetail extends StatelessWidget {
 
                                 TimelineDM timeline =
                                     controller.selectedTimeline.value;
-                                return TimelineItemContent(
+                                return TabletTimelineItemContent(
                                   currentUser:
                                       controller.currentUser ?? UserDM(),
                                   timeline: timeline,

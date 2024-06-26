@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskItem/task_item_content.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskItem/web_task_item_content.dart';
 import 'package:project_management_thesis_app/repository/scheduleTask/dataModel/schedule_task_dm.dart';
 import 'package:project_management_thesis_app/repository/timeline/dataModel/timeline_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
@@ -11,7 +11,7 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class TimelineItemContent extends StatelessWidget {
+class WebTimelineItemContent extends StatelessWidget {
   final UserDM currentUser;
   final TimelineDM timeline;
   final List<ScheduleTaskDM> task;
@@ -24,7 +24,7 @@ class TimelineItemContent extends StatelessWidget {
   final Function(ScheduleTaskDM) onEditTask;
   final Function(ScheduleTaskDM) onDeleteTask;
 
-  const TimelineItemContent({
+  const WebTimelineItemContent({
     super.key,
     required this.currentUser,
     required this.timeline,
@@ -215,7 +215,7 @@ class TimelineItemContent extends StatelessWidget {
                                 if (taskList.isEmpty) {
                                   return const SizedBox();
                                 } else {
-                                  return TaskItemContent(
+                                  return WebTaskItemContent(
                                     taskList: taskList,
                                     staff: staff,
                                     selectedTask: selectedTask,

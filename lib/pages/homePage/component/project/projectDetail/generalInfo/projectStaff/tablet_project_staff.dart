@@ -3,18 +3,18 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/controller_project_staff.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectStaff/controller_project_staff.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
 
-class StaffProject extends StatelessWidget {
+class TabletStaffProject extends StatelessWidget {
   final List<UserDM> staffList;
   final Function(UserDM) onStaffSelected;
   final Function(UserDM) onStaffRemoved;
   final String role;
 
-  const StaffProject({
+  const TabletStaffProject({
     super.key,
     required this.staffList,
     required this.onStaffSelected,

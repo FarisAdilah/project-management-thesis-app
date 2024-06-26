@@ -4,12 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_client_vendor.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_payment.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/project_staff.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectClientVendor/mobile_project_client_vendor.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectClientVendor/tablet_project_client_vendor.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectPayment/mobile_project_payment.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectPayment/tablet_project_payment.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectStaff/mobile_project_staff.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectStaff/tablet_project_staff.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectClientVendor/web_project_client_vendor.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectPayment/web_project_payment.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectStaff/web_project_staff.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/task_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/timeline_form.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
@@ -325,36 +332,100 @@ class ProjectDetailController extends GetxController
 
   Widget getInfoWidget() {
     if (selectedInfoIndex.value == 0) {
-      return StaffProject(
-        role: currentUser?.role ?? UserType.staff.name,
-        staffList: projectStaff,
-        onStaffSelected: (staff) {
-          _addStaffToProject(staff.id ?? "");
-        },
-        onStaffRemoved: (staff) {
-          _onRemoveStaff(staff);
-        },
+      return ResponsiveLayout(
+        mobileScaffold: MobileStaffProject(
+          role: currentUser?.role ?? UserType.staff.name,
+          staffList: projectStaff,
+          onStaffSelected: (staff) {
+            _addStaffToProject(staff.id ?? "");
+          },
+          onStaffRemoved: (staff) {
+            _onRemoveStaff(staff);
+          },
+        ),
+        tabletScaffold: TabletStaffProject(
+          role: currentUser?.role ?? UserType.staff.name,
+          staffList: projectStaff,
+          onStaffSelected: (staff) {
+            _addStaffToProject(staff.id ?? "");
+          },
+          onStaffRemoved: (staff) {
+            _onRemoveStaff(staff);
+          },
+        ),
+        desktopScaffold: WebStaffProject(
+          role: currentUser?.role ?? UserType.staff.name,
+          staffList: projectStaff,
+          onStaffSelected: (staff) {
+            _addStaffToProject(staff.id ?? "");
+          },
+          onStaffRemoved: (staff) {
+            _onRemoveStaff(staff);
+          },
+        ),
       );
     } else if (selectedInfoIndex.value == 1) {
-      return ClientVendorProject(
-        client: projectClient.value,
-        vendors: projectVendor,
+      return ResponsiveLayout(
+        mobileScaffold: MobileClientVendorProject(
+          client: projectClient.value,
+          vendors: projectVendor,
+        ),
+        tabletScaffold: TabletClientVendorProject(
+          client: projectClient.value,
+          vendors: projectVendor,
+        ),
+        desktopScaffold: WebClientVendorProject(
+          client: projectClient.value,
+          vendors: projectVendor,
+        ),
       );
     } else if (selectedInfoIndex.value == 2) {
-      return PaymentProject(
-        payments: projectPayment,
-        client: projectClient.value,
-        vendors: projectVendor,
-        currentUser: currentUser ?? UserDM(),
-        onCreatePayment: () {
-          _addNewPayment();
-        },
-        onEditPayment: (payment) {
-          _updatePayment(payment);
-        },
-        onDeletePayment: (payment) {
-          _deletePayment(payment);
-        },
+      return ResponsiveLayout(
+        mobileScaffold: MobilePaymentProject(
+          payments: projectPayment,
+          client: projectClient.value,
+          vendors: projectVendor,
+          currentUser: currentUser ?? UserDM(),
+          onCreatePayment: () {
+            _addNewPayment();
+          },
+          onEditPayment: (payment) {
+            _updatePayment(payment);
+          },
+          onDeletePayment: (payment) {
+            _deletePayment(payment);
+          },
+        ),
+        tabletScaffold: TabletPaymentProject(
+          payments: projectPayment,
+          client: projectClient.value,
+          vendors: projectVendor,
+          currentUser: currentUser ?? UserDM(),
+          onCreatePayment: () {
+            _addNewPayment();
+          },
+          onEditPayment: (payment) {
+            _updatePayment(payment);
+          },
+          onDeletePayment: (payment) {
+            _deletePayment(payment);
+          },
+        ),
+        desktopScaffold: WebPaymentProject(
+          payments: projectPayment,
+          client: projectClient.value,
+          vendors: projectVendor,
+          currentUser: currentUser ?? UserDM(),
+          onCreatePayment: () {
+            _addNewPayment();
+          },
+          onEditPayment: (payment) {
+            _updatePayment(payment);
+          },
+          onDeletePayment: (payment) {
+            _deletePayment(payment);
+          },
+        ),
       );
     } else {
       return Container();
