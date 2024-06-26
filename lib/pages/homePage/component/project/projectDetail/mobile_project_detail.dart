@@ -303,7 +303,7 @@ class MobileProjectDetail extends StatelessWidget {
                                   ),
                             ],
                             onTap: (index) {
-                              controller.setTimeline(index);
+                              controller.mobileSetTimeline(index);
                             },
                           ),
                         ),
@@ -356,16 +356,17 @@ class MobileProjectDetail extends StatelessWidget {
                                       controller.currentUser ?? UserDM(),
                                   timeline: timeline,
                                   task: controller.task,
-                                  editTimeline: () => controller.editTimeline(),
+                                  editTimeline: () =>
+                                      controller.mobileEditTimeline(),
                                   deleteTimeline: () =>
                                       controller.deleteTimeline(),
-                                  addTask: () => controller.addTask(),
+                                  addTask: () => controller.mobileAddTask(),
                                   projectStaff: controller.projectStaff,
                                   selectedTask: controller.selectedTask.value,
                                   onSelectTask: (task) =>
                                       controller.setSelectedTask(task),
                                   onEditTask: (task) =>
-                                      controller.editTask(task),
+                                      controller.mobileEditTask(task),
                                   onDeleteTask: (task) =>
                                       controller.deleteTask(task),
                                 );

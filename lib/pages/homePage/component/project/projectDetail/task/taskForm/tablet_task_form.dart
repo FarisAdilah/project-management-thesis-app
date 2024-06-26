@@ -12,13 +12,13 @@ import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class TaskForm extends StatelessWidget {
+class TabletTaskForm extends StatelessWidget {
   final String timelineId;
   final bool isEdit;
   final ScheduleTaskDM? task;
   final List<UserDM> staffList;
 
-  const TaskForm({
+  const TabletTaskForm({
     super.key,
     required this.timelineId,
     required this.staffList,
@@ -147,6 +147,7 @@ class TaskForm extends StatelessWidget {
                       child: Image.asset(
                         AssetImages.backgroundCreateProject,
                         fit: BoxFit.cover,
+                        height: double.infinity,
                         alignment: Alignment.bottomCenter,
                       ),
                     ),

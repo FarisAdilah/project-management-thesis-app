@@ -9,14 +9,13 @@ import 'package:project_management_thesis_app/globalComponent/textCustom/custom_
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/controller_timeline_form.dart';
 import 'package:project_management_thesis_app/repository/timeline/dataModel/timeline_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
-import 'package:project_management_thesis_app/utils/asset_images.dart';
 
-class TimelineForm extends StatelessWidget {
+class MobileTimelineForm extends StatelessWidget {
   final String projectId;
   final bool isEdit;
   final TimelineDM? timeline;
 
-  const TimelineForm({
+  const MobileTimelineForm({
     super.key,
     required this.projectId,
     this.isEdit = false,
@@ -45,18 +44,15 @@ class TimelineForm extends StatelessWidget {
           children: [
             const GradationBackground(),
             Container(
-              margin: const EdgeInsets.all(100),
+              margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 25),
               width: double.infinity,
               child: Row(
                 children: [
                   Expanded(
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AssetColor.whitePrimary,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          topLeft: Radius.circular(20),
-                        ),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       padding: const EdgeInsets.all(25),
                       child: Column(
@@ -131,19 +127,6 @@ class TimelineForm extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                      child: Image.asset(
-                        AssetImages.backgroundCreateTimeline,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.bottomCenter,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

@@ -285,7 +285,7 @@ class TabletProjectDetail extends StatelessWidget {
                                   ),
                             ],
                             onTap: (index) {
-                              controller.setTimeline(index);
+                              controller.tabletSetTimeline(index);
                             },
                           ),
                         ),
@@ -338,16 +338,17 @@ class TabletProjectDetail extends StatelessWidget {
                                       controller.currentUser ?? UserDM(),
                                   timeline: timeline,
                                   task: controller.task,
-                                  editTimeline: () => controller.editTimeline(),
+                                  editTimeline: () =>
+                                      controller.tabletEditTimeline(),
                                   deleteTimeline: () =>
                                       controller.deleteTimeline(),
-                                  addTask: () => controller.addTask(),
+                                  addTask: () => controller.tabletAddTask(),
                                   projectStaff: controller.projectStaff,
                                   selectedTask: controller.selectedTask.value,
                                   onSelectTask: (task) =>
                                       controller.setSelectedTask(task),
                                   onEditTask: (task) =>
-                                      controller.editTask(task),
+                                      controller.tabletEditTask(task),
                                   onDeleteTask: (task) =>
                                       controller.deleteTask(task),
                                 );

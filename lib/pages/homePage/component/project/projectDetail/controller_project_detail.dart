@@ -16,8 +16,12 @@ import 'package:project_management_thesis_app/pages/homePage/component/project/p
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/mobile_payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/tablet_payment_form.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/task_form.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/timeline_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/mobile_task_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/tablet_task_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/web_task_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/mobile_timeline_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/tablet_timeline_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/web_timeline_form.dart';
 import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
@@ -180,10 +184,52 @@ class ProjectDetailController extends GetxController
     isLoading.value = false;
   }
 
+  mobileSetTimeline(int index) async {
+    if (index == tabTimelineList.length - 1) {
+      Get.to(
+        () => MobileTimelineForm(
+          projectId: projectId,
+        ),
+      )?.then(
+        (isCreated) async {
+          if (isCreated != null && isCreated) {
+            await getProjectTimeline();
+          }
+        },
+      );
+      tabTimelineController.animateTo(0);
+    } else {
+      tabTimelineController.index = index;
+      selectedTimeline.value = projectTimeline[index];
+      await getTimelineTask(selectedTimeline.value.id ?? "");
+    }
+  }
+
+  tabletSetTimeline(int index) async {
+    if (index == tabTimelineList.length - 1) {
+      Get.to(
+        () => TabletTimelineForm(
+          projectId: projectId,
+        ),
+      )?.then(
+        (isCreated) async {
+          if (isCreated != null && isCreated) {
+            await getProjectTimeline();
+          }
+        },
+      );
+      tabTimelineController.animateTo(0);
+    } else {
+      tabTimelineController.index = index;
+      selectedTimeline.value = projectTimeline[index];
+      await getTimelineTask(selectedTimeline.value.id ?? "");
+    }
+  }
+
   setTimeline(int index) async {
     if (index == tabTimelineList.length - 1) {
       Get.to(
-        () => TimelineForm(
+        () => WebTimelineForm(
           projectId: projectId,
         ),
       )?.then(
@@ -227,9 +273,47 @@ class ProjectDetailController extends GetxController
     }
   }
 
+  mobileEditTask(ScheduleTaskDM task) {
+    Get.to(
+      () => MobileTaskForm(
+        timelineId: selectedTimeline.value.id ?? "",
+        isEdit: true,
+        task: task,
+        staffList: projectStaff,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited != null && isEdited) {
+          selectedTask.value = ScheduleTaskDM();
+          await getTimelineTask(selectedTimeline.value.id ?? "");
+          Helpers().showSuccessSnackBar("Task successfully updated");
+        }
+      },
+    );
+  }
+
+  tabletEditTask(ScheduleTaskDM task) {
+    Get.to(
+      () => TabletTaskForm(
+        timelineId: selectedTimeline.value.id ?? "",
+        isEdit: true,
+        task: task,
+        staffList: projectStaff,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited != null && isEdited) {
+          selectedTask.value = ScheduleTaskDM();
+          await getTimelineTask(selectedTimeline.value.id ?? "");
+          Helpers().showSuccessSnackBar("Task successfully updated");
+        }
+      },
+    );
+  }
+
   editTask(ScheduleTaskDM task) {
     Get.to(
-      () => TaskForm(
+      () => WebTaskForm(
         timelineId: selectedTimeline.value.id ?? "",
         isEdit: true,
         task: task,
@@ -642,9 +726,43 @@ class ProjectDetailController extends GetxController
     tabInfoController.animateTo(value);
   }
 
+  mobileEditTimeline() {
+    Get.to(
+      () => MobileTimelineForm(
+        projectId: projectId,
+        isEdit: true,
+        timeline: selectedTimeline.value,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited != null && isEdited) {
+          await getProjectTimeline();
+          Helpers().showSuccessSnackBar("Timeline successfully updated");
+        }
+      },
+    );
+  }
+
+  tabletEditTimeline() {
+    Get.to(
+      () => TabletTimelineForm(
+        projectId: projectId,
+        isEdit: true,
+        timeline: selectedTimeline.value,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited != null && isEdited) {
+          await getProjectTimeline();
+          Helpers().showSuccessSnackBar("Timeline successfully updated");
+        }
+      },
+    );
+  }
+
   editTimeline() {
     Get.to(
-      () => TimelineForm(
+      () => WebTimelineForm(
         projectId: projectId,
         isEdit: true,
         timeline: selectedTimeline.value,
@@ -698,9 +816,45 @@ class ProjectDetailController extends GetxController
     isLoading.value = false;
   }
 
+  mobileAddTask() {
+    Get.to(
+      () => MobileTaskForm(
+        timelineId: selectedTimeline.value.id ?? "",
+        staffList: projectStaff,
+      ),
+    )?.then(
+      (isCreated) async {
+        if (isCreated) {
+          await getTimelineTask(selectedTimeline.value.id ?? "");
+          Helpers().showSuccessSnackBar("Task created successfully");
+        } else {
+          Helpers().showErrorSnackBar("Create task failed");
+        }
+      },
+    );
+  }
+
+  tabletAddTask() {
+    Get.to(
+      () => TabletTaskForm(
+        timelineId: selectedTimeline.value.id ?? "",
+        staffList: projectStaff,
+      ),
+    )?.then(
+      (isCreated) async {
+        if (isCreated) {
+          await getTimelineTask(selectedTimeline.value.id ?? "");
+          Helpers().showSuccessSnackBar("Task created successfully");
+        } else {
+          Helpers().showErrorSnackBar("Create task failed");
+        }
+      },
+    );
+  }
+
   addTask() {
     Get.to(
-      () => TaskForm(
+      () => WebTaskForm(
         timelineId: selectedTimeline.value.id ?? "",
         staffList: projectStaff,
       ),
