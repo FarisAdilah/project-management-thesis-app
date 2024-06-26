@@ -13,13 +13,13 @@ import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/asset_images.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class PaymentForm extends StatelessWidget {
+class TabletPaymentForm extends StatelessWidget {
   final String projectId;
   final List<VendorDM> vendorList;
   final bool isEdit;
   final PaymentDM? payment;
 
-  const PaymentForm({
+  const TabletPaymentForm({
     super.key,
     required this.projectId,
     required this.vendorList,

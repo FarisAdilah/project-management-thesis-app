@@ -13,7 +13,9 @@ import 'package:project_management_thesis_app/pages/homePage/component/project/p
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectClientVendor/web_project_client_vendor.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectPayment/web_project_payment.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectStaff/web_project_staff.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/mobile_payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/payment_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/tablet_payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/task_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/timeline/timelineForm/timeline_form.dart';
 import 'package:project_management_thesis_app/pages/responsive_layout.dart';
@@ -387,10 +389,11 @@ class ProjectDetailController extends GetxController
           vendors: projectVendor,
           currentUser: currentUser ?? UserDM(),
           onCreatePayment: () {
-            _addNewPayment();
+            Helpers.writeLog("Create payment Mobile");
+            _mobileAddNewPayment();
           },
           onEditPayment: (payment) {
-            _updatePayment(payment);
+            _mobileUpdatePayment(payment);
           },
           onDeletePayment: (payment) {
             _deletePayment(payment);
@@ -402,10 +405,10 @@ class ProjectDetailController extends GetxController
           vendors: projectVendor,
           currentUser: currentUser ?? UserDM(),
           onCreatePayment: () {
-            _addNewPayment();
+            _tabletAddNewPayment();
           },
           onEditPayment: (payment) {
-            _updatePayment(payment);
+            _tabletUpdatePayment(payment);
           },
           onDeletePayment: (payment) {
             _deletePayment(payment);
@@ -494,6 +497,38 @@ class ProjectDetailController extends GetxController
     }
   }
 
+  _mobileAddNewPayment() {
+    Get.to(
+      () => MobilePaymentForm(
+        projectId: projectId,
+        vendorList: projectVendor,
+      ),
+    )?.then(
+      (isCreated) async {
+        if (isCreated != null && isCreated) {
+          await getProjectPayment();
+          Helpers().showSuccessSnackBar("Payment created successfully");
+        }
+      },
+    );
+  }
+
+  _tabletAddNewPayment() {
+    Get.to(
+      () => TabletPaymentForm(
+        projectId: projectId,
+        vendorList: projectVendor,
+      ),
+    )?.then(
+      (isCreated) async {
+        if (isCreated != null && isCreated) {
+          await getProjectPayment();
+          Helpers().showSuccessSnackBar("Payment created successfully");
+        }
+      },
+    );
+  }
+
   _addNewPayment() {
     Get.to(
       () => PaymentForm(
@@ -505,6 +540,42 @@ class ProjectDetailController extends GetxController
         if (isCreated != null && isCreated) {
           await getProjectPayment();
           Helpers().showSuccessSnackBar("Payment created successfully");
+        }
+      },
+    );
+  }
+
+  _mobileUpdatePayment(PaymentDM payment) {
+    Get.to(
+      () => MobilePaymentForm(
+        projectId: projectId,
+        vendorList: projectVendor,
+        isEdit: true,
+        payment: payment,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited != null && isEdited) {
+          await getProjectPayment();
+          Helpers().showSuccessSnackBar("Payment updated successfully");
+        }
+      },
+    );
+  }
+
+  _tabletUpdatePayment(PaymentDM payment) {
+    Get.to(
+      () => TabletPaymentForm(
+        projectId: projectId,
+        vendorList: projectVendor,
+        isEdit: true,
+        payment: payment,
+      ),
+    )?.then(
+      (isEdited) async {
+        if (isEdited != null && isEdited) {
+          await getProjectPayment();
+          Helpers().showSuccessSnackBar("Payment updated successfully");
         }
       },
     );

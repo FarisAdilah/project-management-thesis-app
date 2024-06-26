@@ -10,16 +10,15 @@ import 'package:project_management_thesis_app/pages/homePage/component/project/p
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
-import 'package:project_management_thesis_app/utils/asset_images.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class PaymentForm extends StatelessWidget {
+class MobilePaymentForm extends StatelessWidget {
   final String projectId;
   final List<VendorDM> vendorList;
   final bool isEdit;
   final PaymentDM? payment;
 
-  const PaymentForm({
+  const MobilePaymentForm({
     super.key,
     required this.projectId,
     required this.vendorList,
@@ -50,19 +49,16 @@ class PaymentForm extends StatelessWidget {
           children: [
             const GradationBackground(),
             Container(
-              margin: const EdgeInsets.all(100),
+              margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 25),
               width: double.infinity,
               child: Row(
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
                       child: Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: AssetColor.whitePrimary,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            topLeft: Radius.circular(20),
-                          ),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         padding: const EdgeInsets.all(25),
                         child: Column(
@@ -155,20 +151,6 @@ class PaymentForm extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                      child: Image.asset(
-                        AssetImages.backgroundCreatePayment,
-                        fit: BoxFit.cover,
-                        height: double.infinity,
-                        alignment: Alignment.center,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

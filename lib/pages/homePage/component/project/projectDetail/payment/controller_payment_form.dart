@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/createForm/client/web_select_client.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/vendor/mobile_select_vendor.dart';
+import 'package:project_management_thesis_app/globalComponent/createForm/vendor/tablet_select_vendor.dart';
 import 'package:project_management_thesis_app/globalComponent/createForm/vendor/web_select_vendor.dart';
+import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
@@ -112,16 +115,45 @@ class PaymentFormController extends GetxController {
 
   selectVendor() {
     Get.dialog(
-      AlertDialog(
-        backgroundColor: AssetColor.whiteBackground,
-        content: WebSelectVendor(
-          projectId: projectId,
-          onVendorSelected: (vendor) {
-            selectedVendor.value = vendor;
-            vendorController.text = vendor.name ?? "vendor name";
-          },
-          initialVendor: selectedVendor.value,
-          availableVendor: availableVendor,
+      ResponsiveLayout(
+        mobileScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: MobileSelectVendor(
+            projectId: projectId,
+            onVendorSelected: (vendor) {
+              selectedVendor.value = vendor;
+              vendorController.text = vendor.name ?? "vendor name";
+            },
+            initialVendor: selectedVendor.value,
+            availableVendor: availableVendor,
+          ),
+        ),
+        tabletScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: TabletSelectVendor(
+            projectId: projectId,
+            onVendorSelected: (vendor) {
+              selectedVendor.value = vendor;
+              vendorController.text = vendor.name ?? "vendor name";
+            },
+            initialVendor: selectedVendor.value,
+            availableVendor: availableVendor,
+          ),
+        ),
+        desktopScaffold: AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          contentPadding: const EdgeInsets.all(0),
+          content: WebSelectVendor(
+            projectId: projectId,
+            onVendorSelected: (vendor) {
+              selectedVendor.value = vendor;
+              vendorController.text = vendor.name ?? "vendor name";
+            },
+            initialVendor: selectedVendor.value,
+            availableVendor: availableVendor,
+          ),
         ),
       ),
     );
