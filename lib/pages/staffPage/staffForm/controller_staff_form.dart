@@ -91,6 +91,7 @@ class StaffFormController extends GetxController with Storage {
     user.password = Helpers().getGeneratedPassword(
       nameController.text,
     );
+    user.projectId = [];
 
     Helpers.writeLog("password: ${user.password}");
 

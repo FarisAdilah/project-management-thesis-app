@@ -322,6 +322,7 @@ class MobileProjectDetail extends StatelessWidget {
                           ),
                           child: Obx(
                             () => TabBarView(
+                              physics: const NeverScrollableScrollPhysics(),
                               controller: controller.tabTimelineController,
                               children: controller.tabTimelineList
                                   .map((String title) {
