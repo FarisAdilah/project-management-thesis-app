@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
+import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class PendingProjectItemContent extends StatelessWidget {
-  final ProjectDM pendingProject;
+class PendingPaymentItemContent extends StatelessWidget {
+  final PaymentDM pendingPayment;
   final VoidCallback onPressed;
   final bool isAdmin;
 
-  const PendingProjectItemContent({
+  const PendingPaymentItemContent({
     super.key,
-    required this.pendingProject,
+    required this.pendingPayment,
     required this.onPressed,
     this.isAdmin = false,
   });
@@ -46,7 +46,7 @@ class PendingProjectItemContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(
-            pendingProject.name ?? "name",
+            pendingPayment.paymentName ?? "name",
             color: AssetColor.blackPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -56,19 +56,19 @@ class PendingProjectItemContent extends StatelessWidget {
             color: AssetColor.grey,
             thickness: 1,
           ),
-          const CustomText(
-            "Client",
-            color: AssetColor.blackPrimary,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-          CustomText(
-            pendingProject.clientName ?? "client",
-            color: AssetColor.blackPrimary,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
+          // const CustomText(
+          //   "Client",
+          //   color: AssetColor.blackPrimary,
+          //   fontSize: 16,
+          //   fontWeight: FontWeight.bold,
+          // ),
+          // CustomText(
+          //   pendingPayment.clientId ?? "client",
+          //   color: AssetColor.blackPrimary,
+          // ),
+          // const SizedBox(
+          //   height: 15,
+          // ),
           Row(
             children: [
               Expanded(
@@ -76,14 +76,14 @@ class PendingProjectItemContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomText(
-                      "Start Date",
+                      "Deadline",
                       color: AssetColor.blackPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                     CustomText(
                       Helpers().convertDateStringFormat(
-                        pendingProject.startDate ?? "start date",
+                        pendingPayment.deadline ?? "start date",
                       ),
                       color: AssetColor.blackPrimary,
                     ),
@@ -95,38 +95,26 @@ class PendingProjectItemContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomText(
-                      "End Date",
+                      "Amount",
                       color: AssetColor.blackPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                     CustomText(
-                      Helpers().convertDateStringFormat(
-                        pendingProject.endDate ?? "start date",
+                      Helpers().currencyFormat(
+                        pendingPayment.paymentAmount ?? "amount",
                       ),
                       color: AssetColor.blackPrimary,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.justify,
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(
-            height: 15,
-          ),
-          const CustomText(
-            "Description",
-            color: AssetColor.blackPrimary,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-          CustomText(
-            pendingProject.description ?? "description",
-            color: AssetColor.blackPrimary,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.justify,
-          ),
+
           const SizedBox(
             height: 15,
           ),

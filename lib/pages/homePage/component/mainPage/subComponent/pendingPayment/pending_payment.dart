@@ -1,19 +1,19 @@
 import 'package:flutter/widgets.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/project_pending_item_content.dart';
-import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pendingPayment/pending_payment_item_content.dart';
+import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 
-class PendingProject extends StatelessWidget {
-  final List<ProjectDM> pendingProjects;
-  final Function(ProjectDM) showPendingDetail;
-  final bool isAdmin;
+class PendingPayment extends StatelessWidget {
+  final List<PaymentDM> pendingPayments;
+  final Function(PaymentDM) showPendingDetail;
+  final bool isPm;
 
-  const PendingProject({
+  const PendingPayment({
     super.key,
-    required this.pendingProjects,
+    required this.pendingPayments,
     required this.showPendingDetail,
-    this.isAdmin = false,
+    this.isPm = false,
   });
 
   @override
@@ -22,7 +22,7 @@ class PendingProject extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomText(
-          isAdmin ? "Pending Rejected Project" : "Pending Aprroval Project",
+          isPm ? "Pending Rejected Payment" : "Pending Payment",
           color: AssetColor.blueTertiaryAccent,
           fontSize: 30,
           fontWeight: FontWeight.bold,
@@ -31,20 +31,20 @@ class PendingProject extends StatelessWidget {
           height: 20,
         ),
         SizedBox(
-          height: 325,
+          height: 200,
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: pendingProjects.length,
+            itemCount: pendingPayments.length,
             itemBuilder: (context, index) {
-              ProjectDM pendingProject = pendingProjects[index];
+              PaymentDM pendingPayment = pendingPayments[index];
 
-              return PendingItemContent(
-                pendingProject: pendingProject,
+              return PendingPaymentItemContent(
+                pendingPayment: pendingPayment,
                 onPressed: () {
-                  showPendingDetail(pendingProject);
+                  showPendingDetail(pendingPayment);
                 },
-                isAdmin: isAdmin,
+                isAdmin: isPm,
               );
             },
           ),

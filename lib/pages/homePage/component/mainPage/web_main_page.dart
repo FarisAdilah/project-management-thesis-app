@@ -146,6 +146,8 @@ class WebMainPage extends StatelessWidget {
                       height: 50,
                     ),
                     controller.getPendingWidget(),
+                    controller.getPendingPayment(),
+                    controller.getClosingWidget(),
                     const CustomText(
                       "List Project",
                       color: AssetColor.blueTertiaryAccent,

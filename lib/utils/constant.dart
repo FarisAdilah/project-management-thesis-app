@@ -44,6 +44,8 @@ enum ProjectStatusType {
   rejected,
   ongoing,
   closing,
+  pendingClose,
+  rejectClose,
   completed,
 }
 

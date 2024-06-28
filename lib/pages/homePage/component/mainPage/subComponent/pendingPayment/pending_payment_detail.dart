@@ -4,30 +4,23 @@ import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
-import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
-import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
+import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/repository/vendor/dataModel/vendor_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
-class PendingProjectDetail extends StatelessWidget {
-  final ProjectDM project;
-  final List<VendorDM> vendors;
+class PendingPaymentDetail extends StatelessWidget {
+  final PaymentDM payment;
+  final VendorDM vendors;
   final ClientDM client;
-  final UserDM projectManager;
-  final bool isAdmin;
-  final bool isClosing;
-  final bool isRejectClose;
+  final bool isPm;
 
-  const PendingProjectDetail({
+  const PendingPaymentDetail({
     super.key,
-    required this.project,
+    required this.payment,
     required this.vendors,
     required this.client,
-    required this.projectManager,
-    this.isAdmin = false,
-    this.isClosing = false,
-    this.isRejectClose = false,
+    this.isPm = false,
   });
 
   @override
@@ -53,23 +46,24 @@ class PendingProjectDetail extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    project.name ?? "name",
+                    payment.paymentName ?? "name",
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
                   CustomText(
-                    project.description ?? "description",
+                    payment.id ?? "id",
                     fontSize: 20,
                     textAlign: TextAlign.justify,
                   ),
+                  const Divider(
+                    color: AssetColor.grey,
+                    thickness: 1,
+                  ),
                   const SizedBox(
-                    height: 25,
+                    height: 10,
                   ),
                   const CustomText(
-                    "Project Manager",
+                    "Amount",
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -77,7 +71,9 @@ class PendingProjectDetail extends StatelessWidget {
                     height: 10,
                   ),
                   CustomText(
-                    projectManager.name ?? "name",
+                    Helpers().currencyFormat(
+                      payment.paymentAmount ?? "0",
+                    ),
                     fontSize: 20,
                   ),
                   const SizedBox(
@@ -89,7 +85,7 @@ class PendingProjectDetail extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const CustomText(
-                            "Start Date",
+                            "Deadline",
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -107,7 +103,7 @@ class PendingProjectDetail extends StatelessWidget {
                             ),
                             child: CustomText(
                               Helpers().convertDateStringFormat(
-                                  project.startDate ?? ""),
+                                  payment.deadline ?? ""),
                               color: AssetColor.whiteBackground,
                               fontSize: 20,
                             ),
@@ -116,35 +112,6 @@ class PendingProjectDetail extends StatelessWidget {
                       ),
                       const SizedBox(
                         width: 25,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CustomText(
-                            "End Date",
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AssetColor.orange,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: CustomText(
-                              Helpers().convertDateStringFormat(
-                                  project.endDate ?? ""),
-                              color: AssetColor.whiteBackground,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -188,7 +155,7 @@ class PendingProjectDetail extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomText(
-                                project.clientName ?? "Client Name",
+                                client.name ?? "Client Name",
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -217,107 +184,95 @@ class PendingProjectDetail extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  ListView.builder(
-                    itemCount: vendors.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      VendorDM vendorDM = vendors[index];
-
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AssetColor.greyBackground.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            vendorDM.image != null
-                                ? Expanded(
-                                    child: Image.network(
-                                      vendorDM.image!,
-                                      height: 90,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            vendorDM.image != null
-                                ? const SizedBox(
-                                    width: 15,
-                                  )
-                                : const SizedBox(),
-                            Expanded(
-                              flex: 4,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    vendorDM.name ?? "vendorDM Name",
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  CustomText(
-                                    vendorDM.address ?? "address",
-                                    fontSize: 20,
-                                  ),
-                                  CustomText(
-                                    vendorDM.phoneNumber ?? "email",
-                                    fontSize: 20,
-                                  ),
-                                ],
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AssetColor.greyBackground.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        vendors.image != null
+                            ? Expanded(
+                                child: Image.network(
+                                  vendors.image!,
+                                  height: 90,
+                                ),
+                              )
+                            : const SizedBox(),
+                        vendors.image != null
+                            ? const SizedBox(
+                                width: 15,
+                              )
+                            : const SizedBox(),
+                        Expanded(
+                          flex: 4,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomText(
+                                vendors.name ?? "vendors Name",
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                            ),
-                          ],
+                              CustomText(
+                                vendors.address ?? "address",
+                                fontSize: 20,
+                              ),
+                              CustomText(
+                                vendors.phoneNumber ?? "email",
+                                fontSize: 20,
+                              ),
+                            ],
+                          ),
                         ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 25,
                   ),
-                  isAdmin
-                      ? isClosing
-                          ? CustomButton(
-                              text: "Add Document",
-                              onPressed: () {},
-                            )
-                          : const SizedBox()
-                      : isClosing
-                          ? Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 25,
-                                vertical: 15,
+                  isPm
+                      ? Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 25,
+                            vertical: 15,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AssetColor.redButton,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.circleInfo,
+                                color: AssetColor.whiteBackground,
+                                applyTextScaling: true,
                               ),
-                              decoration: BoxDecoration(
-                                color: AssetColor.redButton,
-                                borderRadius: BorderRadius.circular(15),
+                              SizedBox(
+                                width: 10,
                               ),
-                              child: const Row(
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.circleInfo,
-                                    color: AssetColor.whiteBackground,
-                                    applyTextScaling: true,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: CustomText(
-                                      "This project has been rejected by Supervisor. Please delete or edit to Continue.",
-                                      color: AssetColor.whiteBackground,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
+                              Expanded(
+                                flex: 2,
+                                child: CustomText(
+                                  "This payment has been rejected by Admin. Please delete or edit to Continue.",
+                                  color: AssetColor.whiteBackground,
+                                  fontSize: 16,
+                                ),
                               ),
-                            )
-                          : CustomButton(
-                              text: "See Document",
-                              onPressed: () {},
-                            )
+                            ],
+                          ),
+                        )
+                      : const SizedBox(),
+                  isPm
+                      ? const SizedBox()
+                      : CustomButton(
+                          text: "Add Document",
+                          borderRadius: 8,
+                          onPressed: () {},
+                        )
                 ],
               ),
             ),

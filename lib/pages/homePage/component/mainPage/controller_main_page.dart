@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pending_project.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pendingPayment/pending_payment.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pendingPayment/pending_payment_detail.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pendingProject/pending_project.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/mobile_project_detail.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/tablet_project_detail.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectForm/mobile_project_form.dart';
@@ -15,6 +17,8 @@ import 'package:project_management_thesis_app/pages/homePage/component/project/p
 import 'package:project_management_thesis_app/pages/responsive_layout.dart';
 import 'package:project_management_thesis_app/repository/client/client_repository.dart';
 import 'package:project_management_thesis_app/repository/client/dataModel/client_dm.dart';
+import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
+import 'package:project_management_thesis_app/repository/payment/payment_repository.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/project/project_repository.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
@@ -31,12 +35,16 @@ class MainPageController extends GetxController with Storage {
   final _vendorRepo = VendorRepository.instance;
   final _clientRepo = ClientRepository.instance;
   final _projectRepo = ProjectRepository.instance;
+  final _paymentRepo = PaymentRepository.instance;
 
   RxList<UserDM> users = <UserDM>[].obs;
   RxList<VendorDM> vendors = <VendorDM>[].obs;
   RxList<ClientDM> clients = <ClientDM>[].obs;
   RxList<ProjectDM> projects = <ProjectDM>[].obs;
   RxList<ProjectDM> pendingProjects = <ProjectDM>[].obs;
+  RxList<PaymentDM> pendingPayments = <PaymentDM>[].obs;
+  RxList<ProjectDM> closingProjects = <ProjectDM>[].obs;
+
   Rx<UserDM> currentUser = UserDM().obs;
 
   RxBool isHoverListProject = false.obs;
@@ -52,6 +60,7 @@ class MainPageController extends GetxController with Storage {
     await _getAllVendors();
     await _getAllClients();
     await _getAllProjects();
+    await _getAllPayments();
     isLoading.value = false;
   }
 
@@ -84,9 +93,32 @@ class MainPageController extends GetxController with Storage {
       pendingProjects.value = projects
           .where((element) => element.status == ProjectStatusType.pending.name)
           .toList();
+      closingProjects.value = projects
+          .where((element) =>
+              element.status == ProjectStatusType.pendingClose.name)
+          .toList();
     } else if (currentUser.value.role == UserType.admin.name) {
       pendingProjects.value = projects
           .where((element) => element.status == ProjectStatusType.rejected.name)
+          .toList();
+      closingProjects.value = projects
+          .where((element) =>
+              element.status == ProjectStatusType.rejectClose.name ||
+              element.status == ProjectStatusType.closing.name)
+          .toList();
+    }
+  }
+
+  _getAllPayments() async {
+    pendingPayments.value = await _paymentRepo.getAllPayment();
+
+    if (currentUser.value.role == UserType.admin.name) {
+      pendingPayments.value = pendingPayments
+          .where((element) => element.status == PaymentStatusType.pending.name)
+          .toList();
+    } else if (currentUser.value.role == UserType.projectManager.name) {
+      pendingPayments.value = pendingPayments
+          .where((element) => element.status == PaymentStatusType.rejected.name)
           .toList();
     }
   }
@@ -114,7 +146,7 @@ class MainPageController extends GetxController with Storage {
     }
   }
 
-  showPendingDetail(ProjectDM project) {
+  showPendingDetail(ProjectDM project, {bool isClosing = false}) {
     Helpers.writeLog("project: ${jsonEncode(project)}");
     List<VendorDM> projectVendor = vendors
         .where((element) => project.vendorId!.contains(element.id))
@@ -143,6 +175,7 @@ class MainPageController extends GetxController with Storage {
           vendors: projectVendor,
           projectManager: projectManager ?? UserDM(),
           isAdmin: isAdmin,
+          isClosing: isClosing,
         ),
         actionsAlignment: MainAxisAlignment.center,
         actionsPadding: const EdgeInsets.symmetric(
@@ -150,52 +183,59 @@ class MainPageController extends GetxController with Storage {
           vertical: 10,
         ),
         actions: [
-          CustomButton(
-            onPressed: () {
-              if (isAdmin) {
-                Get.dialog(
-                  AlertDialog(
-                    title: const CustomText("Delete Project"),
-                    content: const CustomText(
-                      "Are you sure you want to delete this project?",
-                    ),
-                    actions: [
-                      CustomButton(
-                        onPressed: () {
-                          deleteProject(project.id ?? "");
-                          Get.back();
-                        },
-                        text: "Yes",
-                        color: AssetColor.redButton,
-                        textColor: AssetColor.whiteBackground,
-                        borderRadius: 8,
-                      ),
-                      CustomButton(
-                        onPressed: () => Get.back(),
-                        text: "No",
-                        color: AssetColor.orangeButton,
-                        textColor: AssetColor.whiteBackground,
-                        borderRadius: 8,
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                updateProjectStatus(
-                  project.id ?? "",
-                  ProjectStatusType.rejected.name,
-                );
-              }
-            },
-            text: isAdmin ? "Delete" : "Decline",
-            color: AssetColor.redButton,
-            textColor: AssetColor.whiteBackground,
-            borderRadius: 8,
-          ),
+          isClosing
+              ? const SizedBox()
+              : CustomButton(
+                  onPressed: () {
+                    if (isAdmin) {
+                      Get.dialog(
+                        AlertDialog(
+                          title: const CustomText("Delete Project"),
+                          content: const CustomText(
+                            "Are you sure you want to delete this project?",
+                          ),
+                          actions: [
+                            CustomButton(
+                              onPressed: () {
+                                deleteProject(project.id ?? "");
+                                Get.back();
+                              },
+                              text: "Yes",
+                              color: AssetColor.redButton,
+                              textColor: AssetColor.whiteBackground,
+                              borderRadius: 8,
+                            ),
+                            CustomButton(
+                              onPressed: () => Get.back(),
+                              text: "No",
+                              color: AssetColor.orangeButton,
+                              textColor: AssetColor.whiteBackground,
+                              borderRadius: 8,
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      updateProjectStatus(
+                        project.id ?? "",
+                        ProjectStatusType.rejected.name,
+                      );
+                    }
+                  },
+                  text: isAdmin ? "Delete" : "Decline",
+                  color: AssetColor.redButton,
+                  textColor: AssetColor.whiteBackground,
+                  borderRadius: 8,
+                ),
           CustomButton(
             onPressed: () => {
               if (isAdmin)
                 {
+                  if (isClosing)
+                    updateProjectStatus(
+                      project.id ?? "",
+                      ProjectStatusType.pendingClose.name,
+                    ),
                   Get.back(),
                   Get.to(
                     () => WebProjectForm(
@@ -216,7 +256,11 @@ class MainPageController extends GetxController with Storage {
                   ),
                 }
             },
-            text: isAdmin ? "Edit" : "Approve",
+            text: isClosing
+                ? isAdmin
+                    ? "Submit Close Project Document"
+                    : "Approve"
+                : "Approve",
             color: isAdmin ? AssetColor.orangeButton : AssetColor.greenButton,
             textColor: AssetColor.whiteBackground,
             borderRadius: 8,
@@ -224,6 +268,152 @@ class MainPageController extends GetxController with Storage {
         ],
       ),
     );
+  }
+
+  getPendingPayment() {
+    if (currentUser.value.role == UserType.admin.name) {
+      return PendingPayment(
+        pendingPayments: pendingPayments,
+        showPendingDetail: showPendingPaymentDetail,
+      );
+    } else if (currentUser.value.role == UserType.projectManager.name) {
+      return PendingPayment(
+        pendingPayments: pendingPayments,
+        showPendingDetail: showPendingPaymentDetail,
+        isPm: true,
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  showPendingPaymentDetail(PaymentDM payment) {
+    Helpers.writeLog("payment: ${jsonEncode(payment)}");
+    VendorDM vendor =
+        vendors.where((element) => payment.vendorId == element.id).first;
+
+    ClientDM client =
+        clients.firstWhere((element) => element.id == payment.clientId);
+
+    bool isPm = currentUser.value.role == UserType.projectManager.name;
+
+    Helpers.writeLog("projectVendor: ${jsonEncode(vendor)}");
+
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AssetColor.whiteBackground,
+        content: PendingPaymentDetail(
+          payment: payment,
+          client: client,
+          vendors: vendor,
+          isPm: isPm,
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actionsPadding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 10,
+        ),
+        actions: [
+          CustomButton(
+            onPressed: () {
+              if (isPm) {
+                Get.dialog(
+                  AlertDialog(
+                    title: const CustomText("Delete Payment"),
+                    content: const CustomText(
+                      "Are you sure you want to delete this payment?",
+                    ),
+                    actions: [
+                      CustomButton(
+                        onPressed: () {
+                          Get.back();
+                          // deleteProject(project.id ?? "");
+                        },
+                        text: "Yes",
+                        color: AssetColor.redButton,
+                        textColor: AssetColor.whiteBackground,
+                        borderRadius: 8,
+                      ),
+                      CustomButton(
+                        onPressed: () => Get.back(),
+                        text: "No",
+                        color: AssetColor.orangeButton,
+                        textColor: AssetColor.whiteBackground,
+                        borderRadius: 8,
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                updateProjectStatus(
+                  payment.id ?? "",
+                  ProjectStatusType.rejected.name,
+                );
+              }
+            },
+            text: isPm ? "Delete" : "Decline",
+            color: AssetColor.redButton,
+            textColor: AssetColor.whiteBackground,
+            borderRadius: 8,
+          ),
+          CustomButton(
+            onPressed: () => {
+              if (isPm)
+                {
+                  Get.back(),
+                  // Get.to(
+                  //   () => WebProjectForm(
+                  //     project: project,
+                  //     isEdit: true,
+                  //   ),
+                  // )?.then(
+                  //   (isUpdated) {
+                  //     if (isUpdated) _getAllProjects();
+                  //   },
+                  // )
+                }
+              else
+                {
+                  Get.back(),
+                  // updateProjectStatus(
+                  //   project.id ?? "",
+                  //   ProjectStatusType.ongoing.name,
+                  // ),
+                }
+            },
+            text: isPm ? "Edit" : "Approve",
+            color: isPm ? AssetColor.orangeButton : AssetColor.greenButton,
+            textColor: AssetColor.whiteBackground,
+            borderRadius: 8,
+          ),
+        ],
+      ),
+    );
+  }
+
+  getClosingWidget() {
+    if (currentUser.value.role == UserType.supervisor.name &&
+        closingProjects.isNotEmpty) {
+      return PendingProject(
+        pendingProjects: closingProjects,
+        showPendingDetail: (project) {
+          showPendingDetail(project);
+        },
+        isClosing: true,
+      );
+    } else if (currentUser.value.role == UserType.admin.name &&
+        closingProjects.isNotEmpty) {
+      return PendingProject(
+        pendingProjects: closingProjects,
+        showPendingDetail: (project) {
+          showPendingDetail(project, isClosing: true);
+        },
+        isAdmin: true,
+        isClosing: true,
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 
   createProject() {

@@ -66,6 +66,38 @@ class PaymentRepository with RepoBase {
     return paymentListDM;
   }
 
+  Future<List<PaymentDM>> getPendingPayments() async {
+    List collection = await getMultipleDocument(
+      CollectionType.payments.name,
+      "status",
+      PaymentStatusType.pending.name,
+    );
+
+    List<PaymentFirebase> paymentList = [];
+    for (var element in collection) {
+      PaymentFirebase payment = PaymentFirebase.fromFirestoreList(element);
+      paymentList.add(payment);
+    }
+
+    List<PaymentDM> paymentListDM = [];
+    for (var payment in paymentList) {
+      PaymentDM paymentDM = PaymentDM();
+      paymentDM.id = payment.id;
+      paymentDM.clientId = payment.clientId;
+      paymentDM.paymentAmount = payment.amount;
+      paymentDM.paymentName = payment.name;
+      paymentDM.vendorId = payment.vendorId;
+      paymentDM.deadline = payment.deadline;
+      paymentDM.projectId = payment.projectId;
+      paymentDM.status = payment.status;
+      paymentDM.file = payment.file;
+
+      paymentListDM.add(paymentDM);
+    }
+
+    return paymentListDM;
+  }
+
   Future<PaymentDM> getPaymentById(String id) async {
     var data = await getDataDocument(CollectionType.payments.name, id);
     PaymentFirebase payment = PaymentFirebase.fromFirestoreDoc(data);
