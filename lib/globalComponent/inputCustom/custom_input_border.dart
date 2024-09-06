@@ -7,6 +7,7 @@ class CustomInputBorder extends StatelessWidget {
   final TextEditingController? controller;
   final bool? isPassword;
   final bool? enabled;
+  final bool? readOnly;
   final VoidCallback? obscureCallback;
   final Function(String)? onChanged;
 
@@ -17,6 +18,7 @@ class CustomInputBorder extends StatelessWidget {
     this.controller,
     this.isPassword,
     this.enabled,
+    this.readOnly,
     this.obscureCallback,
     this.onChanged,
   });
@@ -27,6 +29,7 @@ class CustomInputBorder extends StatelessWidget {
       controller: controller,
       obscureText: isPassword ?? false,
       enabled: enabled ?? true,
+      readOnly: readOnly ?? false,
       onChanged: onChanged != null ? (value) => onChanged!(value) : null,
       decoration: InputDecoration(
         border: OutlineInputBorder(

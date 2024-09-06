@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
-import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input_border.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/pages/profilePage/controller_profile.dart';
@@ -96,6 +95,7 @@ class TabletProfile extends StatelessWidget {
                                     "Name",
                                     FontAwesomeIcons.user,
                                     controller: controller.nameController,
+                                    enabled: false,
                                   ),
                                 ),
                                 const SizedBox(
@@ -139,6 +139,7 @@ class TabletProfile extends StatelessWidget {
                                     "Phone Number",
                                     FontAwesomeIcons.phone,
                                     controller: controller.phoneController,
+                                    enabled: false,
                                   ),
                                 ),
                               ],
@@ -153,6 +154,7 @@ class TabletProfile extends StatelessWidget {
                                     "Role",
                                     FontAwesomeIcons.userTag,
                                     controller: controller.roleController,
+                                    enabled: false,
                                   ),
                                 ),
                                 const SizedBox(
@@ -160,13 +162,6 @@ class TabletProfile extends StatelessWidget {
                                 ),
                                 const Expanded(child: SizedBox()),
                               ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            CustomButton(
-                              text: "Update Data",
-                              onPressed: () {},
                             ),
                           ],
                         ),
@@ -225,6 +220,7 @@ Widget _buildInput(
         controller: controller,
         isPassword: isPassword,
         enabled: enabled,
+        readOnly: true,
         obscureCallback: obscureCallback,
       ),
     ],

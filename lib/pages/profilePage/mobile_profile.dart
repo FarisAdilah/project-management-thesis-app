@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/avatar/profile_picture.dart';
-import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
 import 'package:project_management_thesis_app/globalComponent/inputCustom/custom_input_border.dart';
 import 'package:project_management_thesis_app/globalComponent/loading/loading.dart';
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
@@ -145,6 +144,7 @@ class MobileProfile extends StatelessWidget {
                               number,
                             );
                           },
+                          enabled: false,
                         ),
                         const SizedBox(
                           height: 10,
@@ -160,19 +160,6 @@ class MobileProfile extends StatelessWidget {
                         ),
                         const SizedBox(
                           height: 20,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Obx(
-                            () => CustomButton(
-                              text: "Update Data",
-                              isEnabled: controller.isEnabled.value,
-                              disableColor: AssetColor.blueSecondaryAccent
-                                  .withOpacity(0.5),
-                              borderRadius: 8,
-                              onPressed: () => controller.updateUserData(),
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -214,6 +201,7 @@ Widget _buildInput(
         controller: controller,
         isPassword: isPassword,
         enabled: enabled,
+        readOnly: true,
         obscureCallback: obscureCallback,
         onChanged: onChanged != null ? (value) => onChanged(value) : null,
       ),
