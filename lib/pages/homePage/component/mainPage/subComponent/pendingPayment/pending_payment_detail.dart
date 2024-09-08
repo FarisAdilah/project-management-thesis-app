@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,12 @@ class PendingPaymentDetail extends StatelessWidget {
   final VendorDM vendors;
   final ClientDM client;
   final bool isPm;
+  final VoidCallback? onAddDocument;
+  final File file;
+  final Uint8List fileWeb;
+  final String fileName;
+  final VoidCallback? onBack;
+  final VoidCallback? onDeleteFile;
 
   const PendingPaymentDetail({
     super.key,
@@ -21,6 +29,12 @@ class PendingPaymentDetail extends StatelessWidget {
     required this.vendors,
     required this.client,
     this.isPm = false,
+    this.onAddDocument,
+    required this.file,
+    required this.fileWeb,
+    required this.fileName,
+    this.onBack,
+    this.onDeleteFile,
   });
 
   @override
@@ -268,11 +282,51 @@ class PendingPaymentDetail extends StatelessWidget {
                       : const SizedBox(),
                   isPm
                       ? const SizedBox()
-                      : CustomButton(
-                          text: "Add Document",
-                          borderRadius: 8,
-                          onPressed: () {},
-                        )
+                      : file.path.isEmpty && fileWeb.isEmpty
+                          ? CustomButton(
+                              text: "Add Document",
+                              borderRadius: 8,
+                              onPressed: onAddDocument,
+                            )
+                          : Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color:
+                                    AssetColor.greyBackground.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    FontAwesomeIcons.filePdf,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Expanded(
+                                    child: CustomText(
+                                      fileName,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(FontAwesomeIcons.xmark),
+                                    iconSize: 20,
+                                    onPressed: onDeleteFile,
+                                  ),
+                                ],
+                              ),
+                            ),
                 ],
               ),
             ),
@@ -284,6 +338,9 @@ class PendingPaymentDetail extends StatelessWidget {
               icon: const Icon(FontAwesomeIcons.xmark),
               onPressed: () {
                 Get.back();
+                if (onBack != null) {
+                  onBack!();
+                }
               },
             ),
           ),

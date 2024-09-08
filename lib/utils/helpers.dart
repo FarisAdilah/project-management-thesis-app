@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Helpers {
   showSuccessSnackBar(
@@ -81,12 +82,12 @@ class Helpers {
     return userRole;
   }
 
-  String convertDateStringFormat(String date, {String format = "dd/MM/yyyy"}) {
+  String convertDateStringFormat(String date, {String? format}) {
     if (date.isEmpty) {
       return "";
     }
     DateTime dateTime = DateTime.parse(date);
-    String formattedDate = DateFormat("d MMMM y").format(dateTime);
+    String formattedDate = DateFormat(format ?? "d MMMM y").format(dateTime);
 
     return formattedDate;
   }
@@ -122,5 +123,11 @@ class Helpers {
     }
 
     return taskStatus;
+  }
+
+  Future<void> launchViaUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

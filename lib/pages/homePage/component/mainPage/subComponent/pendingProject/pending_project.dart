@@ -26,8 +26,8 @@ class PendingProject extends StatelessWidget {
         CustomText(
           isClosing
               ? isAdmin
-                  ? "Pending Rejected Closing Project"
-                  : "Pending Closing Project"
+                  ? "Pending Closing Project"
+                  : "Pending Rejected Closing Project"
               : isAdmin
                   ? "Pending Rejected Project"
                   : "Pending Aprroval Project",

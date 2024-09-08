@@ -18,41 +18,43 @@ class PendingPayment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomText(
-          isPm ? "Pending Rejected Payment" : "Pending Payment",
-          color: AssetColor.blueTertiaryAccent,
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        SizedBox(
-          height: 200,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: pendingPayments.length,
-            itemBuilder: (context, index) {
-              PaymentDM pendingPayment = pendingPayments[index];
+    return pendingPayments.isNotEmpty
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                isPm ? "Pending Rejected Payment" : "Pending Payment",
+                color: AssetColor.blueTertiaryAccent,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: pendingPayments.length,
+                  itemBuilder: (context, index) {
+                    PaymentDM pendingPayment = pendingPayments[index];
 
-              return PendingPaymentItemContent(
-                pendingPayment: pendingPayment,
-                onPressed: () {
-                  showPendingDetail(pendingPayment);
-                },
-                isAdmin: isPm,
-              );
-            },
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-      ],
-    );
+                    return PendingPaymentItemContent(
+                      pendingPayment: pendingPayment,
+                      onPressed: () {
+                        showPendingDetail(pendingPayment);
+                      },
+                      isAdmin: isPm,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          )
+        : const SizedBox();
   }
 }

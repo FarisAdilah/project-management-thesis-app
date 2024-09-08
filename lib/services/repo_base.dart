@@ -160,22 +160,23 @@ mixin RepoBase {
   }
 
   // File Operation
-  Future<String> uploadImage(
+  Future<String> uploadFile(
     String path, {
-    XFile? image,
-    Uint8List? imageWeb,
+    XFile? file,
+    Uint8List? fileWeb,
+    String? contentType,
   }) async {
-    final metadata = SettableMetadata(contentType: 'image/jpeg');
+    final metadata = SettableMetadata(contentType: contentType ?? 'image/jpeg');
     try {
-      if (kIsWeb && imageWeb != null) {
+      if (kIsWeb && fileWeb != null) {
         final ref = _storage.ref().child(path);
-        await ref.putData(imageWeb, metadata);
+        await ref.putData(fileWeb, metadata);
         final url = await ref.getDownloadURL();
         Helpers.writeLog("url: $url");
         return url;
-      } else if (image != null) {
-        final ref = _storage.ref(path).child(image.name);
-        await ref.putFile(File(image.path), metadata);
+      } else if (file != null) {
+        final ref = _storage.ref(path).child(file.name);
+        await ref.putFile(File(file.path), metadata);
         final url = await ref.getDownloadURL();
         Helpers.writeLog("url: $url");
         return url;
@@ -188,7 +189,7 @@ mixin RepoBase {
     }
   }
 
-  Future<bool> deleteImage(String path) async {
+  Future<bool> deleteFile(String path) async {
     try {
       await _storage.ref().child(path).delete();
       return true;
@@ -198,7 +199,7 @@ mixin RepoBase {
     }
   }
 
-  Future<String> getImageRefFromUrl(String url) async {
+  Future<String> getRefFromUrl(String url) async {
     try {
       final ref = _storage.refFromURL(url).name;
       Helpers.writeLog("image ref: $ref");

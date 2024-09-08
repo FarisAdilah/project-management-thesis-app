@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/repository/payment/firebaseModel/payment_firebase.dart';
 import 'package:project_management_thesis_app/services/repo_base.dart';
@@ -129,6 +133,52 @@ class PaymentRepository with RepoBase {
       payment.id ?? "",
       payment.toFirestore(),
     );
+  }
+
+  Future<bool> updatePaymentStatus(
+    String id,
+    String status, {
+    File? file,
+    Uint8List? fileWeb,
+  }) async {
+    if (status == PaymentStatusType.rejected.name) {
+      return await updateData(
+        CollectionType.payments.name,
+        id,
+        {"status": status},
+      );
+    } else {
+      String url = "";
+
+      if (kIsWeb && (fileWeb?.isNotEmpty ?? false)) {
+        String fileName = "payment_$id";
+        url = await uploadFile(
+          "files/$fileName",
+          fileWeb: fileWeb,
+          contentType: "application/pdf",
+        );
+      } else if (file?.path.isNotEmpty ?? false) {
+        XFile fileToUpload = XFile(file?.path ?? "");
+        url = await uploadFile(
+          "files",
+          file: fileToUpload,
+          contentType: "application/pdf",
+        );
+      }
+
+      if (url.isNotEmpty) {
+        return await updateData(
+          CollectionType.payments.name,
+          id,
+          {
+            "status": status,
+            "file": url,
+          },
+        );
+      } else {
+        return false;
+      }
+    }
   }
 
   Future<bool> deletePayment(String id) async {

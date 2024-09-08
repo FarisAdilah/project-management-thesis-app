@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
 import 'package:project_management_thesis_app/repository/user/dataModel/user_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
 import 'package:project_management_thesis_app/utils/constant.dart';
+import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class ProjectPaymentController extends GetxController {
   RxBool isLoading = false.obs;
@@ -29,6 +31,16 @@ class ProjectPaymentController extends GetxController {
       selectedPayment.value = PaymentDM();
     } else {
       selectedPayment.value = payment;
+    }
+  }
+
+  viewPaymentFile() {
+    Uri fileUrl = Uri.parse(selectedPayment.value.file ?? "");
+
+    if (kIsWeb) {
+      Helpers().launchViaUrl(fileUrl);
+    } else {
+      // File file = File.fromUri(fileUrl);
     }
   }
 }

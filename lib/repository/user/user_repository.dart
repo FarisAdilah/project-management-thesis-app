@@ -27,15 +27,15 @@ class UserRepository with RepoBase {
       if (kIsWeb && (pickedImageWeb?.isNotEmpty ?? false)) {
         String username =
             user.name?.trim().toLowerCase().replaceAll(" ", "-") ?? "";
-        url = await uploadImage(
+        url = await uploadFile(
           "images/$username",
-          imageWeb: pickedImageWeb,
+          fileWeb: pickedImageWeb,
         );
       } else if (pickedImage?.path.isNotEmpty ?? false) {
         XFile image = XFile(pickedImage?.path ?? "");
-        url = await uploadImage(
+        url = await uploadFile(
           "images",
-          image: image,
+          file: image,
         );
       }
 
@@ -89,12 +89,12 @@ class UserRepository with RepoBase {
       Helpers.writeLog("upload image web");
       String username = currUserName.trim().toLowerCase().replaceAll(" ", "-");
 
-      isDeleted = await deleteImage("images/$username");
+      isDeleted = await deleteFile("images/$username");
 
       if (isDeleted) {
-        url = await uploadImage(
+        url = await uploadFile(
           "images/$username",
-          imageWeb: pickedImageWeb,
+          fileWeb: pickedImageWeb,
         );
       } else {
         Helpers().showErrorSnackBar("Something went wrong");
@@ -104,13 +104,13 @@ class UserRepository with RepoBase {
       Helpers.writeLog("upload image mobile");
       XFile image = XFile(pickedImage?.path ?? "");
 
-      String ref = await getImageRefFromUrl(user.image ?? "");
-      isDeleted = await deleteImage("images/$ref");
+      String ref = await getRefFromUrl(user.image ?? "");
+      isDeleted = await deleteFile("images/$ref");
 
       if (isDeleted) {
-        url = await uploadImage(
+        url = await uploadFile(
           "images",
-          image: image,
+          file: image,
         );
       } else {
         Helpers().showErrorSnackBar("Something went wrong");
@@ -143,11 +143,11 @@ class UserRepository with RepoBase {
   }
 
   Future<bool> deleteUser(UserDM user) async {
-    String url = await getImageRefFromUrl(user.image ?? "");
+    String url = await getRefFromUrl(user.image ?? "");
 
     bool isDeleteImage;
     if (url.isNotEmpty) {
-      isDeleteImage = await deleteImage("images/$url");
+      isDeleteImage = await deleteFile("images/$url");
     } else {
       Helpers().showErrorSnackBar("Something went wrong");
       return false;

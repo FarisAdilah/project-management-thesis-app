@@ -128,15 +128,15 @@ class VendorRepository with RepoBase {
     if (kIsWeb && imageWeb != null) {
       String imageName =
           vendor.name?.trim().toLowerCase().replaceAll(" ", "_") ?? "";
-      url = await uploadImage(
+      url = await uploadFile(
         "images/$imageName",
-        imageWeb: imageWeb,
+        fileWeb: imageWeb,
       );
     } else if (image != null) {
       XFile imageToUpload = XFile(image.path);
-      url = await uploadImage(
+      url = await uploadFile(
         "images",
-        image: imageToUpload,
+        file: imageToUpload,
       );
     }
 
@@ -170,12 +170,12 @@ class VendorRepository with RepoBase {
       String imageName =
           vendor.name?.trim().toLowerCase().replaceAll(" ", "_") ?? "";
 
-      isDeleted = await deleteImage("images/$imageName");
+      isDeleted = await deleteFile("images/$imageName");
 
       if (isDeleted) {
-        url = await uploadImage(
+        url = await uploadFile(
           "images/$imageName",
-          imageWeb: imageWeb,
+          fileWeb: imageWeb,
         );
       } else {
         Helpers().showErrorSnackBar("Something went wrong");
@@ -184,13 +184,13 @@ class VendorRepository with RepoBase {
     } else if (image?.path.isNotEmpty ?? false) {
       XFile imageToUpload = XFile(image?.path ?? "");
 
-      String ref = await getImageRefFromUrl(vendor.image ?? "");
-      isDeleted = await deleteImage("images/$ref");
+      String ref = await getRefFromUrl(vendor.image ?? "");
+      isDeleted = await deleteFile("images/$ref");
 
       if (isDeleted) {
-        url = await uploadImage(
+        url = await uploadFile(
           "images",
-          image: imageToUpload,
+          file: imageToUpload,
         );
       } else {
         Helpers().showErrorSnackBar("Something went wrong");
@@ -221,11 +221,11 @@ class VendorRepository with RepoBase {
   }
 
   Future<bool> deleteVendor(String id, String imageUrl) async {
-    String url = await getImageRefFromUrl(imageUrl);
+    String url = await getRefFromUrl(imageUrl);
 
     bool isDeleteImage;
     if (url.isNotEmpty) {
-      isDeleteImage = await deleteImage("images/$url");
+      isDeleteImage = await deleteFile("images/$url");
     } else {
       Helpers().showErrorSnackBar("Something went wrong");
       return false;

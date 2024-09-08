@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/globalComponent/button/custom_button.dart';
@@ -8,6 +11,7 @@ import 'package:project_management_thesis_app/pages/homePage/component/mainPage/
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pendingPayment/pending_payment_detail.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/mainPage/subComponent/pendingProject/pending_project.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/mobile_project_detail.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/web_payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/tablet_project_detail.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectForm/mobile_project_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectForm/tablet_project_form.dart';
@@ -50,7 +54,14 @@ class MainPageController extends GetxController with Storage {
   RxBool isHoverListProject = false.obs;
   RxInt selectedIndexProject = (-1).obs;
 
+  RxBool disableApprove = true.obs;
+
   RxBool isLoading = true.obs;
+
+  final FilePicker _picker = FilePicker.platform;
+  Rx<File> chosenFile = File("").obs;
+  Rx<String> fileName = "".obs;
+  Rx<Uint8List> chosenFileWeb = Uint8List(0).obs;
 
   @override
   void onInit() async {
@@ -121,6 +132,8 @@ class MainPageController extends GetxController with Storage {
           .where((element) => element.status == PaymentStatusType.rejected.name)
           .toList();
     }
+
+    Helpers.writeLog("pendingPayments: ${jsonEncode(pendingPayments)}");
   }
 
   getPendingWidget() {
@@ -155,7 +168,7 @@ class MainPageController extends GetxController with Storage {
     ClientDM projectClient =
         clients.firstWhere((element) => element.id == project.clientId);
 
-    Helpers.writeLog("projectClient: ${jsonEncode(users)}");
+    Helpers.writeLog("projectClient: ${jsonEncode(projectClient)}");
     UserDM? projectManager = users.firstWhereOrNull(
       (element) => element.id == project.pmId,
     );
@@ -274,12 +287,12 @@ class MainPageController extends GetxController with Storage {
     if (currentUser.value.role == UserType.admin.name) {
       return PendingPayment(
         pendingPayments: pendingPayments,
-        showPendingDetail: showPendingPaymentDetail,
+        showPendingDetail: (payment) => showPendingPaymentDetail(payment),
       );
     } else if (currentUser.value.role == UserType.projectManager.name) {
       return PendingPayment(
         pendingPayments: pendingPayments,
-        showPendingDetail: showPendingPaymentDetail,
+        showPendingDetail: (payment) => showPendingPaymentDetail(payment),
         isPm: true,
       );
     } else {
@@ -289,106 +302,218 @@ class MainPageController extends GetxController with Storage {
 
   showPendingPaymentDetail(PaymentDM payment) {
     Helpers.writeLog("payment: ${jsonEncode(payment)}");
-    VendorDM vendor =
-        vendors.where((element) => payment.vendorId == element.id).first;
+    VendorDM vendor = vendors.firstWhere(
+      (element) => payment.vendorId == element.id,
+      orElse: () => VendorDM(),
+    );
 
-    ClientDM client =
-        clients.firstWhere((element) => element.id == payment.clientId);
+    ClientDM client = clients.firstWhere(
+      (element) => element.id == payment.clientId,
+      orElse: () => ClientDM(),
+    );
+
+    Helpers.writeLog("client: ${jsonEncode(client)}");
 
     bool isPm = currentUser.value.role == UserType.projectManager.name;
 
     Helpers.writeLog("projectVendor: ${jsonEncode(vendor)}");
 
     Get.dialog(
-      AlertDialog(
-        backgroundColor: AssetColor.whiteBackground,
-        content: PendingPaymentDetail(
-          payment: payment,
-          client: client,
-          vendors: vendor,
-          isPm: isPm,
-        ),
-        actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 10,
-        ),
-        actions: [
-          CustomButton(
-            onPressed: () {
-              if (isPm) {
-                Get.dialog(
-                  AlertDialog(
-                    title: const CustomText("Delete Payment"),
-                    content: const CustomText(
-                      "Are you sure you want to delete this payment?",
+      Obx(
+        () => AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          content: PendingPaymentDetail(
+            payment: payment,
+            client: client,
+            vendors: vendor,
+            isPm: isPm,
+            file: chosenFile.value,
+            fileWeb: chosenFileWeb.value,
+            fileName: fileName.value,
+            onAddDocument: () => _onAddDocument(payment),
+            onBack: () => onClearFile(),
+            onDeleteFile: () => onClearFile(),
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 10,
+          ),
+          actions: [
+            CustomButton(
+              onPressed: () {
+                if (isPm) {
+                  Get.dialog(
+                    AlertDialog(
+                      title: const CustomText("Delete Payment"),
+                      content: const CustomText(
+                        "Are you sure you want to delete this payment?",
+                      ),
+                      actions: [
+                        CustomButton(
+                          onPressed: () {
+                            Get.close(2);
+                            deletePayment(payment.id ?? "");
+                          },
+                          text: "Yes",
+                          color: AssetColor.redButton,
+                          textColor: AssetColor.whiteBackground,
+                          borderRadius: 8,
+                        ),
+                        CustomButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          text: "No",
+                          color: AssetColor.orangeButton,
+                          textColor: AssetColor.whiteBackground,
+                          borderRadius: 8,
+                        ),
+                      ],
                     ),
-                    actions: [
-                      CustomButton(
-                        onPressed: () {
-                          Get.back();
-                          // deleteProject(project.id ?? "");
+                  );
+                } else {
+                  updatePaymentStatus(
+                    payment.id ?? "",
+                    PaymentStatusType.rejected.name,
+                  );
+                }
+              },
+              text: isPm ? "Delete" : "Decline",
+              color: AssetColor.redButton,
+              textColor: AssetColor.whiteBackground,
+              borderRadius: 8,
+            ),
+            isPm
+                ? CustomButton(
+                    onPressed: () {
+                      ProjectDM project = projects.firstWhere(
+                        (element) => element.id == payment.projectId,
+                      );
+                      List<VendorDM> vendorPayment = vendors
+                          .where(
+                            (element) =>
+                                project.vendorId?.contains(element.id) ?? false,
+                          )
+                          .toList();
+
+                      Get.to(
+                        () => WebPaymentForm(
+                          payment: payment,
+                          projectId: project.id ?? "",
+                          vendorList: vendorPayment,
+                          isEdit: true,
+                        ),
+                      )?.then(
+                        (isUpdated) async {
+                          if (isUpdated) {
+                            isLoading.value = true;
+
+                            Get.back();
+                            await _getAllPayments();
+                            Helpers().showSuccessSnackBar(
+                                "Payment has been updated");
+
+                            isLoading.value = false;
+                          }
                         },
-                        text: "Yes",
-                        color: AssetColor.redButton,
+                      );
+                    },
+                    text: "Edit",
+                    color: AssetColor.orangeButton,
+                    disableColor: AssetColor.orangeButton.withOpacity(0.5),
+                    textColor: AssetColor.whiteBackground,
+                    borderRadius: 8,
+                  )
+                : disableApprove.value
+                    ? const SizedBox()
+                    : CustomButton(
+                        onPressed: () {
+                          updatePaymentStatus(
+                            payment.id ?? "",
+                            PaymentStatusType.approved.name,
+                          );
+                        },
+                        text: "Approve",
+                        color: AssetColor.greenButton,
+                        disableColor: AssetColor.greenButton.withOpacity(0.5),
                         textColor: AssetColor.whiteBackground,
                         borderRadius: 8,
                       ),
-                      CustomButton(
-                        onPressed: () => Get.back(),
-                        text: "No",
-                        color: AssetColor.orangeButton,
-                        textColor: AssetColor.whiteBackground,
-                        borderRadius: 8,
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                updateProjectStatus(
-                  payment.id ?? "",
-                  ProjectStatusType.rejected.name,
-                );
-              }
-            },
-            text: isPm ? "Delete" : "Decline",
-            color: AssetColor.redButton,
-            textColor: AssetColor.whiteBackground,
-            borderRadius: 8,
-          ),
-          CustomButton(
-            onPressed: () => {
-              if (isPm)
-                {
-                  Get.back(),
-                  // Get.to(
-                  //   () => WebProjectForm(
-                  //     project: project,
-                  //     isEdit: true,
-                  //   ),
-                  // )?.then(
-                  //   (isUpdated) {
-                  //     if (isUpdated) _getAllProjects();
-                  //   },
-                  // )
-                }
-              else
-                {
-                  Get.back(),
-                  // updateProjectStatus(
-                  //   project.id ?? "",
-                  //   ProjectStatusType.ongoing.name,
-                  // ),
-                }
-            },
-            text: isPm ? "Edit" : "Approve",
-            color: isPm ? AssetColor.orangeButton : AssetColor.greenButton,
-            textColor: AssetColor.whiteBackground,
-            borderRadius: 8,
-          ),
-        ],
+          ],
+        ),
       ),
+      barrierDismissible: false,
     );
+  }
+
+  onClearFile() {
+    chosenFile.value = File("");
+    chosenFileWeb.value = Uint8List(0);
+    fileName.value = "";
+    disableApprove.value = true;
+  }
+
+  Future<void> _onAddDocument(PaymentDM payment) async {
+    FilePickerResult? pickedFile = await _picker.pickFiles(
+      allowedExtensions: ["pdf"],
+      type: FileType.custom,
+    );
+
+    isLoading.value = true;
+
+    if (pickedFile != null) {
+      if (kIsWeb) {
+        var file = pickedFile.files.first.bytes;
+        chosenFileWeb.value = file ?? Uint8List(0);
+      } else {
+        var file = File(pickedFile.files.first.path ?? "");
+        chosenFile.value = file;
+      }
+      fileName.value = pickedFile.files.first.name;
+      disableApprove.value = false;
+    } else {
+      Helpers.writeLog("No file selected.");
+    }
+
+    isLoading.value = false;
+  }
+
+  updatePaymentStatus(String id, String status) async {
+    isLoading.value = true;
+
+    bool isUpdated = await _paymentRepo.updatePaymentStatus(
+      id,
+      status,
+      file: chosenFile.value,
+      fileWeb: chosenFileWeb.value,
+    );
+
+    if (isUpdated) {
+      Get.back();
+      onClearFile();
+      Helpers.writeLog("Payment has been updated");
+      await _getAllPayments();
+    } else {
+      Helpers.writeLog("Failed to update payment");
+    }
+
+    isLoading.value = false;
+  }
+
+  deletePayment(String id) async {
+    isLoading.value = true;
+
+    bool isDeleted = await _paymentRepo.deletePayment(id);
+
+    if (isDeleted) {
+      Helpers().showSuccessSnackBar("Payment has been deleted");
+      await _getAllPayments();
+    } else {
+      Helpers.writeLog("Failed to delete payment");
+    }
+
+    isLoading.value = false;
   }
 
   getClosingWidget() {
@@ -439,7 +564,7 @@ class MainPageController extends GetxController with Storage {
     if (isUpdated) {
       Get.back();
       Helpers.writeLog("Project has been updated");
-      _getAllProjects();
+      await _getAllProjects();
     } else {
       Helpers.writeLog("Failed to update project");
     }

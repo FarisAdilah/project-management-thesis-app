@@ -14,7 +14,7 @@ import 'package:project_management_thesis_app/pages/homePage/component/project/p
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectPayment/web_project_payment.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/generalInfo/projectStaff/web_project_staff.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/mobile_payment_form.dart';
-import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/payment_form.dart';
+import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/web_payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/payment/tablet_payment_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/mobile_task_form.dart';
 import 'package:project_management_thesis_app/pages/homePage/component/project/projectDetail/task/taskForm/tablet_task_form.dart';
@@ -615,7 +615,7 @@ class ProjectDetailController extends GetxController
 
   _addNewPayment() {
     Get.to(
-      () => PaymentForm(
+      () => WebPaymentForm(
         projectId: projectId,
         vendorList: projectVendor,
       ),
@@ -667,7 +667,7 @@ class ProjectDetailController extends GetxController
 
   _updatePayment(PaymentDM payment) {
     Get.to(
-      () => PaymentForm(
+      () => WebPaymentForm(
         projectId: projectId,
         vendorList: projectVendor,
         isEdit: true,
