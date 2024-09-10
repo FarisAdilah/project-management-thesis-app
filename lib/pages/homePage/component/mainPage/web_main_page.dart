@@ -329,7 +329,7 @@ Widget _buildStatus(String status) {
   Color statusColor;
   String title = "";
   if (status == ProjectStatusType.pending.name) {
-    statusColor = AssetColor.orange;
+    statusColor = AssetColor.grey;
     title = "Pending";
   } else if (status == ProjectStatusType.rejected.name) {
     statusColor = AssetColor.redButton;
@@ -340,6 +340,12 @@ Widget _buildStatus(String status) {
   } else if (status == ProjectStatusType.closing.name) {
     statusColor = AssetColor.orange;
     title = "Closing";
+  } else if (status == ProjectStatusType.pendingClose.name) {
+    statusColor = AssetColor.orangeButton;
+    title = "Pending Close";
+  } else if (status == ProjectStatusType.rejectClose.name) {
+    statusColor = AssetColor.redButton;
+    title = "Rejected Close";
   } else {
     statusColor = AssetColor.green;
     title = "Completed";

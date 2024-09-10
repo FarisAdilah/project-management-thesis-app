@@ -18,6 +18,11 @@ class PendingProjectDetail extends StatelessWidget {
   final bool isAdmin;
   final bool isClosing;
   final bool isRejectClose;
+  final VoidCallback? onAddBastDocument;
+  final String? fileName;
+  final VoidCallback? onDeleteFile;
+  final VoidCallback? onBack;
+  final VoidCallback? onViewBastDocument;
 
   const PendingProjectDetail({
     super.key,
@@ -28,6 +33,11 @@ class PendingProjectDetail extends StatelessWidget {
     this.isAdmin = false,
     this.isClosing = false,
     this.isRejectClose = false,
+    this.onAddBastDocument,
+    this.fileName,
+    this.onDeleteFile,
+    this.onBack,
+    this.onViewBastDocument,
   });
 
   @override
@@ -278,13 +288,52 @@ class PendingProjectDetail extends StatelessWidget {
                   ),
                   isAdmin
                       ? isClosing
-                          ? CustomButton(
-                              text: "Add Document",
-                              onPressed: () {},
-                            )
-                          : const SizedBox()
-                      : isClosing
-                          ? Container(
+                          ? fileName?.isEmpty ?? true
+                              ? CustomButton(
+                                  text: "Add BAST Document",
+                                  onPressed: onAddBastDocument,
+                                )
+                              : Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AssetColor.greyBackground
+                                        .withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        FontAwesomeIcons.filePdf,
+                                        size: 20,
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Expanded(
+                                        child: CustomText(
+                                          fileName ?? "",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      IconButton(
+                                        icon:
+                                            const Icon(FontAwesomeIcons.xmark),
+                                        iconSize: 20,
+                                        onPressed: onDeleteFile,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                          : Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 25,
                                 vertical: 15,
@@ -314,10 +363,16 @@ class PendingProjectDetail extends StatelessWidget {
                                 ],
                               ),
                             )
-                          : CustomButton(
-                              text: "See Document",
-                              onPressed: () {},
+                      : isClosing
+                          ? CustomButton(
+                              text: "See BAST Document",
+                              onPressed: () {
+                                if (onViewBastDocument != null) {
+                                  onViewBastDocument!();
+                                }
+                              },
                             )
+                          : const SizedBox(),
                 ],
               ),
             ),
@@ -329,6 +384,9 @@ class PendingProjectDetail extends StatelessWidget {
               icon: const Icon(FontAwesomeIcons.xmark),
               onPressed: () {
                 Get.back();
+                if (onBack != null) {
+                  onBack!();
+                }
               },
             ),
           ),

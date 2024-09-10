@@ -179,108 +179,151 @@ class MainPageController extends GetxController with Storage {
     Helpers.writeLog("projectVendor: ${jsonEncode(projectVendor)}");
     Helpers.writeLog("projectManager: ${jsonEncode(projectManager)}");
 
+    fileName.value = project.fileName ?? "";
+
     Get.dialog(
-      AlertDialog(
-        backgroundColor: AssetColor.whiteBackground,
-        content: PendingProjectDetail(
-          project: project,
-          client: projectClient,
-          vendors: projectVendor,
-          projectManager: projectManager ?? UserDM(),
-          isAdmin: isAdmin,
-          isClosing: isClosing,
-        ),
-        actionsAlignment: MainAxisAlignment.center,
-        actionsPadding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 10,
-        ),
-        actions: [
-          isClosing
-              ? const SizedBox()
-              : CustomButton(
-                  onPressed: () {
-                    if (isAdmin) {
-                      Get.dialog(
-                        AlertDialog(
-                          title: const CustomText("Delete Project"),
-                          content: const CustomText(
-                            "Are you sure you want to delete this project?",
+      Obx(
+        () => AlertDialog(
+          backgroundColor: AssetColor.whiteBackground,
+          content: PendingProjectDetail(
+            project: project,
+            client: projectClient,
+            vendors: projectVendor,
+            projectManager: projectManager ?? UserDM(),
+            isAdmin: isAdmin,
+            isClosing: isClosing,
+            onAddBastDocument: () => _onAddDocument(),
+            fileName: fileName.value,
+            onDeleteFile: () => onClearFile(),
+            onBack: () => onClearFile(),
+            onViewBastDocument: () => launchUrl(project.file ?? ""),
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 10,
+          ),
+          actions: [
+            isClosing && isAdmin
+                ? const SizedBox()
+                : CustomButton(
+                    onPressed: () {
+                      if (isAdmin) {
+                        Get.dialog(
+                          AlertDialog(
+                            title: const CustomText("Delete Project"),
+                            content: const CustomText(
+                              "Are you sure you want to delete this project?",
+                            ),
+                            actions: [
+                              CustomButton(
+                                onPressed: () {
+                                  deleteProject(project.id ?? "");
+                                  Get.back();
+                                },
+                                text: "Yes",
+                                color: AssetColor.redButton,
+                                textColor: AssetColor.whiteBackground,
+                                borderRadius: 8,
+                              ),
+                              CustomButton(
+                                onPressed: () => Get.back(),
+                                text: "No",
+                                color: AssetColor.orangeButton,
+                                textColor: AssetColor.whiteBackground,
+                                borderRadius: 8,
+                              ),
+                            ],
                           ),
-                          actions: [
-                            CustomButton(
-                              onPressed: () {
-                                deleteProject(project.id ?? "");
-                                Get.back();
-                              },
-                              text: "Yes",
-                              color: AssetColor.redButton,
-                              textColor: AssetColor.whiteBackground,
-                              borderRadius: 8,
+                        );
+                      } else {
+                        updateProjectStatus(
+                          project.id ?? "",
+                          isClosing
+                              ? ProjectStatusType.rejectClose.name
+                              : ProjectStatusType.rejected.name,
+                        );
+                      }
+                    },
+                    text: isAdmin ? "Delete" : "Decline",
+                    color: AssetColor.redButton,
+                    textColor: AssetColor.whiteBackground,
+                    borderRadius: 8,
+                  ),
+            isAdmin
+                ? isClosing
+                    ? fileName.value.isNotEmpty &&
+                            fileName.value != project.fileName
+                        ? CustomButton(
+                            onPressed: () => {
+                              updateProjectStatus(
+                                project.id ?? "",
+                                ProjectStatusType.pendingClose.name,
+                                url: project.file,
+                              ),
+                            },
+                            text: project.status ==
+                                    ProjectStatusType.rejectClose.name
+                                ? "Revise Close Project Document"
+                                : "Submit Close Project Document",
+                            color: AssetColor.orangeButton,
+                            textColor: AssetColor.whiteBackground,
+                            borderRadius: 8,
+                          )
+                        : const SizedBox()
+                    : CustomButton(
+                        onPressed: () => {
+                          Get.back(),
+                          Get.to(
+                            () => ResponsiveLayout(
+                              mobileScaffold: MobileProjectForm(
+                                project: project,
+                                isEdit: true,
+                              ),
+                              tabletScaffold: TabletProjectForm(
+                                project: project,
+                                isEdit: true,
+                              ),
+                              desktopScaffold: WebProjectForm(
+                                project: project,
+                                isEdit: true,
+                              ),
                             ),
-                            CustomButton(
-                              onPressed: () => Get.back(),
-                              text: "No",
-                              color: AssetColor.orangeButton,
-                              textColor: AssetColor.whiteBackground,
-                              borderRadius: 8,
-                            ),
-                          ],
-                        ),
-                      );
-                    } else {
+                          )?.then(
+                            (isUpdated) {
+                              if (isUpdated) _getAllProjects();
+                            },
+                          )
+                        },
+                        text: "Edit",
+                        color: AssetColor.orangeButton,
+                        textColor: AssetColor.whiteBackground,
+                        borderRadius: 8,
+                      )
+                : CustomButton(
+                    onPressed: () => {
                       updateProjectStatus(
                         project.id ?? "",
-                        ProjectStatusType.rejected.name,
-                      );
-                    }
-                  },
-                  text: isAdmin ? "Delete" : "Decline",
-                  color: AssetColor.redButton,
-                  textColor: AssetColor.whiteBackground,
-                  borderRadius: 8,
-                ),
-          CustomButton(
-            onPressed: () => {
-              if (isAdmin)
-                {
-                  if (isClosing)
-                    updateProjectStatus(
-                      project.id ?? "",
-                      ProjectStatusType.pendingClose.name,
-                    ),
-                  Get.back(),
-                  Get.to(
-                    () => WebProjectForm(
-                      project: project,
-                      isEdit: true,
-                    ),
-                  )?.then(
-                    (isUpdated) {
-                      if (isUpdated) _getAllProjects();
+                        isClosing
+                            ? ProjectStatusType.completed.name
+                            : ProjectStatusType.ongoing.name,
+                      ),
                     },
-                  )
-                }
-              else
-                {
-                  updateProjectStatus(
-                    project.id ?? "",
-                    ProjectStatusType.ongoing.name,
+                    text: "Approve",
+                    color: AssetColor.greenButton,
+                    textColor: AssetColor.whiteBackground,
+                    borderRadius: 8,
                   ),
-                }
-            },
-            text: isClosing
-                ? isAdmin
-                    ? "Submit Close Project Document"
-                    : "Approve"
-                : "Approve",
-            color: isAdmin ? AssetColor.orangeButton : AssetColor.greenButton,
-            textColor: AssetColor.whiteBackground,
-            borderRadius: 8,
-          ),
-        ],
+          ],
+        ),
       ),
+      barrierDismissible: false,
     );
+  }
+
+  launchUrl(String url) async {
+    Uri uri = Uri.parse(url);
+    Helpers().launchViaUrl(uri);
   }
 
   getPendingPayment() {
@@ -330,7 +373,7 @@ class MainPageController extends GetxController with Storage {
             file: chosenFile.value,
             fileWeb: chosenFileWeb.value,
             fileName: fileName.value,
-            onAddDocument: () => _onAddDocument(payment),
+            onAddDocument: () => _onAddDocument(),
             onBack: () => onClearFile(),
             onDeleteFile: () => onClearFile(),
           ),
@@ -454,7 +497,7 @@ class MainPageController extends GetxController with Storage {
     disableApprove.value = true;
   }
 
-  Future<void> _onAddDocument(PaymentDM payment) async {
+  Future<void> _onAddDocument() async {
     FilePickerResult? pickedFile = await _picker.pickFiles(
       allowedExtensions: ["pdf"],
       type: FileType.custom,
@@ -522,7 +565,7 @@ class MainPageController extends GetxController with Storage {
       return PendingProject(
         pendingProjects: closingProjects,
         showPendingDetail: (project) {
-          showPendingDetail(project);
+          showPendingDetail(project, isClosing: true);
         },
         isClosing: true,
       );
@@ -555,10 +598,16 @@ class MainPageController extends GetxController with Storage {
     );
   }
 
-  updateProjectStatus(String id, String status) async {
+  updateProjectStatus(String id, String status, {String? url}) async {
+    isLoading.value = true;
+
     bool isUpdated = await _projectRepo.updateProjectStatus(
       id,
       status,
+      file: chosenFile.value,
+      fileWeb: chosenFileWeb.value,
+      currentUrl: url,
+      fileName: fileName.value,
     );
 
     if (isUpdated) {
@@ -568,6 +617,8 @@ class MainPageController extends GetxController with Storage {
     } else {
       Helpers.writeLog("Failed to update project");
     }
+
+    isLoading.value = false;
   }
 
   deleteProject(String id) async {

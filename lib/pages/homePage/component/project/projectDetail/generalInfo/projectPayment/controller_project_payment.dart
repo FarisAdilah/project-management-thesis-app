@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_management_thesis_app/repository/payment/dataModel/payment_dm.dart';
@@ -37,10 +36,13 @@ class ProjectPaymentController extends GetxController {
   viewPaymentFile() {
     Uri fileUrl = Uri.parse(selectedPayment.value.file ?? "");
 
-    if (kIsWeb) {
-      Helpers().launchViaUrl(fileUrl);
-    } else {
-      // File file = File.fromUri(fileUrl);
-    }
+    Helpers().launchViaUrl(fileUrl);
+
+    // Platform specific code to handle file opening
+
+    // if (kIsWeb) {
+    // } else {
+    //   // File file = File.fromUri(fileUrl);
+    // }
   }
 }

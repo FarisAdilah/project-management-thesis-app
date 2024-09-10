@@ -15,6 +15,8 @@ class ProjectDM {
   List<String>? userId;
   String? clientName;
   String? pmId;
+  String? file;
+  String? fileName;
 
   ProjectDM();
 

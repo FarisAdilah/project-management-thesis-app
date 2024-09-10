@@ -14,7 +14,8 @@ PaymentDM _$PaymentDMFromJson(Map<String, dynamic> json) => PaymentDM()
   ..paymentAmount = json['paymentAmount'] as String?
   ..deadline = json['deadline'] as String?
   ..projectId = json['projectId'] as String?
-  ..status = json['status'] as String?;
+  ..status = json['status'] as String?
+  ..file = json['file'] as String?;
 
 Map<String, dynamic> _$PaymentDMToJson(PaymentDM instance) => <String, dynamic>{
       'id': instance.id,
@@ -25,4 +26,5 @@ Map<String, dynamic> _$PaymentDMToJson(PaymentDM instance) => <String, dynamic>{
       'deadline': instance.deadline,
       'projectId': instance.projectId,
       'status': instance.status,
+      'file': instance.file,
     };

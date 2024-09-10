@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/repository/project/firebaseModel/project_firebase.dart';
 import 'package:project_management_thesis_app/services/repo_base.dart';
@@ -30,6 +34,8 @@ class ProjectRepository with RepoBase {
       projectDM.clientId = element.clientId;
       projectDM.vendorId = element.vendorId;
       projectDM.pmId = element.pmId;
+      projectDM.file = element.file;
+      projectDM.fileName = element.fileName;
 
       projectDMList.add(projectDM);
     }
@@ -69,6 +75,8 @@ class ProjectRepository with RepoBase {
       projectDM.clientId = element.clientId;
       projectDM.vendorId = element.vendorId;
       projectDM.pmId = element.pmId;
+      projectDM.file = element.file;
+      projectDM.fileName = element.fileName;
 
       projectDMList.add(projectDM);
     }
@@ -91,6 +99,8 @@ class ProjectRepository with RepoBase {
     projectDM.clientId = project.clientId;
     projectDM.vendorId = project.vendorId;
     projectDM.pmId = project.pmId;
+    projectDM.file = project.file;
+    projectDM.fileName = project.fileName;
 
     return projectDM;
   }
@@ -130,12 +140,82 @@ class ProjectRepository with RepoBase {
     );
   }
 
-  Future<bool> updateProjectStatus(String id, String status) async {
-    return await updateData(
-      CollectionType.projects.name,
-      id,
-      {"status": status},
-    );
+  Future<bool> updateProjectStatus(
+    String id,
+    String status, {
+    File? file,
+    Uint8List? fileWeb,
+    String? currentUrl,
+    String? fileName,
+  }) async {
+    if (status == ProjectStatusType.pendingClose.name) {
+      String url = "";
+      bool isDeleled = false;
+
+      if (kIsWeb && (fileWeb?.isNotEmpty ?? false)) {
+        String fileName = "project_bast_$id";
+
+        if (currentUrl?.isNotEmpty ?? false) {
+          isDeleled = await deleteFile("files/$fileName");
+        }
+
+        if (isDeleled || (currentUrl?.isEmpty ?? true)) {
+          url = await uploadFile(
+            "files/$fileName",
+            fileWeb: fileWeb,
+            contentType: "application/pdf",
+          );
+        } else {
+          Helpers().showErrorSnackBar("Something went wrong");
+          return false;
+        }
+      } else if (file?.path.isNotEmpty ?? false) {
+        XFile fileToUpload = XFile(
+          file?.path ?? "",
+          name: "project_bast_$id",
+        );
+
+        String ref = await getRefFromUrl(currentUrl ?? "");
+        if (currentUrl?.isNotEmpty ?? false) {
+          isDeleled = await deleteFile("files/$ref");
+        }
+
+        if (isDeleled || (currentUrl?.isEmpty ?? true)) {
+          url = await uploadFile(
+            "files",
+            file: fileToUpload,
+            contentType: "application/pdf",
+          );
+        } else {
+          Helpers().showErrorSnackBar("Something went wrong");
+          return false;
+        }
+      } else {
+        Helpers.writeLog("file is same");
+        url = currentUrl ?? "";
+      }
+
+      if (url.isNotEmpty) {
+        return await updateData(
+          CollectionType.projects.name,
+          id,
+          {
+            "status": status,
+            "file": url,
+            "fileName": fileName,
+          },
+        );
+      } else {
+        Helpers.writeLog("Error: url is empty");
+        return false;
+      }
+    } else {
+      return await updateData(
+        CollectionType.projects.name,
+        id,
+        {"status": status},
+      );
+    }
   }
 
   Future<bool> deleteProject(String id) async {

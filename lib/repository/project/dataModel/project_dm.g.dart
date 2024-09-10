@@ -19,7 +19,9 @@ ProjectDM _$ProjectDMFromJson(Map<String, dynamic> json) => ProjectDM()
   ..userId =
       (json['userId'] as List<dynamic>?)?.map((e) => e as String).toList()
   ..clientName = json['clientName'] as String?
-  ..pmId = json['pmId'] as String?;
+  ..pmId = json['pmId'] as String?
+  ..file = json['file'] as String?
+  ..fileName = json['fileName'] as String?;
 
 Map<String, dynamic> _$ProjectDMToJson(ProjectDM instance) => <String, dynamic>{
       'id': instance.id,
@@ -33,4 +35,6 @@ Map<String, dynamic> _$ProjectDMToJson(ProjectDM instance) => <String, dynamic>{
       'userId': instance.userId,
       'clientName': instance.clientName,
       'pmId': instance.pmId,
+      'file': instance.file,
+      'fileName': instance.fileName,
     };

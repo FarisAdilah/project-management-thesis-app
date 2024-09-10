@@ -13,7 +13,8 @@ ScheduleTaskDM _$ScheduleTaskDMFromJson(Map<String, dynamic> json) =>
       ..startDate = json['startDate'] as String?
       ..endDate = json['endDate'] as String?
       ..timelineId = json['timelineId'] as String?
-      ..staffId = json['staffId'] as String?;
+      ..staffId = json['staffId'] as String?
+      ..status = json['status'] as String?;
 
 Map<String, dynamic> _$ScheduleTaskDMToJson(ScheduleTaskDM instance) =>
     <String, dynamic>{
@@ -23,4 +24,5 @@ Map<String, dynamic> _$ScheduleTaskDMToJson(ScheduleTaskDM instance) =>
       'endDate': instance.endDate,
       'timelineId': instance.timelineId,
       'staffId': instance.staffId,
+      'status': instance.status,
     };

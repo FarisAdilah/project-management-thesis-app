@@ -3,6 +3,7 @@ import 'package:project_management_thesis_app/globalComponent/button/custom_butt
 import 'package:project_management_thesis_app/globalComponent/textCustom/custom_text.dart';
 import 'package:project_management_thesis_app/repository/project/dataModel/project_dm.dart';
 import 'package:project_management_thesis_app/utils/asset_color.dart';
+import 'package:project_management_thesis_app/utils/constant.dart';
 import 'package:project_management_thesis_app/utils/helpers.dart';
 
 class PendingProjectItemContent extends StatelessWidget {
@@ -130,15 +131,37 @@ class PendingProjectItemContent extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: CustomButton(
-              text: "See Detail",
-              borderRadius: 8,
-              color: AssetColor.orangeButton,
-              textColor: AssetColor.whiteBackground,
-              onPressed: onPressed,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 5,
+                  horizontal: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: pendingProject.status ==
+                          ProjectStatusType.rejectClose.name
+                      ? AssetColor.redButton
+                      : AssetColor.grey,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: CustomText(
+                  Helpers().getProjectStatus(pendingProject.status ?? ""),
+                  color: AssetColor.whiteBackground,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  maxLines: 2,
+                ),
+              ),
+              CustomButton(
+                text: "See Detail",
+                borderRadius: 8,
+                color: AssetColor.orangeButton,
+                textColor: AssetColor.whiteBackground,
+                onPressed: onPressed,
+              ),
+            ],
           )
         ],
       ),

@@ -125,6 +125,31 @@ class Helpers {
     return taskStatus;
   }
 
+  String getProjectStatus(String status) {
+    if (status.isEmpty) {
+      return "Status";
+    }
+
+    String projectStatus = "";
+    if (status == ProjectStatusType.closing.name) {
+      projectStatus = "Closing";
+    } else if (status == ProjectStatusType.completed.name) {
+      projectStatus = "Completed";
+    } else if (status == ProjectStatusType.ongoing.name) {
+      projectStatus = "Ongoing";
+    } else if (status == ProjectStatusType.pending.name) {
+      projectStatus = "Pending";
+    } else if (status == ProjectStatusType.pendingClose.name) {
+      projectStatus = "Pending Close";
+    } else if (status == ProjectStatusType.rejectClose.name) {
+      projectStatus = "Rejected";
+    } else if (status == ProjectStatusType.rejected.name) {
+      projectStatus = "Rejected";
+    }
+
+    return projectStatus;
+  }
+
   Future<void> launchViaUrl(Uri url) async {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
