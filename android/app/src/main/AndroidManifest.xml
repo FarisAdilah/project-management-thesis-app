@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="project_management_thesis_app"
+        android:label="PenTools"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

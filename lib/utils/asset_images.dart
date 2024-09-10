@@ -1,5 +1,5 @@
 class AssetImages {
-  static const String asset = 'images/';
+  static const String asset = 'assets/images/';
 
   static const String profilePlaceholder = '${asset}facebook-profile.jpg';
   static const String backgroundProfile = '${asset}gradation_background.png';
