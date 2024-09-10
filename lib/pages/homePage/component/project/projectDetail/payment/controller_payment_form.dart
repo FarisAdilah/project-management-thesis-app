@@ -199,7 +199,6 @@ class PaymentFormController extends GetxController {
   }
 
   updatePayment() async {
-    // TODO: implement updatePayment
     PaymentFirebase param = PaymentFirebase();
     param.id = payment?.id;
     param.amount = amountController.text

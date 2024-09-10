@@ -108,7 +108,7 @@ class MobilePaymentProject extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // TODO: Implement Preview PDF
+                        controller.viewPaymentFile();
                       },
                     );
                   } else if (controller.selectedPayment.value.status ==

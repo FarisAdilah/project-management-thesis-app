@@ -102,7 +102,6 @@ class TaskFormController extends GetxController {
   }
 
   updateTask() async {
-    // TODO: Update Schedule Task Integration
     isLoading.value = true;
 
     ScheduleTaskFirebase param = ScheduleTaskFirebase();
